@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block doctype %}{% endblock %}
+{% block title %} Lab Report {% endblock %}
+{% block bootstrap %} {% endblock %} 
+{% block header %} {% endblock %}
+{% block navbar %} {% endblock navbar %}
+{% block menu %} {% endblock menu %} 
+
+{% block js %}
+{% endblock js %}  
+
+{% block content %}
+
+    <table rules="all" style="border:solid thin black;font-family: verdana;font-size:12px">    
+        {% for h in headers %}
+        <tr>
+            <td colspan="2"><span style="font-size:16px">{{ h.category_name }} results for {{ h.fullname }}</span></td>
+            {% set tmp = h.dates|split(',') %}            
+            {% for t in tmp if h.dates %}                 
+                <td>{{ t[4:2] }}/{{ t[6:2] }}/{{ t[0:4] }}</td>               
+            {% endfor %}              
+        </tr>
+            {% for v in values if v.person_id == h.person_id and v.category_id == h.category_id %}
+                <tr>           
+                    <td style='text-align:left'>{{ v.property_name }}</td> 
+                    <td style='text-align:left'>{{ v.normal_value }}</td>
+                    {% set tmp = v.results|split(',') %}                    
+                    {% for t in tmp if v.results %}                 
+                        <td>{{ t }}</td>               
+                    {% endfor %}                             
+                </tr>
+            {% endfor %}
+        {% else %} 
+        No Results
+        {% endfor %}     
+    </table>
+
+
+
+{% endblock %}

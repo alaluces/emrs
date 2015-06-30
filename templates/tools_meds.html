@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block menu %}
+    {% include "tools_menu.html" %}
+{% endblock menu %}
+
+{% block content %}
+
+
+<div class="container">
+    
+<div class="row clearfix">    
+  <div class="col-xs-12 column">  
+      <br>
+  </div>    
+</div>   
+   
+{% include "flash_msg.html" %}
+
+<div class="row clearfix">
+
+<form role="form" action="/emrs/emrs/tools/meds/save" method="POST">
+
+<div class="{{ id ? 'col-lg-3' : 'col-lg-7 col-xs-6' }}   column">
+     <div class="panel panel-primary">
+        <div class="panel-heading">Meds List [ <a style="color:white;" href="/emrs/emrs/tools/meds/active">active</a> | <a style="color:white;" href="/emrs/emrs/tools/meds/all">all</a> ]</div>
+            <table class="table table-bordered" style="font-size:12px; text-align:left;">
+                <tr>               
+                    <th>ID</th>
+                    <th>Name</th>                                     
+                </tr>    
+             {% for ml in meds_list %}   
+                <tr>                    
+                    <td><a href="/emrs/emrs/tools/meds/{{ ml.med_id }}">{{ ml.med_id }}</a></td>
+                    <td style="text-align:left;">{{ ml.med_name }}</td>                       
+                </tr>    
+            {% endfor %}    
+            </table>            
+     </div>
+</div> 
+
+<div class="{{ id ? 'col-lg-4' : 'col-lg-5 col-xs-6' }} column">
+     <div class="panel panel-primary">
+        <div class="panel-heading">Meds Detail</div>        
+        <table class="table table-bordered" style="font-size:12px; ">
+            <tr>               
+                <th>ID</th>
+                <th>Name</th>                                        
+                <th>active</th>
+            <tr>                    
+                <td><input style="width:50px;" class="form-control input-sm" type="text" name="med_id"  value="{{ med_id }}" READONLY></td>
+                <td><input style="width:100%;" class="form-control input-sm" type="text" name="med_name"  value="{{ meds_details.med_name }}"></td>   
+                <td><input style="height:20px;width:20px;" type="checkbox" name="active"  value="1" {{ meds_details.active == '1' ? 'CHECKED' }}></td>  
+            </tr>       
+        </table>         
+
+        <div class="form-group">
+            <button class="btn btn-primary btn-block" type="submit" name="btn_save_meds" value="1">Save</button>
+        </div>
+            
+    </div> 
+    
+     <div class="panel panel-primary">
+        <div class="panel-heading">Preparations</div>        
+        <table class="table table-bordered" style="font-size:12px; ">
+            <tr>               
+                <th>ID</th>
+                <th>Name</th>     
+                <th>Active</th>
+            {% for mp in meds_prep %}  
+            <tr>                    
+                <td><input style="width:50px;" class="form-control input-sm" type="text" name="prep_id[]"  value="{{ mp.prep_id }}" READONLY></td>
+                <td><input style="width:100%;" class="form-control input-sm" type="text" name="prep_name[]"  value="{{ mp.prep_name }}"></td> 
+                <td><input style="height:20px;width:20px;" type="checkbox" name="prep_active[]"  value="{{ mp.prep_id }}" {{ mp.active == '1' ? 'CHECKED' }}></td>
+            </tr>
+            {% endfor %}  
+            <tr>                    
+                <td><input style="width:50px;" class="form-control input-sm" type="text" name="prep_id[]"  value="{{ new_prep_id }}" READONLY></td>
+                <td><input style="width:100%;" class="form-control input-sm" type="text" name="prep_name[]"  value=""></td> 
+                <td><input style="height:20px;width:20px;" type="checkbox" name="prep_active[]"  value="{{ new_prep_id }}" CHECKED></td>
+            </tr>            
+        </table>         
+
+        <div class="form-group">
+            <button class="btn btn-primary btn-block" type="submit" name="btn_save_prep" value="1">Save</button>
+        </div>
+            
+    </div>     
+</div>
+
+
+
+
+    
+
+
+
+    
+    
+</div>
+</form>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+
+{% block doctype %}{% endblock %}
+{% block title %} Prescription View {% endblock %}
+{% block bootstrap %} {% endblock %} 
+{% block header %} {% endblock %}
+{% block navbar %} {% endblock navbar %}
+{% block menu %} {% endblock menu %} 
+
+{% block js %}
+{% endblock js %}  
+
+{% block content %}
+{% for i in 0..total_pages - 1 %}
+    <div style="border:solid thin black;border-radius: 5px;margin:auto;width:500px;height:700px;">                
+      <div>
+        <span style="display:block;text-align:center;font-size:20px;font-family:verdana;font-weight:bold;">{{ physician_info.pro_title }}</span>             
+
+        {% set tmp = physician_info.pro_affiliation|split('|') %}    
+        {% for x in tmp %}  
+        <span style="display:block;text-align:center;font-size:14px;font-family:verdana">{{ x }}</span>
+        {% endfor %}    
+
+        <br>                
+        <div style="position:relative;border:none;border-top:solid thin black;margin:auto;width:450px;height:540px; ">
+            <span style="position:absolute;top:0px;left:0px;font-size:40px;font-family:verdana;font-weight:bold">Rx</span>
+
+            <span style="position:absolute;top:50px;left:0px;font-size:12px;font-family:verdana;">Name: {{ person.lname }}, {{ person.fname }}</span>
+
+            <span style="position:absolute;top:65px;left:0px;font-size:12px;font-family:verdana;">Address: {{ person.city }} {{ person.province }}</span>
+
+            <span style="position:absolute;top:80px;left:0px;font-size:12px;font-family:verdana;">Age: {{ age }} Gender: {{ person.gender }}</span>
+            <br><br><br><br><br><br>
+            {% for e in entries|slice(i * 10,(i * 10) + 10) %}  
+            <span style="font-size:11px;font-family:verdana;">{{e.med_name }} - {{e.prep_name }}  # {{e.qty }}</span>
+            <br>        
+            <span style="font-size:11px;font-family:verdana;">Sig: {{e.amt }}  {{e.frequency }} {{e.duration }}</span>
+            <br> 
+            <span style="font-size:11px;font-family:verdana;">* {{e.notes }}</span>
+            <br>
+            {% endfor %} 
+        </div>
+
+        <div style="position:relative;border:none;border-top:solid thin black;margin:auto;width:450px;height:100px; "> 
+
+            <span style="position:absolute;top:10px;left:0px;font-size:11px;font-family:verdana;">Address<br>Address2<br>City<br>Phone</span>
+
+            <span style="position:absolute;top:10px;left:350px;font-size:11px;font-family:verdana;">PRC: {{ physician_info.prc_id }}</span>
+
+            <span style="position:absolute;top:25px;left:350px;font-size:11px;font-family:verdana;">LIC: {{ physician_info.license_number }}</span>
+
+            <span style="position:absolute;top:40px;left:350px;font-size:11px;font-family:verdana;">PTR: {{ physician_info.ptr }}</span>
+
+            <span style="position:absolute;top:55px;left:350px;font-size:11px;font-family:verdana;">S2: {{ physician_info.s2 }}</span>
+
+        </div>            
+
+      </div>
+    </div>
+<br><br><br>
+{% endfor %}
+
+
+{% endblock %}

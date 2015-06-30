@@ -1,0 +1,225 @@
+{% extends "base.html" %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block menu %}
+    {% include "tools_menu.html" %}
+{% endblock menu %}
+
+{% block js %}
+<script>
+    $(function() {
+   
+        // jQuery plugin to prevent double submission of forms
+        jQuery.fn.preventDoubleSubmission = function() {
+          $(this).on('submit',function(e){
+            var $form = $(this);
+
+            if ($form.data('submitted') === true) {
+              // Previously submitted - don't submit again
+              e.preventDefault();
+            } else {
+              // Mark it so that the next submit can be ignored
+              $form.data('submitted', true);
+            }
+          });
+
+          // Keep chainability
+          return this;
+        };
+
+        $('form').preventDoubleSubmission();
+        
+        $("#birth_date").datepicker({                                
+            dateFormat: "yymmdd",
+            changeMonth: true,
+            changeYear: true                    
+        });  
+        
+
+    });
+</script> 
+{% endblock js %}
+
+{% block content %}
+
+
+<div class="container">
+    
+<div class="row clearfix">    
+  <div class="col-xs-12 column">  
+      <br>
+  </div>    
+</div>        
+   
+{% include "flash_msg.html" %}      
+
+
+
+<form role="form" action="{{ root_url }}/emrs/emrs/tools/users/save" method="POST">
+
+<div class="row clearfix">
+<div class="col-md-12 column">
+     <div class="panel panel-primary">
+        <div class="panel-heading">User List [ <a style="color:white;" href="/emrs/emrs/tools/users/active">active</a> | <a style="color:white;" href="/emrs/emrs/tools/users/all">all</a> ]</div>
+            <table class="table table-bordered" style="font-size:12px">
+                <tr>
+                    <th>ID</th>
+                    <th>User Name</th> 
+                    <th>Full Name</th>                    
+                    <th>Group</th> 
+                    <th>Role</th>  
+                    <th>Level</th>  
+                </tr>    
+             {% for user in users %}   
+                <tr>                    
+                    <td><a href="/emrs/emrs/tools/users/{{ user.person_id }}">{{ user.person_id }}</a></td>
+                    <td style="text-align:left;">{{ user.username }}</td>
+                    <td style="text-align:left;">{{ user.full_name }}</td>
+                    <td style="text-align:left;">{{ user.user_group }}</td>
+                    <td style="text-align:left;">{{ user.user_role }}</td>
+                    <td style="text-align:left;">{{ user.user_level }}</td>
+                </tr>    
+            {% endfor %}    
+            </table>            
+     </div>
+</div> 
+</div>    
+    
+<div class="row clearfix">
+    
+<div class="col-md-4 column">    
+     <div class="panel panel-primary">
+        <div class="panel-heading">Basic Info</div>        
+        <table class="table table-bordered" style="font-size:12px"> 
+        <tr>
+            <td>ID</td>                                
+            <td><input class="form-control input-sm" type="text" name="pid" value="{{ pid ? pid : new_id }}" READONLY></td>
+        </tr>              
+        {% if person_values %}    
+            {% for key, value in person_values if key not in ['person_id'] %}   
+                <tr>                    
+                    <td style="text-align:left">{{ key|replace({'_': ' '})|title }} {{ key in ['fname','lname','birth_date','gender','active'] ?  '<span style="color:red;">*</span>' }}</td>
+                    {% if key == 'gender' %}
+                        <td><select style="width:100%;" class="form-control input-sm" id="{{ key }}" type="text" name="{{ key }}">
+                            <option value="" >-</option>
+                        {% for po in person_options if key == po.property_name %}
+                            <option value="{{ po.option_id }}" {{ po.option_value == value ? 'SELECTED' }} >{{ po.option_value }}</option>
+                        {% endfor %} 
+                        </td>                        
+                    {% else %} 
+                        <td><input style="width:100%;" class="form-control input-sm" id="{{ key }}" type="text" name="{{ key }}"  value="{{ value }}"></td>
+                    {% endif %}                                     
+                </tr>            
+            {% endfor %}
+        {% else %} 
+            {% for header in person_header if header.Field not in ['person_id']  %}   
+                <tr>                    
+                    <td style="text-align:left">{{ header.Field|replace({'_': ' '})|title }} {{ header.Field in ['fname','lname','birth_date','gender','active'] ?  '<span style="color:red;">*</span>' }}</td>
+                    {% if header.Field == 'gender' %}
+                        <td><select style="width:100%;" class="form-control input-sm" id="{{ header.Field }}" type="text" name="{{ header.Field }}">
+                            <option value="" >-</option>
+                        {% for po in person_options if header.Field == po.property_name %}
+                            <option value="{{ po.option_id }}" {{ po.option_value == value ? 'SELECTED' }} >{{ po.option_value }}</option>
+                        {% endfor %} 
+                        </td>                        
+                    {% else %} 
+                        <td><input style="width:100%;" class="form-control input-sm" id="{{ header.Field }}" type="text" name="{{ header.Field }}"  value=""></td>
+                    {% endif %}               
+                </tr>            
+            {% endfor %}            
+        {% endif %}       
+        </table>    
+        <div class="form-group">
+            <button class="btn btn-primary btn-block" type="submit" name="btn_save_basic" id="btn_save_basic" value="1">Save</button>
+        </div>            
+     </div>  
+</div>    
+    
+<div class="col-md-4 column">    
+     <div class="panel panel-primary">
+        <div class="panel-heading">User Info</div>  
+        <table class="table table-bordered" style="font-size:12px"> 
+       
+        <tr>
+            <td>User Name<span style="color:red;">*</span></td>                                
+            <td><input class="form-control input-sm" type="text" name="user_name" value="{{ cred.username }}" {{ cred.username ? 'READONLY' }}></td>
+        </tr> 
+        <tr>
+            <td>Password <input type="checkbox" name="cpass1" value="1"></td>
+            <td><input class="form-control input-sm" type="password" name="pass1" value="000000000"></td>
+        </tr>  
+        <tr>
+            <td>Password <input type="checkbox" name="cpass2" value="1"></td>           
+            <td><input class="form-control input-sm" type="password" name="pass2" value="0000000000"></td>
+        </tr>        
+       
+        <tr>
+            <td>User Group</td>                                
+            <td><input class="form-control input-sm" type="text" name="user_group" value="{{ cred.user_group }}"></td>
+        </tr> 
+        <tr>
+            <td>User Role</td>                                
+            <td><input class="form-control input-sm" type="text" name="user_role" value="{{ cred.user_role }}"></td>
+        </tr> 
+        <tr>
+            <td>User Level<span style="color:red;">*</span></td>                                
+            <td><input class="form-control input-sm" type="text" name="user_level" value="{{ cred.user_level }}"></td>
+        </tr>  
+
+        </table> 
+            
+    </div>
+</div>
+    
+<div class="col-md-4 column">    
+     <div class="panel panel-primary">
+        <div class="panel-heading">Professional Info</div>        
+        <table class="table table-bordered" style="font-size:12px">          
+        {% if pro_values %}    
+            {% for key, value in pro_values if key not in ['person_id', 'active'] %}   
+                <tr>                    
+                    <td style="text-align:left">{{ key|replace({'_': ' '})|title }} {{ key in ['fname','lname','birth_date','gender'] ?  '<span style="color:red;">*</span>' }}</td>
+                    {% if key in in_select %}
+                        <td><select style="width:100%;" class="form-control input-sm" id="{{ key }}" type="text" name="{{ key }}">
+                            <option value="" >-</option>
+                        {% for po in person_options if key == po.property_name %}
+                            <option value="{{ po.option_id }}" {{ po.option_value == value ? 'SELECTED' }} >{{ po.option_value }}</option>
+                        {% endfor %} 
+                        </td>                        
+                    {% else %} 
+                        <td><input style="width:100%;" class="form-control input-sm" id="{{ key }}" type="text" name="{{ key }}"  value="{{ value }}"></td>
+                    {% endif %}                                     
+                </tr>            
+            {% endfor %}
+        {% else %} 
+            {% for header in pro_header if header.Field not in ['person_id', 'active']  %}   
+                <tr>                    
+                    <td style="text-align:left">{{ header.Field|replace({'_': ' '})|title }}</td>
+                    {% if header.Field in in_select %}
+                        <td><select style="width:100%;" class="form-control input-sm" id="{{ header.Field }}" type="text" name="{{ header.Field }}">
+                            <option value="" >-</option>
+                        {% for po in person_options if header.Field == po.property_name %}
+                            <option value="{{ po.option_id }}" {{ po.option_value == value ? 'SELECTED' }} >{{ po.option_value }}</option>
+                        {% endfor %} 
+                        </td>                        
+                    {% else %} 
+                        <td><input style="width:100%;" class="form-control input-sm" id="{{ header.Field }}" type="text" name="{{ header.Field }}"  value=""></td>
+                    {% endif %}               
+                </tr>            
+            {% endfor %}            
+        {% endif %}       
+        </table>    
+           
+     </div>  
+</div>     
+    
+
+    
+</div>
+    
+</form>
+
+</div>
+
+{% endblock %}

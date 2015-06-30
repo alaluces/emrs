@@ -1,0 +1,341 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} {% endblock %}
+
+{% block menu %}
+    {% include "patient_menu.html" %}
+{% endblock menu %}
+
+{% block js %}
+
+<script>
+    $(function() {
+        $('.amt_text').hide();
+        $('.frequency_text').hide();
+        
+        $(".amt_select").change(
+            function(){
+                var i = $('.amt_select').index(this); 
+                var t = $('.amt_select option:selected').eq(i).text();
+                if (t === 'Other') {
+                    $('.amt_select').eq(i).hide();
+                    $('.amt_text').eq(i).val('');
+                    $('.amt_text').eq(i).show();                    
+                } else {                              
+                   $('.amt_text').eq(i).val($('.amt_select').eq(i).val());                   
+                }
+            }    
+        ); 
+            
+        $(".frequency_select").change(
+            function(){
+                var i = $('.frequency_select').index(this); 
+                var t = $('.frequency_select option:selected').eq(i).text();
+                if (t === 'Other') {
+                    $('.frequency_select').eq(i).hide();
+                    $('.frequency_text').eq(i).val('');
+                    $('.frequency_text').eq(i).show();                    
+                } else {                              
+                   $('.frequency_text').eq(i).val($('.frequency_select').eq(i).val());                   
+                }
+            }    
+        );                       
+           
+        $(".amt_text").dblclick(
+            function(){
+                var i = $('.amt_text').index(this);            
+                $('.amt_text').eq(i).hide();
+                $('.amt_select').eq(i).show();
+            }    
+        );   
+            
+        $(".frequency_text").dblclick(
+            function(){
+                var i = $('.frequency_text').index(this);            
+                $('.frequency_text').eq(i).hide();
+                $('.frequency_select').eq(i).show();
+            }    
+        );  
+                       
+                            
+    });
+</script> 
+
+
+{% endblock js %}
+
+{% block content %}
+
+<div class="container">
+    
+<div class="row clearfix">    
+  <div class="col-xs-12 column">  
+      <br>
+  </div>    
+</div>     
+        
+<div class="row clearfix">
+    <div class="col-xs-12 column">   
+        {% if delete_ask %}
+        <div class="alert alert-danger fade in">
+            <button class="close" data-dismiss="alert" type="button">×</button>
+            Confirm Delete? 
+            <a href="/emrs/emrs/prescriptions/delete/{{ pid }}/{{ presc_id }}">YES</a> | 
+            <a href="/emrs/emrs/medications/{{ pid }}">NO</a>
+        </div>
+        {% endif %} 
+    </div>
+</div>     
+    
+{% include "flash_msg.html" %}
+
+
+<div class="row clearfix">
+    
+{% if edit_mode %}    
+<form role="form" action="/emrs/emrs/medications/find" method="POST">    
+<div class="col-xs-12 column">   
+    <input type="hidden" name="pid" value="{{ pid }}"> 
+    <input type="hidden" name="presc_id" value="{{ presc_id }}">
+    <div class="form-group">
+        <div class="input-group">
+            <span class="input-group-addon">Search Meds</span>
+            <input class="form-control" placeholder="" type="text" name="med_name" value="{{ query }}">
+            <span class="input-group-btn">
+                <button class="btn btn-default" type="submit" name="btn_search">
+                  Find
+                </button>                    
+                  <a href="/emrs/emrs/tools/meds/active" class="btn btn-default">Add New</a>                                 
+            </span>
+        </div>
+    </div>          
+</div> 
+</form> 
+{% endif %}
+    
+{% if searching %}
+<div class="col-xs-12 column">  
+    {% if results %}       
+        <div class="panel panel-info">
+            <div class="panel-heading">Search results</div>
+                <table class="table table-bordered" style="font-size:12px">                  
+                    <tr>
+                        <th>Generic Name<br>Brand / Prep</th>                        
+                        <th>Qty</th>
+                        <th>Amt</th>
+                        <th>Frequency</th>
+                        <th>Duration</th>
+                        <th>Notes</th>
+                        <th>Add</th>
+                    </tr>
+
+                    {% for result in results %}
+                    <form action="/emrs/emrs/prescriptions/add-to-list/{{ pid }}/{{ presc_id }}" method="POST">
+                        <tr>
+                        <td>
+                        <span style="display:block;text-align:left;"><a href="/emrs/emrs/tools/meds/{{ result.med_id }}">[edit]</a> {{ result.med_name }}</span> 
+                        <input type="hidden" name="med_id" value="{{ result.med_id }}">
+                        <select style="width:250px;font-size:12px;font-family:verdana" name="prep_id">
+                            <option value="">---</option>
+                            {% for p in preps if result.med_id == p.med_id %}
+                            <option value="{{ p.prep_id }}" >{{ p.prep_name }}</option>  
+                            {% endfor %} 
+                        </select>
+                        </td>    
+                        <td>
+                        <input style="width:30px;" type="textbox"                     name="qty" value="{{ e.qty }}">    
+                        </td> 
+                        <td>
+                        <select style="width:100px;font-size:12px;font-family:verdana" class="amt_select">                   
+                            <option value="1/2 Tab">1/2 Tab</option>   
+                            <option value="1 Tab">1 Tab</option> 
+                            <option value="2 Tabs">2 Tabs</option>
+                            <option value="1 Cap">1 Cap</option> 
+                            <option value="2 Caps">2 Caps</option>  
+                            <option value="1/2 Sachet">1/2 Sachet</option>  
+                            <option value="">Other</option>
+                        </select>                        
+                        <input style="width:100px;" type="textbox"                    name="amt"  value="1/2 Tab" class="amt_text">  
+                        
+                        </td>
+                        <td>
+                        <select style="width:160px;font-size:12px;font-family:verdana" class="frequency_select">                   
+                            <option value="Once a day">Once a day</option> 
+                            <option value="2x a day">2x a day</option> 
+                            <option value="3x a day">3x a day</option>
+                            <option value="2x a day with meals">2x a day with meals</option>
+                            <option value="3x a day with meals">3x a day with meals</option>
+                            <option value="Every 4 hrs">Every 4 hrs</option>
+                            <option value="Every 6 hrs">Every 6 hrs</option>
+                            <option value="Every 8 hrs">Every 8 hrs</option>
+                            <option value="Every 12 hrs">Every 12 hrs</option>
+                            <option value="Every other day">Every other day</option>
+                            <option value="">Other</option>
+                        </select>
+                        <input style="width:160px;" type="textbox"                     name="frequency" value="Once a day" class="frequency_text">   
+                        </td>
+                        <td>             
+                        <input style="width:80px;" type="textbox"                     name="duration" value="" class="duration_text">               
+                        </td>    
+                        <td>             
+                        <input   style="width:120px;"   type="textbox" name="notes" value="{{ e.notes }}">
+                        </td>
+                        <td><button class="btn btn-default input-sm" type="submit" value='1' name='add'>Add</button></td>
+                        </tr> 
+                    </form>     
+                    {% endfor %}
+                </table>
+        </div>  
+    {% else %}
+            <div class="alert alert-danger fade in">
+                <button class="close" data-dismiss="alert" type="button">×</button>
+                No results
+            </div>
+
+    {% endif %}
+</div>
+      
+{% endif %}    
+      
+<form role="form" action="/emrs/emrs/prescriptions/save" method="POST">
+<input type="hidden" name="pid" value="{{ pid }}">
+<input type="hidden" name="presc_id" value="{{ presc_id }}">     
+
+<div class="col-xs-12 column">
+     <div class="panel panel-primary ">
+        <div class="panel-heading">Prescription for: {{ person.fname }} {{ person.lname }}</div> 
+            <table class="table table-bordered" style="font-size:12px">
+                <tr>
+                    {% if edit_mode %}<th>-</th>{% endif %} 
+                    <th>Med Name</th>
+                    <th>qty</th> 
+                    <th>Amt</th> 
+                    <th>Frequency</th> 
+                    <th>Duration</th>
+                    <th>Notes</th>
+                </tr>                
+
+                {% for e in entries %}
+                <tr>
+                {% if edit_mode %}    
+                <td style="text-align: left">
+                    <input type="checkbox" name=chk_med_ids[] value="{{ e.med_id }}" CHECKED>   
+                </td>
+                {% endif %}
+                <td style="text-align: left">
+                    <span>{{ e.med_name }} - {{ e.prep_name }}</span> 
+                    <input type="hidden" name="med_id[]" value="{{ e.med_id }}">
+                    <input type="hidden" name="prep_id[]" value="{{ e.prep_id }}"> 
+                </td>    
+                <td>
+                {% if edit_mode %}    
+                <input style="width:30px;" type="textbox"                     name="qty[]" value="{{ e.qty }}">
+                {% else %}
+                    <span>{{ e.qty }}</span> 
+                {% endif %}
+                </td> 
+                <td>
+                {% if edit_mode %}   
+                <select style="width:100px;font-size:12px;font-family:verdana" class="amt_select">
+                    <option value="{{ e.amt }}">{{ e.amt }}</option>   
+                    <option value="1/2 Tab">1/2 Tab</option>   
+                    <option value="1 Tab">1 Tab</option> 
+                    <option value="2 Tabs">2 Tabs</option>
+                    <option value="1 Cap">1 Cap</option> 
+                    <option value="2 Caps">2 Caps</option>  
+                    <option value="1/2 Sachet">1/2 Sachet</option>
+                    <option value="">Other</option>
+                </select>                
+                <input style="width:100px;" type="textbox"                    name="amt[]"  value="{{ e.amt }}" class="amt_text">
+                {% else %}
+                    <span>{{ e.amt }}</span> 
+                {% endif %}
+                </td>
+                <td>
+                {% if edit_mode %}       
+                <select style="width:160px;font-size:12px;font-family:verdana" class="frequency_select">
+                    <option value="{{ e.frequency }}">{{ e.frequency }}</option>  
+                    <option value="Once a day">Once a day</option> 
+                    <option value="2x a day">2x a day</option> 
+                    <option value="3x a day">3x a day</option>
+                    <option value="2x a day with meals">2x a day with meals</option>
+                    <option value="3x a day with meals">3x a day with meals</option>
+                    <option value="Every 4 hrs">Every 4 hrs</option>
+                    <option value="Every 6 hrs">Every 6 hrs</option>
+                    <option value="Every 8 hrs">Every 8 hrs</option>
+                    <option value="Every 12 hrs">Every 12 hrs</option>
+                    <option value="Every other day">Every other day</option>
+                    <option value="">Other</option>
+                </select>
+                <input style="width:160px;" type="textbox"                     name="frequency[]" value="{{ e.frequency }}" class="frequency_text">  
+                {% else %}
+                    <span>{{ e.frequency }}</span> 
+                {% endif %}                
+                </td>
+                <td> 
+                {% if edit_mode %}    
+                <input style="width:80px;" type="textbox"                     name="duration[]" value="{{ e.duration }}" class="duration_text">
+                {% else %}
+                    <span>{{ e.duration }}</span> 
+                {% endif %}                
+                </td>    
+                <td>
+                {% if edit_mode %}    
+                <input   style="width:120px;"   type="textbox" name="notes[]" value="{{ e.notes }}">
+                {% else %}
+                    <span>{{ e.notes }}</span> 
+                {% endif %}                
+                </td>
+                </tr>   
+                {% endfor %}               
+            </table>
+     </div>
+
+     
+</div> 
+</div>    
+
+      
+<div class="row clearfix">
+       
+<div class="col-md-6 column">
+    {% if edit_mode %}
+    
+    <button type="submit" name="btn_save" value="1" class="btn btn-primary">Save</button>
+    <a href="/emrs/emrs/prescriptions/view/{{ pid }}/{{ presc_id }}" name="btn_view" value="1" class="btn btn-primary">View</a>
+    <a href="/emrs/emrs/prescriptions/print/{{ pid }}/{{ presc_id }}" name="btn_edit" value="1" class="btn btn-primary">Prescription</a>
+    <button type="submit" name="btn_duplicate" value="1" class="btn btn-primary pull-right">Copy as new</button>
+    
+    {% else %}
+    
+    <a href="/emrs/emrs/prescriptions/edit/{{ pid }}/{{ presc_id }}" name="btn_edit" value="1" class="btn btn-primary">Edit</a>
+    <a href="/emrs/emrs/prescriptions/print/{{ pid }}/{{ presc_id }}" name="btn_edit" value="1" class="btn btn-primary">Prescription</a>
+    {% endif %}
+</div> 
+    
+<div class="col-md-6 column">
+    {% if edit_mode %}
+    <div class="panel panel-primary">
+       <div class="panel-heading">Prescription Details</div>
+       <table class="table table-bordered" style="font-size:12px">
+       <tr>    
+           <td>Physician</td><td>
+               <select style="display:block;margin:auto;width:300px;font-size:16px;font-family:arial" name="physician_id">
+               <option value="">---</option>
+               {% for p in physicians %}
+               <option value="{{ p.person_id }}" {{ p.person_id == physician_info.person_id ? 'SELECTED' }} >{{ p.pro_title }}</option>  
+               {% endfor %} 
+               </select>
+           </td>
+       </tr>     
+       </table>       
+    </div>  
+    {% endif %} 
+</div>     
+
+</div>    
+
+
+</div>
+
+{% endblock %}

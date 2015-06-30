@@ -1,0 +1,485 @@
+{% extends "base.html" %}
+
+{% block doctype %}{% endblock %}
+{% block title %} Treatment Form {% endblock %}
+{% block bootstrap %} {% endblock %} 
+{% block header %} {% endblock %}
+{% block navbar %} {% endblock navbar %}
+{% block menu %} {% endblock menu %} 
+
+{% block jquery %}
+<script type="text/javascript" src="{{ root_url }}/emrs/pub/js/jquery.min.js"></script>
+{% endblock jquery %} 
+
+{% block js %}
+<script>    
+    jQuery(document).ready(function($)
+    {    
+        
+        // for dropdowns that can be modified
+        $('.s1_value').hide();        
+        $(".s1_options").change(
+            function(){
+                var i = $('.s1_options').index(this); 
+                var t = $('.s1_options option:selected').eq(i).text();
+                if (t === 'Other') {
+                    $('.s1_options').eq(i).hide();
+                    $('.s1_value').eq(i).val('');
+                    $('.s1_value').eq(i).show();                    
+                } else {                              
+                   $('.s1_value').eq(i).val(t);                   
+                }
+            }    
+        );        
+        
+        // for password authentication
+        $('.s2_value').hide();
+        $('.s2_options').change(
+            function(){
+                var i = $('.s2_options').index(this); 
+                $('.s2_options').eq(i).hide();
+                $('.s2_value').eq(i).show();
+            }    
+        );        
+
+        $("#treatment_dropdown").change(
+            function(){
+                l = $( "#treatment_dropdown :selected" ).val();     
+                window.location  = '/emrs/emrs/treatments/' + l;   
+            }    
+        );        
+        
+        $( "#3" ).blur(function() {
+            calcWeightGain();
+        });   
+
+        $( "#4" ).blur(function() {
+            calcWeightGain();
+            calcActualUF();
+        });    
+
+        $( "#6" ).blur(function() {  
+            calcActualUF();
+        }); 
+
+        $( "#7" ).blur(function() {  
+            calcActualUF();
+        });      
+        
+        $('.showComment').click(
+            function(){
+                var i = $('.showComment').index(this);            
+                $('.tr_comment').eq(i).show();
+            }    
+        );         
+        
+        $('.hideComment').click(
+            function(){
+                var i = $('.hideComment').index(this);            
+                $('.tr_comment').eq(i).hide();
+            }    
+        ); 
+            
+        $('.tr_comment').hide();
+        $('.tr_comment_value').show();
+        
+        $('#3').val($('#dry_weight').val());
+        $('#5').val($('#prev_weight').val());
+        $('#101').val($('#time_started').val());
+        $('#1').val($('#time_arrived').val());
+        $('#201').val($('#time_finished').val());
+        
+        //var standing_order = $('#20').val();
+        if ($('#20').val() === '') {            
+            $('#20').val($('#prev_order').val());
+        }  
+        
+        if ($('#2').val() === '') {            
+            $('#2').val($('#duration').val());
+        }          
+        
+        if ($('#4').val() === '') {            
+            $('#4').val(0);
+        }
+        
+        if ($('#7').val() === '') {            
+            $('#7').val(0);
+        }  
+        
+        calcWeightGain();
+        calcActualUF();   
+        
+    });    
+    
+    function calcActualUF(){
+        //Get the texts from both textboxes
+        var pre = $('#4').val();
+        var post = $('#7').val();
+        //Substract that
+        var res = parseFloat(pre) - parseFloat(post);
+        $('#22').val(res.toFixed(2));
+    }
+    
+    function calcWeightGain(){        
+        var pre = $('#4').val();
+        var dry = $('#3').val();       
+        var res = parseFloat(pre) - parseFloat(dry);
+        $('#19').val(res.toFixed(2));
+    }    
+    
+    function confirmFinished() {         
+        if (confirm("Are you sure you want to terminate?") == true) {
+            return confirm("Please verify");              
+        } else {
+            return false;
+        }       
+    }   
+</script>
+{% endblock %}
+
+{% block content %}
+
+{% if flash.error %}
+<div class="alert alert-danger fade in">
+    <button class="close" data-dismiss="alert" type="button">×</button>
+    {{ flash.error }}
+</div>
+{% endif %}
+
+{% if flash.info %}
+<div class="alert alert-success fade in">
+    <button class="close" data-dismiss="alert" type="button">×</button>
+    {{ flash.info }}
+</div>
+{% endif %} 
+
+
+{% for item in misc_html_header %}    
+    {% if item.html_type == 'div' %}
+    <div style="
+         position:absolute;
+         top: {{ item.pos_top }}px;
+         left: {{ item.pos_left }}px;
+         width: {{ item.width }}px; 
+         height: {{ item.height }}px;
+         border-color:{{ item.border_color }};
+         border-style:{{ item.border_style }};
+         border-width:{{ item.border_width }};
+         border-top:{{ item.border_top }};
+         border-bottom:{{ item.border_bottom }};
+         border-left:{{ item.border_left }};
+         border-right:{{ item.border_right }};
+         ">        
+    </div>
+    {% endif %}  
+
+    {% if item.html_type in ['span','h1','h2','h3','h4','h5','h6'] %}    
+    <{{ item.html_type }} style="
+         display:block;
+         text-align:center;
+         font-family: {{ item.font }}; 
+         font-weight: {{ item.font_weight }};  
+         font-style: {{ item.font_style }}; 
+         font-size: {{ item.font_size }};         
+         "> 
+         {{ item.label }}
+    </{{ item.html_type }}>     
+    {% endif %}
+{% endfor %}
+
+<div style="position:relative;top:20px;left:0px;width:1024px; height: 1100px;border: solid thin black;margin:auto;">
+    <form action="/emrs/emrs/treatments/save" method="POST">
+    
+        {% if time_started %} 
+        <table id='ms' style="position:absolute;top:200px;left:300px" rules="all" border=1 >
+            <thead>
+            <tr>
+                <th>Time</th>
+                <th>BP</th>                       
+                <th>AP</th>
+                <th>VP</th> 
+                <th>QB</th>
+                <th>TMP</th>
+                <th>UF VOL</th>              
+                <th>-</th>
+            </tr> 
+            </thead>
+            <tbody>
+            {% for keys in intervals %}
+            {% set i = loop.index0 %}
+            {% for key,val in ms if val.ms_time == keys %}  
+            {% if val.ms_bp1 >= 170 %} {% set color1 = 'red' %}  {% endif %}            
+            {% if val.ms_bp1 >= 141 and  val.ms_bp1 <= 169 %} {% set color1 = 'blue' %}  {% endif %}            
+            {% if val.ms_bp1 <= 140 or val.ms_bp1 == '' %} {% set color1 = 'black' %}  {% endif %}
+            
+            {% if val.ms_bp2 >= 110 %} {% set color2 = 'red' %}  {% endif %}            
+            {% if val.ms_bp2 >= 91 and  val.ms_bp2 <= 109 %} {% set color2 = 'blue' %}  {% endif %}            
+            {% if val.ms_bp2 <= 90 or val.ms_bp2 == '' %} {% set color2 = 'black' %}  {% endif %}
+            <tr style="font-size:12px;font-family:verdana">
+                <td><input name='ms_time[]'  type='text' style='width:40px;' value='{{ keys }}' readonly></td>
+                <td><input name='ms_bp1[]'   type='text' style='width:40px;color:{{ color1 }}' value='{{ val.ms_bp1 }}'>/<input name='ms_bp2[]' type='text' style='width:40px;color:{{ color2 }}' value='{{ val.ms_bp2 }}'></td>                     
+                <td><input name='ms_ap[]'    type='text' style='width:40px;' value='{{ val.ms_ap }}'></td>
+                <td><input name='ms_vp[]'    type='text' style='width:40px;' value='{{ val.ms_vp }}'></td>
+                <td><input name='ms_qb[]'    type='text' style='width:40px;' value='{{ val.ms_qb }}'></td>
+                <td><input name='ms_tmp[]'   type='text' style='width:40px;' value='{{ val.ms_tmp }}'></td>
+                <td><input name='ms_ufvol[]' type='text' style='width:60px;' value='{{ val.ms_ufvol }}'></td> 
+                <td><button type='button' class='showComment'>+</button><button type='button' class='hideComment' {{ val.ms_comments ? 'DISABLED' }}>-</button>
+                </td>                 
+            </tr>            
+            <tr class="tr_comment {{ val.ms_comments ? 'tr_comment_value' }}" style="font-size:12px;font-family:verdana">                
+                <td colspan="8"><input name='ms_comments[]' type='text' style='width:410px;' value='{{ val.ms_comments }}'></td>
+            </tr> 
+           {% else %} 
+            <tr style="font-size:12px;font-family:verdana">
+                <td><input name='ms_time[]'  type='text' style='width:40px;' value='{{ keys }}' readonly></td>
+                <td><input name='ms_bp1[]'   type='text' style='width:40px'>/<input name='ms_bp2[]' type='text' style='width:40px;'></td>                     
+                <td><input name='ms_ap[]'    type='text' style='width:40px;'></td>
+                <td><input name='ms_vp[]'    type='text' style='width:40px;'></td>
+                <td><input name='ms_qb[]'    type='text' style='width:40px;'></td>
+                <td><input name='ms_tmp[]'   type='text' style='width:40px;'></td>
+                <td><input name='ms_ufvol[]' type='text' style='width:60px;'></td> 
+                <td><button type='button' class='showComment'>+</button><button type='button' class='hideComment'>-</button>
+                </td>                 
+            </tr>            
+            <tr class='tr_comment' style="font-size:12px;font-family:verdana">                
+                <td colspan="8"><input name='ms_comments[]' type='text' style='width:420px;'></td>
+            </tr>             
+            
+            {% endfor %}
+            {% endfor %}
+            
+            </tbody>
+        </table> 
+        {% endif %}
+    
+    <input type="hidden" name="pid" value="{{ pid }}"> 
+    <input type="hidden" name="tid" value="{{ tid }}"> 
+    <input type="hidden" name="vid" value="{{ vid }}">  
+    <input type="hidden" id="dry_weight" value="{{ person.dry_weight }}">  
+    <input type="hidden" id="prev_order" value="{{ prev_order }}"> 
+    <input type="hidden" id="duration" value="{{ duration }}"> 
+    <input type="hidden" id="time_arrived" value='{{ time_arrived is empty ? "" : time_arrived|date("H:i:s") }}'> 
+    <input type="hidden" id="time_started" value='{{ time_started is empty ? "" : time_started|date("H:i:s") }}'> 
+    <input type="hidden" id="time_finished" value='{{ time_finished is empty ? "" : time_finished|date("H:i:s") }}'> 
+    <input type="hidden" id="prev_weight" value="{{ prev_weight }}"> 
+    
+    
+    {% if entry_status != 'CLOSED' %}
+    <button style='position:absolute;top:35px;left:840px;' type="submit" name="btn_update" value="1">Save</button>
+    <button style='position:absolute;top:35px;left:890px;' type="submit" name="btn_done" value="1" onClick="return confirmFinished();">Save and finished</button>
+    <!--<button style='position:absolute;top:170px;left:640px;' type="submit" name="btn_save_sheet" value="1">Save Sheet</button>-->
+    {% endif %}
+    
+    {% if not time_started %}
+    <button style='position:absolute;top:170px;left:300px;' type="submit" name="btn_start_now" value="1">Start Now</button>
+    {% endif %}
+    
+    <span style="position:absolute;top:0px;left:10px;font-family:verdana;font-size:12">Treatment No:    
+        <select id="treatment_dropdown">
+        {% set i = 1 %}
+        {% for history in treatment_history %}
+                 <option value="{{ history.entry_date }}/{{ pid }}/{{ history.treatment_id }}/{{ history.version_id }}" {{ history.treatment_id == tid ? 'SELECTED' }}>{{ i }}</option>      
+                 {% set i = i + 1 %}
+        {% endfor %}
+        </select>    
+    </span>    
+    
+    <span style="position:absolute;top:25px;left:10px;font-family:verdana;font-size:12">Patient name: <a href="/emrs/emrs/patients/{{ pid }}">{{ person.fname|title }} {{ person.lname|title }}</a></span>
+    <span style="position:absolute;top:45px;left:10px;font-family:verdana;font-size:12">{{ person.gender }} / {{ age }} years old</span>
+
+    <span style="position:absolute;top:25px;left:450px;font-family:verdana;font-size:12">Physician: {{ person.physician|title }} </span>
+    <span style="position:absolute;top:45px;left:450px;font-family:verdana;font-size:12">Hepatitis Status: {{ person.hepa_status }} </span>
+  
+    <span style="display:block;text-align:center;font-family:verdana;font-size:14;font-weight:bold">{{ entry_date2|date(" F j, Y") }}</span>
+    <span style="position:absolute;top:0px;left:750px;font-family:verdana;font-size:12">
+
+    </span>    
+    
+    <span style="position:absolute;top:3px;left:750px;font-family:verdana;font-size:12">
+        <a href="/emrs/emrs/lab-results/view/all/{{ pid }}">Lab Results</a> |  
+        <a href="/emrs/emrs/medications/{{ pid }}">Medications</a> |   
+        <a href="/emrs/emrs/billing/{{ pid }}/{{ tid }}">Billing</a>   
+    </span>    
+    
+    
+    
+    {% for item in misc_html %}    
+    {% if item.html_type == 'div' %}
+    <div style="
+         position:absolute;
+         top: {{ item.pos_top }}px;
+         left: {{ item.pos_left }}px;
+         width: {{ item.width }}px; 
+         height: {{ item.height }}px;
+         border-color:{{ item.border_color }};
+         border-style:{{ item.border_style }};
+         border-width:{{ item.border_width }};
+         border-top:{{ item.border_top }};
+         border-bottom:{{ item.border_bottom }};
+         border-left:{{ item.border_left }};
+         border-right:{{ item.border_right }};
+         ">        
+    </div>
+    {% endif %}  
+    
+    {% if item.html_type in ['span','h1','h2','h3','h4','h5','h6'] %}
+    <{{ item.html_type }} style="
+         position:absolute;
+         top: {{ item.pos_top }}px;
+         left: {{ item.pos_left }}px;
+         font-family: {{ item.font }}; 
+         font-weight: {{ item.font_weight }};  
+         font-style: {{ item.font_style }}; 
+         font-size: {{ item.font_size }};         
+         "> 
+         {{ item.label }}
+    </{{ item.html_type }}>
+    {% endif %}      
+    
+    
+    {% endfor %}
+      
+
+    {% for field in fields_main if field.auto_display %} 
+        <span style="
+              position:absolute; 
+              top:{{ field.pos_label_top }}px; 
+              left:{{ field.pos_label_left }}px;
+              font-weight:{{ field.label_font_weight }};
+              font-family:{{ field.label_font }};
+              font-size:{{ field.label_font_size }}"  >       
+            {{ field.property_name }}    
+        </span>    
+       
+        {% if field.html_type == 'text' %}
+        <input 
+        style="position:absolute;
+        top:{{ field.pos_input_top }}px;
+        left:{{ field.pos_input_left }}px;
+        width:{{ field.input_width }}px;
+        height:{{ field.input_height }}px;           
+        " 
+        type="text" 
+        name="{{ field.property_id ~ ',0,0' }}"        
+        value="{{ field.property_value }}"
+        id="{{ field.property_id }}"
+        
+        >    
+        {% endif %}
+        
+        {% if field.html_type == 'textarea' %}
+        <textarea
+        style="position:absolute;
+        top:{{ field.pos_input_top }}px;
+        left:{{ field.pos_input_left }}px;
+        width:{{ field.input_width }}px;
+        height:{{ field.input_height }}px;
+        font-family:{{ field.label_font }};
+        font-size:{{ field.label_font_size }};
+        " 
+        id="{{ field.property_id }}"
+        name="{{ field.property_id ~ ',0,0' }}"         
+        >{{ field.property_value }}</textarea>    
+        {% endif %}        
+
+        {% if field.html_type == 'checkbox' %} 
+            {% set i = field.pos_input_top %}
+            {% for option in options %}
+                {% if option.property_id == field.property_id %}
+                
+                <input 
+                style="position:absolute;
+                top:{{ i }}px;
+                left:{{ field.pos_input_left }}px;
+                width:{{ field.input_width }}px;
+                height:{{ field.input_height }}px;           
+                "    
+                name="{{ field.property_id ~ ',0,0'}}[]" 
+                type="checkbox" 
+                value="{{ option.option_id }}" {{ option.option_id in field.property_value  ? 'CHECKED' }}  
+                >
+                
+                <span
+                style="position:absolute;
+                top:{{ i + 3 }}px;
+                left:{{ field.pos_input_left + field.input_width + 10}}px;             
+                font-family:{{ field.label_font }};
+                font-size:{{ field.label_font_size }};
+                "                     
+                >{{ option.option_value }}
+                </span>
+                
+                {% set i = i + field.input_height + 5 %}    
+                {% endif %}
+            {% endfor %}
+        {% endif %}  
+            
+        
+        {% if field.html_type == 'select' %}  
+        <select 
+            style="position:absolute;
+            top:{{ field.pos_input_top }}px;
+            left:{{ field.pos_input_left }}px;
+            width:{{ field.input_width }}px;
+            height:{{ field.input_height }}px;           
+            "
+            class="s1_options">            
+            <option value="{{ field.property_value == '' ? '' : field.property_value }}" >{{ field.property_value == '' ? '---' : field.property_value }}</option>
+            {% for option in options %}
+                {% if option.property_id == field.property_id %}
+                <option value="{{ option.option_id }}" >{{ option.option_value }}</option>
+                {% endif %}
+            {% endfor %}
+            {% if field.modify_options %}
+            <option value="Other" >Other</option>
+            {% endif %}
+        </select>
+        
+        <input
+        style="position:absolute;
+        top:{{ field.pos_input_top }}px;
+        left:{{ field.pos_input_left }}px;
+        width:{{ field.input_width }}px;
+        height:{{ field.input_height }}px;           
+        "
+        class="s1_value"
+        type="text" name="{{ field.property_id ~ ',0,0' }}" value="{{ field.property_value }}">        
+        {% endif %}
+        
+        {% if field.html_type == 'select_persons' %}  
+        <select {{ field.property_value ? 'READONLY' }}
+            style="position:absolute;
+            top:{{ field.pos_input_top }}px;
+            left:{{ field.pos_input_left }}px;
+            width:{{ field.input_width }}px;
+            height:{{ field.input_height }}px;           
+            "
+            class="s2_options"
+            name="{{ field.property_id ~ ',1,0'}}" >
+            <option value="" >---</option>
+            {% for option in options_persons %}
+                {% if option.property_id == field.property_id %}
+                <option value="{{ option.person_id == field.property_value ? 'SET,' ~ option.person_id : option.person_id }}" {{ option.person_id == field.property_value ? 'SELECTED' }}>{{ option.username }}</option>
+                {% endif %}
+            {% endfor %}
+        </select>    
+        <input 
+            style="position:absolute;
+            top:{{ field.pos_input_top }}px;
+            left:{{ field.pos_input_left }}px;
+            width:{{ field.input_width }}px;
+            height:{{ field.input_height }}px;           
+            "
+            type="password"
+            
+            class="s2_value"
+            name="{{ field.property_id ~ ',1,1' }}"> 
+        
+        {% endif %}        
+
+          
+    {% endfor %}
+    </form>
+</div>
+
+{% endblock content %}

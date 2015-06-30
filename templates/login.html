@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block navbar %} {% endblock %}
+{% block menu %}{% endblock %}
+{% block title %} {{ title }} {% endblock %}
+
+{% block content%}
+
+{% if flash.error %}
+<div class="alert alert-danger fade in">
+  <button class="close" data-dismiss="alert" type="button">×</button>
+  {{ flash.error }}
+</div>
+{% endif %}
+
+<br/>
+<div class="container">
+    
+<div class="row clearfix">
+    <div class="col-xs-12 column">
+        <div style="text-align:center;">
+        <img src="{{ root_url }}/emrs/pub/img/front0.jpg"></img>
+        <br>
+        <img src="{{ root_url }}/emrs/pub/img/front.jpg"></img>
+        <br>
+        <img src="{{ root_url }}/emrs/pub/img/front2.jpg"></img>
+        <br>
+        </div>
+    </div>        
+</div>
+<br>     
+<div class="row clearfix">
+       
+
+        <div class="col-xs-4 column">
+        </div>
+        <div class="col-xs-4 column">               
+            
+                <form role="form" action="{{ root_url }}/emrs/emrs/login" method="POST">
+                        <div class="form-group">
+                                 <label>Username</label><input class="form-control" type="text" name="username"/>
+                        </div>
+                        <div class="form-group">
+                                 <label>Password</label><input class="form-control" type="password" name="password"/>
+                        </div>                                                     
+                        <button type="submit" class="btn btn-default" name="btn_login">Submit</button>
+                </form>
+        </div>
+        <div class="col-xs-4 column">
+        </div>
+</div>
+</div>    
+{% endblock content%}

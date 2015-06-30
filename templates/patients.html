@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} {% endblock %}
+
+{% block menu %}
+    {% include "patient_menu.html" %}
+{% endblock menu %}
+
+{% block js %}
+<script>
+    $(function() {
+        $(".dp_class").datepicker({                                
+            dateFormat: "yymmdd"  
+        });  
+
+        $("#birth_date").datepicker({                                
+            dateFormat: "yymmdd",
+            changeMonth: true,
+            changeYear: true                    
+        });                   
+    });
+</script> 
+{% endblock js %}
+  
+{% block content %}
+
+<div class="container">
+    
+<div class="row clearfix">    
+  <div class="col-xs-12 column">  
+      <br>
+  </div>    
+</div>     
+    
+<div class="row clearfix">
+
+    
+</div> 
+    
+<div class="row clearfix">
+    <div class="col-xs-12 column">   
+        {% if delete_ask %}
+        <div class="alert alert-danger fade in">
+            <button class="close" data-dismiss="alert" type="button">×</button>
+            Confirm Delete? 
+            <a href="/emrs/emrs/prescriptions/delete/{{ presc_id }}/{{ pid }}">YES</a> | 
+            <a href="/emrs/emrs/prescriptions/{{ pid }}">NO</a>
+        </div>
+        {% endif %} 
+    </div>
+</div>     
+    
+{% include "flash_msg.html" %}
+
+<form role="form" action="/emrs/emrs/patients/save" method="POST">
+<input type="hidden" name="pid" value="{{ pid }}">
+       
+
+<div class="row clearfix">
+    
+{% if show_patient_info %}    
+<div class="col-xs-4 column">
+    
+     <div class="panel panel-primary">
+        <div class="panel-heading">Patient Info</div>        
+        <table class="table table-bordered" style="font-size:12px"> 
+        {% if person_values %}    
+            {% for key, value in person_values if key not in ['person_id', 'active'] %}   
+                <tr>                    
+                    <td style="text-align:left">{{ key|replace({'_': ' '})|title }} {{ key in ['fname','lname','birth_date','gender'] ?  '<span style="color:red;">*</span>' }}</td>
+                    {% if key == 'gender' %}
+                        <td><select style="width:100%;" class="form-control input-sm" id="{{ key }}" type="text" name="{{ key }}">
+                            <option value="" >-</option>
+                        {% for po in person_options if key == po.property_name %}
+                            <option value="{{ po.option_id }}" {{ po.option_value == value ? 'SELECTED' }} >{{ po.option_value }}</option>
+                        {% endfor %}
+                        </select>
+                        </td>  
+                    {% elseif key == 'civil_status' %}
+                        <td><select style="width:100%;" class="form-control input-sm" id="{{ key }}" type="text" name="{{ key }}">
+                            <option value="" >-</option>
+                        {% for po in person_options if key == po.property_name %}
+                            <option value="{{ po.option_id }}" {{ po.option_value == value ? 'SELECTED' }} >{{ po.option_value }}</option>
+                        {% endfor %}
+                        </select>
+                        </td>                       
+                    {% else %} 
+                        <td><input style="width:100%;" class="form-control input-sm" id="{{ key }}" type="text" name="{{ key }}"  value="{{ value }}"></td>
+                    {% endif %}                                     
+                </tr>            
+            {% endfor %}
+        {% else %} 
+            {% for header in person_header if header.Field not in ['person_id', 'active']  %}   
+                <tr>                    
+                    <td style="text-align:left">{{ header.Field|replace({'_': ' '})|title }} {{ header.Field in ['fname','lname','birth_date','gender'] ?  '<span style="color:red;">*</span>' }}</td>
+                    {% if header.Field == 'gender' %}
+                        <td><select style="width:100%;" class="form-control input-sm" id="{{ header.Field }}" type="text" name="{{ header.Field }}">
+                            <option value="" >-</option>
+                        {% for po in person_options if header.Field == po.property_name %}
+                            <option value="{{ po.option_id }}" {{ po.option_value == value ? 'SELECTED' }} >{{ po.option_value }}</option>
+                        {% endfor %}
+                        </select>
+                        </td>  
+                    {% elseif header.Field == 'civil_status' %}
+                        <td><select style="width:100%;" class="form-control input-sm" id="{{ header.Field }}" type="text" name="{{ header.Field }}">
+                            <option value="" >-</option>
+                        {% for po in person_options if header.Field == po.property_name %}
+                            <option value="{{ po.option_id }}" {{ po.option_value == value ? 'SELECTED' }} >{{ po.option_value }}</option>
+                        {% endfor %}
+                        </select>
+                        </td>                        
+                    {% else %} 
+                        <td><input style="width:100%;" class="form-control input-sm" id="{{ header.Field }}" type="text" name="{{ header.Field }}"  value=""></td>
+                    {% endif %}               
+                </tr>            
+            {% endfor %}            
+        {% endif %} 
+        
+        {% if patient_values %}    
+            {% for key, value in patient_values if key not in ['person_id'] %}   
+                <tr>                    
+                    <td style="text-align:left">{{ key|replace({'_': ' '})|title }} <span style="color:red;">*</span></td>
+                    {% if key == 'hepa_status' %}
+                        <td><select style="width:100%;" class="form-control input-sm" id="{{ key }}" type="text" name="{{ key }}">
+                            <option value="" >-</option>
+                        {% for po in person_options if key == po.property_name %}
+                            <option value="{{ po.option_id }}" {{ po.option_id == value ? 'SELECTED' }} >{{ po.option_value }}</option>
+                        {% endfor %}
+                        </select>
+                        </td>                       
+                     
+                    {% elseif key == 'physician_id' %}                    
+                    <td><select style="width:100%;" class="form-control input-sm" id="physician_id" type="text" name="physician_id">
+                        <option value="" >-</option>
+                        {% for p in physicians %}
+                            <option value="{{ p.person_id }}" {{ p.person_id == value ? 'SELECTED' }}>{{ p.pro_title }}</option>
+                        {% endfor %}
+                        </select>
+                    </td>                       
+                    {% else %}                    
+                    <td><input style="width:100%;" class="form-control input-sm" id="{{ key }}" type="text" name="{{ key }}"  value="{{ value }}"></td>
+                    {% endif %}                  
+                </tr>            
+            {% endfor %}
+        {% else %} 
+            {% for header in patient_header if header.Field not in ['person_id'] %}   
+                <tr>                    
+                    <td style="text-align:left">{{ header.Field|replace({'_': ' '})|title }} <span style="color:red;">*</span></td>
+                    {% if header.Field == 'hepa_status' %}
+                        <td><select style="width:100%;" class="form-control input-sm" id="{{ header.Field }}" type="text" name="{{ header.Field }}">
+                            <option value="" >-</option>
+                        {% for po in person_options if header.Field == po.property_name %}
+                            <option value="{{ po.option_id }}" {{ po.option_id == value ? 'SELECTED' }} >{{ po.option_value }}</option>
+                        {% endfor %} 
+                        </select>
+                        </td>                    
+                    {% elseif header.Field == 'physician_id' %}
+                        <td><select style="width:100%;" class="form-control input-sm" id="physician_id" type="text" name="physician_id">
+                            <option value="" >-</option>
+                        {% for p in physicians %}
+                            <option value="{{ p.person_id }}">{{ p.pro_title }}</option>
+                        {% endfor %} 
+                        </select>
+                        </td>                         
+                    {% else %}                    
+                    <td><input style="width:100%;" class="form-control input-sm" id="{{ header.Field }}" type="text" name="{{ header.Field }}"  value=""></td>
+                    {% endif %}            
+                </tr>            
+            {% endfor %}                
+        {% endif %}  
+      
+        </table>         
+
+        <div class="form-group">
+            <button class="btn btn-primary btn-block" type="submit" name="btn_save_property" value="1">Save</button>
+        </div>            
+        </div>  
+</div>
+{% endif %}
+    
+    
+{% if show_treatment_history %}
+<div class="col-xs-4 column">
+     <div class="panel panel-primary">
+        <div class="panel-heading">Treatment History for: {{ person_values.fname }} {{ person_values.lname }}</div> 
+            <table class="table table-bordered" style="font-size:12px">
+                <tr>
+                    <th>Treatment ID</th>
+                    <th>Date</th>                  
+                </tr> 
+                {% set i = 1 %}
+                {% for history in treatment_history %}   
+                <tr>
+                    <td><a href="/emrs/emrs/treatments/{{ history.entry_date }}/{{ pid }}/{{ history.treatment_id }}/{{ history.version_id }}">{{ i }}</a></td>
+                    <td style="text-align:left">{{ history.entry_date_readable }}</td>
+                </tr>  
+                {% set i = i + 1 %}
+                {% endfor %}    
+            </table>
+     </div>
+</div> 
+{% endif %}
+
+{% if show_appointment_history %}
+<div class="col-xs-12 column">
+     <div class="panel panel-primary">
+        <div class="panel-heading">Appointment History</div>
+            <table class="table table-bordered" style="font-size:12px">
+                <tr>
+                    <th>ID</th>
+                    <th>Date</th>  
+                    <th>Time</th>  
+                    <th>Set</th>  
+                    <th>Status</th>  
+                </tr>    
+             {% for appointment in appointment_history %}   
+                <tr>
+                    <td><a href="/emrs/emrs/appointments/view/{{ appointment.appointment_date }}">{{ appointment.aid }}</a></td>
+                    <td style="text-align:left">{{ appointment.appointment_date_readable }}</td>
+                    <td style="text-align:left">{{ appointment.appointment_time }}</td>
+                    <td>{{ appointment.set_number }}</td>
+                    <td>{{ appointment.appointment_status }}</td>
+
+
+                </tr>    
+            {% endfor %}    
+            </table>            
+     </div>
+</div> 
+{% endif %}
+
+
+    
+    
+</div>
+
+</form>
+
+</div>
+
+{% endblock %}

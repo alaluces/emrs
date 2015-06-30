@@ -1,0 +1,127 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} {% endblock %}
+{% block menu %} {% endblock menu %}
+
+{% block js %}
+<script>
+    $(function() {
+        $(".dp_class").datepicker({                                
+            dateFormat: "yymmdd"  
+        });  
+
+        $("#birth_date").datepicker({                                
+            dateFormat: "yymmdd",
+            changeMonth: true,
+            changeYear: true                    
+        });                   
+    });
+</script> 
+{% endblock js %}
+
+{% block content %}
+
+<div class="container">
+    
+<div class="row clearfix">    
+  <div class="col-xs-12 column">  
+      <br>
+  </div>    
+</div>     
+    
+<div class="row clearfix">
+    
+    <div class="col-xs-12 column">     
+        <form role="form" action="/emrs/emrs/patients/find" method="POST">
+        <div class="form-group">
+            <div class="input-group">
+                <span class="input-group-addon">Find patient</span>
+                <input class="form-control" placeholder="Last Name, First Name" type="text" name="param" value="{{ param }}">
+                <span class="input-group-addon">
+                <select name="gender">
+                    <option value="Both">Gender: Both</option>
+                    <option value="Male"   {{ gender == 'Male' ? 'SELECTED' }}>Gender: Male</option>
+                    <option value="Female" {{ gender == 'Female' ? 'SELECTED' }}>Gender: Female</option>
+                </select>
+                </span>
+                <span class="input-group-addon" >
+                <select name="hepa_status">
+                    <option value="All">Hepa: All</option>
+                    <option value="Negative" {{ hepa_status == 'Negative' ? 'SELECTED' }}>Hepa: Negative</option>
+                    <option value="B"        {{ hepa_status == 'B' ? 'SELECTED' }}>Hepa: Hepa B</option>
+                    <option value="C"        {{ hepa_status == 'C' ? 'SELECTED' }}>Hepa: Hepa C</option>
+                </select>
+                </span>
+                <span class="input-group-btn">
+                    <button class="btn btn-default" type="submit" name="btn_search">
+                      Find
+                    </button>                    
+                      <a href="/emrs/emrs/patients/add" target="_blank" class="btn btn-default">Add New</a>                                 
+                </span>
+            </div>
+        </div>    
+        </form>        
+    </div>
+    
+    
+</div> 
+    
+{% include "flash_msg.html" %}
+
+{% if searching %}
+<div class="row clearfix">
+<div class="col-xs-12 column">  
+    {% if results %}       
+            <div class="panel panel-primary">
+                <div class="panel-heading">Search results</div>
+                    <table class="table">
+                        <thead>
+                          <tr><th>Name</th><th>View</th><th>Add</th></tr>
+                        </thead>
+                        <tbody>
+                            {% for result in results %}                            
+                            <tr>
+                                <td>{{ result.fname|title ~ ' ' ~ result.lname|title }}</td>
+                                <td><a href="/emrs/emrs/patients/{{ result.person_id }}" target="_blank">View</a></td>
+                                
+                                <td>   
+                                    <!-- take note: kasana sa looping yung form para yung na submit na button, yung ka group lang nya yung ma sesend -->
+                                    <form class="form-inline" action="{{ root_url }}/emrs/emrs/appointments/set/{{ result.person_id }}" method="POST">
+                                      <div class="form-group">
+                                        <input class="form-control dp_class input-sm" type="text" placeholder="Select Date"style="width:120px;" name="entry_date">
+                                      </div>
+                                      <div class="form-group">
+                                        <select class="form-control input-sm" name="set_number"> 
+                                            <option value="">Set</option>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            
+                                        </select>
+                                      </div>                                        
+                                
+                                      <button class="btn btn-default input-sm" type="submit" value='1' name='add'>Add</button>
+                                      <button class="btn btn-default input-sm" type="submit" value='1' name='add_today'>Add to today's appointment</button>
+                                      
+                                    </form>                                    
+                                </td>
+                       
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+            </div>  
+    {% else %}
+            <div class="alert alert-danger fade in">
+                <button class="close" data-dismiss="alert" type="button">×</button>
+                No results
+            </div>
+
+    {% endif %}
+</div>
+</div>  
+{% endif %}
+
+
+    
+</div>
+{% endblock %}

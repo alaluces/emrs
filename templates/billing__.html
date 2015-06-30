@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} {% endblock %}
+
+{% block menu %}
+    {% include "patient_menu.html" %}
+{% endblock menu %}
+
+{% block js %}
+{% endblock js %}
+
+{% block content %}
+
+<div class="container">
+    
+<div class="row clearfix">    
+  <div class="col-xs-12 column">  
+      <br>
+  </div>    
+</div>     
+        
+<div class="row clearfix">
+    <div class="col-xs-12 column">   
+        {% if delete_ask %}
+        <div class="alert alert-danger fade in">
+            <button class="close" data-dismiss="alert" type="button">×</button>
+            Confirm Delete? 
+            <a href="/emrs/emrs/prescriptions/delete/{{ pid }}/{{ presc_id }}">YES</a> | 
+            <a href="/emrs/emrs/medications/{{ pid }}">NO</a>
+        </div>
+        {% endif %} 
+    </div>
+</div>     
+    
+{% include "flash_msg.html" %}
+
+<div class="row clearfix">
+<div class="col-xs-12 column">
+     <div class="panel panel-primary">
+        <div class="panel-heading">Meds List for: {{ person.fname }} {{ person.lname }}</div> 
+            <table class="table table-bordered" style="font-size:12px">
+                <tr>
+                    <th>ID</th>
+                    <th>Created</th> 
+                    <th>Last Edit</th> 
+                    <th>Action</th> 
+                </tr>                
+                {% for p in prescription_list if p.log_status not in ['DELETED'] %}   
+                <tr>                    
+                    <td>{{ p.presc_id }}</td>
+                    <td>{{ p.created }}</td>
+                    <td>{{ p.edited }}</td>
+                    <td><a href="/emrs/emrs/prescriptions/edit/{{ pid }}/{{ p.presc_id }}">Edit</a> |
+                        <a href="/emrs/emrs/prescriptions/delete-ask/{{ pid }}/{{ p.presc_id }}">Delete</a>
+                    </td>                    
+                </tr>               
+                {% endfor %}    
+            </table>
+     </div>    
+     <a href="/emrs/emrs/prescriptions/add/{{ pid }}" class="btn btn-primary" type="button">Add New</a>
+</div> 
+</div>
+
+
+</div>
+
+{% endblock %}

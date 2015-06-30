@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block menu %}
+    {% include "patient_menu.html" %}
+{% endblock menu %}
+
+
+
+{% block js %}
+<script>
+    $(function() {
+        
+        $(".dp_class").datepicker({                                
+            dateFormat: "yymmdd"  
+        });         
+        
+        //-log (post bun/pre bun) - 0.03 + (4 - 3.5 x (post bun/pre bun) x (UF/weight)
+        
+        function calcKtv(){           
+            var pre = $('#98').val();
+            var post = $('#99').val();
+            
+            var res = (parseInt(pre) - parseInt(post)) / parseInt(pre) * 100;
+            res = res.toFixed(2);
+            $('#100').val(res);
+        }        
+        
+        function calcUrr(){           
+            var pre = $('#98').val();
+            var post = $('#99').val();
+            
+            var res = (parseInt(pre) - parseInt(post)) / parseInt(pre) * 100;
+            res = res.toFixed(2);
+            $('#100').val(res);
+        }
+        
+        function calcTsat(){           
+            var iron = $('#79').val();
+            var tibc = $('#80').val();
+            
+            var res = parseInt(iron) / parseInt(tibc);
+            res = res.toFixed(2);
+            $('#104').val(res);
+        }
+
+        $( "#79" ).blur(function() {
+            calcTsat();
+        }); 
+        $( "#80" ).blur(function() {
+            calcTsat();
+        }); 
+        
+        $( "#98" ).blur(function() {
+            calcUrr();
+        }); 
+        $( "#99" ).blur(function() {
+            calcUrr();
+        });         
+                
+    });
+</script>
+{% endblock js %}  
+
+{% block content %}
+<div class="container">
+    
+ <div class="row clearfix">    
+  <div class="col-xs-12 column">  
+        <ul class="nav nav-pills">
+            <li {{ cid == 'all' ? 'class="active"' : '' }} >
+                 <a href="/emrs/emrs/lab-results/view/all/{{ pid }}">All</a>
+            </li>            
+            {% for lml in lab_menu_list %}
+                <li {{ cid == lml.category_id ? 'class="active"' : ''}} >
+                    <a href="/emrs/emrs/lab-results/view/{{ lml.category_id }}/{{ pid }}">{{ lml.category_name }}</a>
+                </li>
+            {% endfor %} 
+        </ul> 
+  </div>    
+</div> 
+    
+<div class="row clearfix">    
+  <div class="col-xs-12 column">  
+      <br>
+  </div>    
+</div>      
+   
+<div class="row clearfix">
+    <div class="col-xs-12 column">        
+        {% if delete_ask %}
+        <div class="alert alert-danger fade in">
+            <button class="close" data-dismiss="alert" type="button">×</button>
+            Confirm Delete? 
+            <a href="/emrs/emrs/lab-results/delete/{{ cid }}/{{ pid }}/{{ old_date }}">YES</a> | 
+            <a href="/emrs/emrs/lab-results/view/{{ cid }}/{{ pid }}">NO</a>
+        </div>
+        {% endif %}
+    </div>
+</div> 
+    
+{% include "flash_msg.html" %}    
+    
+   
+       
+<form role="form" action="/emrs/emrs/lab-results/save" method="POST">
+<input type="hidden" name="pid"       value="{{ pid }}">   
+<input type="hidden" name="old_date" value="{{ old_date }}">
+
+<div class="row clearfix"> 
+    
+<div class="col-md-12 column">
+    {% for l in lab_list %}
+     <div style="overflow-y: auto;" class="panel panel-primary">        
+        <div class="panel-heading">{{ l.category_name }} lab results for: {{ person.fname }} {{ person.lname }}</div>
+          
+            <table  border=1 rules="all" style="font-size:12px">
+                <tr>
+                    <th colspan="2">Date</th>
+                    
+                    {% set dtmp = l.date_headers|split(',') %}
+                    {% set i = 0 %}
+                    {% set n = 0 %}
+                    {% for d in dtmp if l.date_headers %}
+                        {% if d == old_date and cid == l.category_id %}
+                            <td><input style='{{ cid in ['8','9','10'] ? 'width:160px;' : 'width:60px;' }}' id="{{ lr.property_id }}" class="dp_class" name="new_date" type='text' value="{{ d }}"></td>
+                            {% set n = i %}
+                        {% else %}     
+                            <th>{{ d[4:2] }}/{{ d[6:2] }}/{{ d[0:4] }}</th>    
+                        {% endif %}                         
+                        {% set i = i +1  %}
+                    {% endfor %} 
+                    {% if not edit_mode %}
+                        <td><input style='{{ cid in ['8','9','10'] ? 'width:160px;' : 'width:60px;' }}' id="{{ lr.property_id }}" class="dp_class" name="new_date" type='text' value="{{ d }}"></td>
+                    {% endif %}                        
+                </tr>  
+                <tr>
+                    <th>Test</th>
+                    <th>Normal<br>Value</th>
+                    
+                    {% set dtmp = l.date_headers|split(',') %}
+                    {% set i = 0 %}
+                    {% set n = 0 %}
+                    {% for d in dtmp if l.date_headers %}
+                        {% if d == old_date and cid == l.category_id %}
+                            <th><button class="btn btn-primary btn-block" type="submit" name="btn_add_lr" value="{{ l.category_id }}">Save</button></th>
+                            {% set n = i %}
+                        {% else %}     
+                            <th>
+                                <a style='font-size:14px;' href="/emrs/emrs/lab-results/edit/{{ l.category_id }}/{{ pid }}/{{ d }}">edit</a><br>
+                                <a style='font-size:10px;' href="/emrs/emrs/lab-results/delete-ask/{{ l.category_id }}/{{ pid }}/{{ d }}">delete</a>
+                            </th>    
+                        {% endif %}                         
+                        {% set i = i +1  %}
+                    {% endfor %} 
+                    {% if not edit_mode %}
+                        <th><button class="btn btn-primary btn-block" type="submit" name="btn_add_lr" value="{{ l.category_id }}">Save</button></th>
+                    {% endif %}                        
+                </tr>                
+                {% for lr in lab_results if lr.category_id == l.category_id %}   
+                <tr>             
+                    <td>{{ lr.property_name }}</td>
+                    <td>{{ lr.normal_value }}</td>
+                    
+                    {% set tmp = lr.val|split(',') %}
+                    {% set i = 0 %}
+                    {% for v in tmp if lr.val %}
+                        {% if i == n and cid == l.category_id and edit_mode == '1'%}
+                            <td><input style='{{ cid in ['8','9','10'] ? 'width:160px;' : 'width:60px;' }}' id="{{ lr.property_id }}" name="{{ lr.property_id ~ ',X' }}" type='text' value="{{ v }}"></td>
+                        {% else %}    
+                            <td>{{ v }}</td>    
+                        {% endif %}                        
+                        {% set i = i + 1  %}
+                    {% endfor %} 
+                    {% if not edit_mode %}
+                        <td><input style='{{ cid in ['8','9','10'] ? 'width:160px;' : 'width:60px;' }}' id="{{ lr.property_id }}" name="{{ lr.property_id ~ ',X' }}" type='text' value=""></td>
+                    {% endif %}   
+                </tr>    
+                {% endfor %}    
+            </table>             
+     </div>
+    {% endfor %}
+</div>     
+    
+</div>
+</form>
+
+</div>
+
+{% endblock %}

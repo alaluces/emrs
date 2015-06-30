@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}{{ title }} {% endblock %}
+{% block navbar %} {% endblock %} 
+{% block menu %} {% endblock %} 
+{% block content %}
+
+<div class="container">
+    
+   
+<div class="row clearfix">
+    <div class="col-xs-12 column">         
+        {% if flash.error %}
+        <div class="alert alert-danger fade in">
+            <button class="close" data-dismiss="alert" type="button">×</button>
+            {{ flash.error }}
+        </div>
+        {% endif %}
+        
+        {% if flash.info %}
+        <div class="alert alert-success fade in">
+          <button class="close" data-dismiss="alert" type="button">×</button>
+          {{ flash.info }}
+        </div>
+        {% endif %} 
+    </div>
+</div>      
+
+<div class="row clearfix">
+    <div class="col-xs-12 column">
+        <div style="text-align:center;">
+            <img src="{{ root_url }}/emrs/pub/img/front0.jpg">    
+        </div>  
+    </div>
+</div>
+<br>  <br>   
+<div class="row clearfix">    
+    <div class="col-xs-2 column">
+        <a href="/emrs/emrs/patients" target="_blank" class="btn btn-primary btn-block" type="button">Patients</a>  
+        <a href="/emrs/emrs/appointments" target="_blank" class="btn btn-primary btn-block" type="button">Appointments</a>
+        <a href="#" class="btn btn-primary btn-block" type="button">-</a> 
+        <a href="#" class="btn btn-primary btn-block" type="button">-</a> 
+        <a href="#" class="btn btn-primary btn-block" type="button">-</a> 
+        <a href="#" class="btn btn-primary btn-block" type="button">-</a> 
+    </div>
+    
+    <div class="col-xs-8 column">
+        <div style="text-align:center;">
+            <img src="{{ root_url }}/emrs/pub/img/front.jpg">    
+        </div>           
+    </div>
+    
+    <div class="col-xs-2 column">
+        <a href="#" class="btn btn-primary btn-block" type="button">Accounting</a> 
+        <a href="#" class="btn btn-primary btn-block" type="button">-</a>         
+        <a href="#" class="btn btn-primary btn-block" type="button">-</a> 
+        <a href="#" class="btn btn-primary btn-block" type="button">-</a> 
+        <a href="/emrs/emrs/reports/laboratory" target="_blank" class="btn btn-primary btn-block" type="button">Lab Reports</a>
+        <a href="/emrs/emrs/tools/users/active" target="_blank" class="btn btn-primary btn-block" type="button">Tools</a>
+        <a href="/emrs/emrs/logout" class="btn btn-primary btn-block" type="button">Log Out</a> 
+    </div>
+</div>  
+    
+<div class="row clearfix">
+    <div class="col-xs-12 column">
+        <div style="text-align:center;">
+            <img src="{{ root_url }}/emrs/pub/img/front2.jpg"> 
+        </div>
+    </div>
+</div>      
+ 
+
+     
+
+</div>
+
+
+   
+
+{% endblock %}

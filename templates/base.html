@@ -1,0 +1,77 @@
+{% block doctype %}<!DOCTYPE html>{% endblock %}
+<html lang="en">
+<head>      
+    
+    {% set root_url = 'http://127.0.0.1' %} 
+    
+   
+    <title>{% block title %}{% endblock %}</title>    
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">    
+    
+    <!-- Fav and touch icons -->
+    <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ root_url }}/emrs/pub/img/apple-touch-icon-144-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ root_url }}/emrs/pub/img/apple-touch-icon-114-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ root_url }}/emrs/pub/img/apple-touch-icon-72-precomposed.png">
+    <link rel="apple-touch-icon-precomposed" href="{{ root_url }}/emrs/pub/img/apple-touch-icon-57-precomposed.png">
+    <link rel="shortcut icon" href="{{ root_url }}/emrs/pub/img/favicon.png">   
+    
+    {% block jquery %}
+    <script type="text/javascript" src="{{ root_url }}/emrs/pub/js/jquery.min.js"></script>
+    <script type="text/javascript" src="{{ root_url }}/emrs/pub/js/jquery-ui.min.js"></script>    
+    <link rel="stylesheet" href="{{ root_url }}/emrs/pub/css/jquery-ui.min.css"> 
+    <link rel="stylesheet" href="{{ root_url }}/emrs/pub/css/jquery-ui.structure.min.css"> 
+    <link rel="stylesheet" href="{{ root_url }}/emrs/pub/css/jquery-ui.theme.min.css"> 
+    {% endblock %}
+
+    {% block bootstrap %} 
+    <!--link rel="stylesheet/less" href="less/bootstrap.less" type="text/css" /-->
+    <!--link rel="stylesheet/less" href="less/responsive.less" type="text/css" /-->
+    <!--script src="js/less-1.3.3.min.js"></script-->
+    <!--append ‘#!watch’ to the browser URL, then refresh the page. -->
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.js"></script>
+    <![endif]-->  
+    <link href="{{ root_url }}/emrs/pub/css/bootstrap.min.css" rel="stylesheet">
+    <link href="{{ root_url }}/emrs/pub/css/style.css" rel="stylesheet">    
+    <script type="text/javascript" src="{{ root_url }}/emrs/pub/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="{{ root_url }}/emrs/pub/js/scripts.js"></script>  
+    {% endblock %} 
+    
+    {% block js %}
+    {% endblock js %}   
+        
+</head>
+
+
+<body> 
+{% block header %}    
+<div class="container">
+    {% block navbar %}
+	<div class="row clearfix">
+		<div class="col-md-12 col-xs-12 column">                        
+			<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+				<div class="navbar-header">
+					 <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1"> <span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button> <a class="navbar-brand" href="#">Renal Clinical Care Services, Inc</a>
+			        </div>
+				
+			</nav>
+                        
+		</div>
+	</div>
+    <br/><br/><br/> 
+    {% endblock navbar %}
+    {% block menu %} 
+
+    {% endblock menu %}
+</div>
+{% endblock header %}
+    
+{% block content %}	
+{% endblock %}
+
+</body>
+</html>

@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+
+{% block title %} {{ title }} {% endblock %}
+
+{% block menu %}    
+{% endblock menu %}
+
+{% block js %}
+<script>
+    jQuery(document).ready(function($)
+    { 
+        $("#discount_name").change(
+            function(){
+                v = $( "#discount_name :selected" ).val(); 
+                $('#discount_percent').val( v );
+                calcTotalAmount();
+            }    
+        );   
+            
+       $( "#treatment_amount" ).change(function() {  
+            calcTotalAmount();
+        });  
+        
+    }); 
+    
+    function calcTotalAmount(){        
+        var amt          = $('#treatment_amount').val();
+        var disc_percent = $('#discount_percent').val(); 
+        var disc_value   = parseInt(amt) * (parseInt(disc_percent) / 100);
+        var total        = parseInt(amt) - disc_value;
+        $('#total_amount').val(total);
+    } 
+    
+</script>    
+{% endblock js %}  
+
+{% block content %}
+<div class="container">
+    
+<div class="row clearfix">    
+  <div class="col-xs-12 column">  
+      <br>
+  </div>    
+</div>      
+   
+{% include "flash_msg.html" %}    
+    
+   
+       
+<form role="form" action="/emrs/emrs/reports/laboratory" method="POST">
+<input type="hidden" name="pid"       value="{{ pid }}">   
+<input type="hidden" name="old_date" value="{{ old_date }}">
+
+<div class="row clearfix">
+    
+<div class="col-md-4 column">
+</div>    
+    
+<div class="col-md-4 column">    
+     <div class="panel panel-primary">        
+        <div class="panel-heading">Billing</div>
+        
+        <table class="table table-bordered">
+        <tr>
+            <td>Treatment Type</td>
+            <td>
+            <select style="width:160px;" name="treatment_type">
+                <option value="al">---</option>
+                <option value="Hemodiafiltration">Hemodialysis</option>
+                <option value="Hemodiafiltration">Hemodiafiltration</option>
+            </select>
+            </td>    
+        </tr>
+        <tr>
+            <td>Amount</td>
+            <td><input style="width:160px;" type='text' id="treatment_amount" name="treatment_amount"></td>    
+        </tr>        
+        <tr>
+            <td>Discount</td>
+            <td>
+            <select style="width:120px;" id="discount_name" name="discount_name">
+                <option value="">---</option>   
+                {% for d in discounts %}
+                    <option value="{{ d.discount_percent }}">{{ d.discount_name }}</option>   
+                {% endfor %}
+            </select>
+            <input style="width:30px;" type='text' id="discount_percent" name="discount_percent">%
+            </td>    
+        </tr>
+        <tr>
+            <td>Total</td>
+            <td><input style="width:160px;" type='text' id="total_amount" name="total_amount"></td>    
+        </tr>         
+        <tr>
+            <td></td>
+            <td><button type=submit class="btn btn-primary btn-block">Submit</button></td>    
+        </tr>        
+        
+        </table>         
+     </div>
+    
+</div>  
+    
+<div class="col-md-4 column">
+</div>
+    
+</div>  
+
+<div class="row clearfix">    
+<div class="col-md-12 column">
+
+</div> 
+</div>    
+
+</form>
+
+</div>
+
+{% endblock %}
