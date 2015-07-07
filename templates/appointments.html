@@ -222,7 +222,7 @@
                 <tr>
                     <td>{{ c }}</td>
                     <td><a href="/emrs/emrs/patients/{{ set.person_id }}" target="_blank">{{ set.name|title }}</a></td>
-                    <td>{{ set.time_added_readable }}</td> 
+                    <td>{{ set.time_added[0:2] }}:{{ set.time_added[2:2] }}:{{ set.time_added[4:2] }}</td>                    
                     <td>{{ set.appointment_status }}</td>
                     <td>
                         [<a href="/emrs/emrs/treatments/{{ today }}/{{ set.person_id }}" target="_blank">Treatment</a>]
@@ -240,7 +240,7 @@
                <tr>
                     <td>B</td>
                     <td><a href="/emrs/emrs/patients/{{ set.person_id }}" target="_blank">{{ set.name|title }}</a></td>
-                    <td>{{ set.time_added_readable }}</td> 
+                    <td>{{ set.time_added[0:2] }}:{{ set.time_added[2:2] }}:{{ set.time_added[4:2] }}</td>   
                     <td>{{ set.appointment_status }}</td>
                     <td>
                         [<a href="/emrs/emrs/treatments/{{ today }}/{{ set.person_id }}" target="_blank">Treatment</a>]
@@ -256,7 +256,7 @@
                <tr>
                     <td>C</td>
                     <td><a href="/emrs/emrs/patients/{{ set.person_id }}" target="_blank">{{ set.name|title }}</a></td>
-                    <td>{{ set.time_added_readable }}</td> 
+                    <td>{{ set.time_added[0:2] }}:{{ set.time_added[2:2] }}:{{ set.time_added[4:2] }}</td>   
                     <td>{{ set.appointment_status }}</td>
                     <td>
                         [<a href="/emrs/emrs/treatments/{{ today }}/{{ set.person_id }}" target="_blank">Treatment</a>]
@@ -280,7 +280,7 @@
                 <tr>
                     <td>{{ c }}</td>
                     <td><a href="/emrs/emrs/patients/{{ set.person_id }}" target="_blank">{{ set.name|title }}</a></td>
-                    <td>{{ set.time_added_readable }}</td> 
+                    <td>{{ set.time_added[0:2] }}:{{ set.time_added[2:2] }}:{{ set.time_added[4:2] }}</td>   
                     <td>{{ set.appointment_status }}</td>
                     <td>
                         [<a href="/emrs/emrs/treatments/{{ today }}/{{ set.person_id }}" target="_blank">Treatment</a>]
@@ -298,7 +298,7 @@
                <tr>
                     <td>B</td>
                     <td><a href="/emrs/emrs/patients/{{ set.person_id }}" target="_blank">{{ set.name|title }}</a></td>
-                    <td>{{ set.time_added_readable }}</td> 
+                    <td>{{ set.time_added[0:2] }}:{{ set.time_added[2:2] }}:{{ set.time_added[4:2] }}</td>   
                     <td>{{ set.appointment_status }}</td>
                     <td>
                         [<a href="/emrs/emrs/treatments/{{ today }}/{{ set.person_id }}" target="_blank">Treatment</a>]
@@ -313,7 +313,7 @@
                <tr>
                     <td>C</td>
                     <td><a href="/emrs/emrs/patients/{{ set.person_id }}" target="_blank">{{ set.name|title }}</a></td>
-                    <td>{{ set.time_added_readable }}</td> 
+                    <td>{{ set.time_added[0:2] }}:{{ set.time_added[2:2] }}:{{ set.time_added[4:2] }}</td>   
                     <td>{{ set.appointment_status }}</td>
                     <td>
                         [<a href="/emrs/emrs/treatments/{{ today }}/{{ set.person_id }}" target="_blank">Treatment</a>]
