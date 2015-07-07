@@ -218,7 +218,7 @@
             </thead>
             <tbody>
             {% set c = 1 %} 
-            {% for set in today_set1 if set.appointment_status in ['WAITING','ONGOING'] and set.hepatitis_status == 'Negative' %}
+            {% for set in today_set1 if set.appointment_status in ['WAITING','ONGOING','DONE'] and set.hepatitis_status == 'Negative' %}
                 <tr>
                     <td>{{ c }}</td>
                     <td><a href="/emrs/emrs/patients/{{ set.person_id }}" target="_blank">{{ set.name|title }}</a></td>
@@ -236,7 +236,7 @@
                 <tr><td>{{ i }}</td><td></td><td></td><td></td><td></td></tr>            
             {% endfor %}            
             
-            {% for set in today_set1 if set.appointment_status in ['WAITING','ONGOING'] and set.hepatitis_status == 'Hepatitis B' %}            
+            {% for set in today_set1 if set.appointment_status in ['WAITING','ONGOING','DONE'] and set.hepatitis_status == 'Hepatitis B' %}            
                <tr>
                     <td>B</td>
                     <td><a href="/emrs/emrs/patients/{{ set.person_id }}" target="_blank">{{ set.name|title }}</a></td>
@@ -252,7 +252,7 @@
                 <tr><td>B</td><td></td><td></td><td></td><td></td></tr>
             {% endfor %}            
             
-            {% for set in today_set1 if set.appointment_status in ['WAITING','ONGOING'] and set.hepatitis_status == 'Hepatitis C' %}            
+            {% for set in today_set1 if set.appointment_status in ['WAITING','ONGOING','DONE'] and set.hepatitis_status == 'Hepatitis C' %}            
                <tr>
                     <td>C</td>
                     <td><a href="/emrs/emrs/patients/{{ set.person_id }}" target="_blank">{{ set.name|title }}</a></td>
@@ -276,7 +276,7 @@
             </thead>
             <tbody>
             {% set c = 1 %} 
-            {% for set in today_set2 if set.appointment_status in ['WAITING','ONGOING'] and set.hepatitis_status == 'Negative' %}
+            {% for set in today_set2 if set.appointment_status in ['WAITING','ONGOING','DONE'] and set.hepatitis_status == 'Negative' %}
                 <tr>
                     <td>{{ c }}</td>
                     <td><a href="/emrs/emrs/patients/{{ set.person_id }}" target="_blank">{{ set.name|title }}</a></td>
@@ -294,7 +294,7 @@
                 <tr><td>{{ i }}</td><td></td><td></td><td></td><td></td></tr>            
             {% endfor %}
 
-            {% for set in today_set2 if set.appointment_status in ['WAITING','ONGOING'] and set.hepatitis_status == 'Hepatitis B' %}            
+            {% for set in today_set2 if set.appointment_status in ['WAITING','ONGOING','DONE'] and set.hepatitis_status == 'Hepatitis B' %}            
                <tr>
                     <td>B</td>
                     <td><a href="/emrs/emrs/patients/{{ set.person_id }}" target="_blank">{{ set.name|title }}</a></td>
@@ -309,7 +309,7 @@
                 <tr><td>B</td><td></td><td></td><td></td><td></td></tr>
             {% endfor %}            
             
-            {% for set in today_set2 if set.appointment_status in ['WAITING','ONGOING'] and set.hepatitis_status == 'Hepatitis C' %}            
+            {% for set in today_set2 if set.appointment_status in ['WAITING','ONGOING','DONE'] and set.hepatitis_status == 'Hepatitis C' %}            
                <tr>
                     <td>C</td>
                     <td><a href="/emrs/emrs/patients/{{ set.person_id }}" target="_blank">{{ set.name|title }}</a></td>

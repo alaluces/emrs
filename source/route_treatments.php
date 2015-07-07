@@ -86,25 +86,20 @@ $app->group('/treatments', function () use ($app, $sec, $person, $treatment, $ap
         
         //var_dump($allPostVars);
         
-        if ($app->request->post('btn_start_now') == '1' ) {                  
-            $treatment->log($tid, $vid, $entry_date, $entry_time, 'START_TREATMENT', '');
-            $appointment->update($aid, $entry_date, $entry_time, $set_number, 'ONGOING');                   
-        }        
-        
-        if ($app->request->post('btn_done') == '1' ) {
-            $vid++;            
-            $treatment->log($tid, $vid, $entry_date, $entry_time, 'CLOSED', '');   
-            $appointment->update($aid, $entry_date, $entry_time, $set_number, 'DONE'); 
-        } 
-        
-        if ($app->request->post('btn_update') == '1' ) {
-            $vid++;
+        if ($app->request->post('btn_start_now') == '1' ) {
             
+            $treatment->log($tid, $vid, $entry_date, $entry_time, 'START_TREATMENT', '');
+            $appointment->update($aid, $entry_date, $entry_time, $set_number, 'ONGOING');
+            
+        } else {
+            
+            $vid++;
+
             // delete all entries exept last 3
             for ($i = 1; $i <= $vid - 4; $i++) {
                 $treatment->delete_entries($tid, $i);                
             }            
-            
+
             // Loop thru each post variables
             // legend for treatment form post variables
             // property_id, value type(0=values, 1=password auth), index of values)
@@ -117,7 +112,7 @@ $app->group('/treatments', function () use ($app, $sec, $person, $treatment, $ap
                 if ($arrtmp[2] == '1') {
                     continue;
                 }
-                
+
                 // 20150506 verify who primed cannulated etc thru password
                 // if select_persons aka need to authenticate pw
                 if ($arrtmp[1] == '1') {                   
@@ -144,9 +139,16 @@ $app->group('/treatments', function () use ($app, $sec, $person, $treatment, $ap
                 } else {
                     $treatment->add_entries($tid, $vid, $arrtmp[0], $val);
                 }                
-            }           
+            } 
             
-            $treatment->log($tid, $vid, $entry_date, $entry_time, 'UPDATE_TREATMENT', '');            
+            if ($app->request->post('btn_update') == '1' ) {
+                $treatment->log($tid, $vid, $entry_date, $entry_time, 'UPDATE_TREATMENT', '');  
+            }
+                
+            if ($app->request->post('btn_done') == '1' ) {                           
+                $treatment->log($tid, $vid, $entry_date, $entry_time, 'CLOSED', '');
+                $appointment->update($aid, $entry_date, $entry_time, $set_number, 'DONE'); 
+            }                     
 
             $ms_time     = $app->request->post('ms_time');
             $ms_bp1      = $app->request->post('ms_bp1');
@@ -157,9 +159,9 @@ $app->group('/treatments', function () use ($app, $sec, $person, $treatment, $ap
             $ms_tmp      = $app->request->post('ms_tmp');
             $ms_ufvol    = $app->request->post('ms_ufvol');
             $ms_comments = $app->request->post('ms_comments');           
-            
+
             $treatment->delete_monitoring_sheet($tid);
-            
+
             for ($i = 0; $i < count($ms_time); $i++) {                
                 $treatment->save_monitoring_sheet($tid, $ms_time[$i], $ms_bp1[$i], $ms_bp2[$i], $ms_ap[$i], $ms_vp[$i], $ms_qb[$i], $ms_tmp[$i], $ms_ufvol[$i], $ms_comments[$i]);                
             }            
