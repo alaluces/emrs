@@ -192,7 +192,79 @@
             <thead>
               <tr><th colspan="3">Third Set</th></tr>
               <tr><th>#</th><th>Name</th><th>Status</th></tr>
-            </thead>
+            </thead>            
+            <tbody>
+            {% set c = 1 %}    
+            {% for set in set3 if set.appointment_status != 'REMOVED' and set.hepatitis_status == 'Negative' and set.is_reserved == 'RESERVED' %}            
+                <tr>
+                    <td>{{ c }}</td>
+                    <td><a href="/emrs/emrs/patients/{{ set.person_id }}" target="_blank">{{ set.name|title }}</a></td>
+                    <td>
+                        {{ set.appointment_status }} 
+                        
+                        {% if set.appointment_status == 'RESERVED' %}
+                        [<a href="/emrs/emrs/appointments/add/3/{{ set.person_id }}">Add to today's schedule</a>]
+                        {% endif %}  
+                        {% if set.appointment_status == 'CANCELLED' %}
+                        [<a href="/emrs/emrs/appointments/remove/{{ entry_date }}/{{ set.appointment_id }}">Remove</a>]                        
+                        {% else %}       
+                        [<a href="/emrs/emrs/appointments/cancel/{{ entry_date }}/{{ set.appointment_id }}">Cancel</a>]  
+                        {% endif %}        
+                    </td> 
+                              
+                </tr> 
+                {% set c = c + 1 %}
+            {% endfor %}
+            {% for i  in c..13 %}
+                <tr><td>{{ i }}</td><td></td><td></td></tr>            
+            {% endfor %}
+            
+            {% for set in set3 if set.appointment_status != 'REMOVED' and set.hepatitis_status == 'Hepatitis B' and set.is_reserved == 'RESERVED' %}            
+                <tr>
+                    <td>B</td>
+                    <td><a href="/emrs/emrs/patients/{{ set.person_id }}" target="_blank">{{ set.name|title }}</a></td>
+                    <td>
+                        {{ set.appointment_status }} 
+                        
+                        {% if set.appointment_status == 'RESERVED' %}
+                        [<a href="/emrs/emrs/appointments/add/3/{{ set.person_id }}">Add to today's schedule</a>]
+                        {% endif %} 
+                        {% if set.appointment_status == 'CANCELLED' %}
+                        [<a href="/emrs/emrs/appointments/remove/{{ entry_date }}/{{ set.appointment_id }}">Remove</a>]                        
+                        {% else %}       
+                        [<a href="/emrs/emrs/appointments/cancel/{{ entry_date }}/{{ set.appointment_id }}">Cancel</a>]  
+                        {% endif %} 
+                    </td>  
+                                  
+                </tr> 
+            {% else %}
+                <tr><td>B</td><td></td><td></td></tr> 
+            {% endfor %} 
+            
+            {% for set in set3 if set.appointment_status != 'REMOVED' and set.hepatitis_status == 'Hepatitis C' and set.is_reserved == 'RESERVED' %}            
+                 <tr>
+                    <td>C</td>
+                    <td><a href="/emrs/emrs/patients/{{ set.person_id }}" target="_blank">{{ set.name|title }}</a></td>
+                    <td>
+                        {{ set.appointment_status }} 
+                        
+                        {% if set.appointment_status == 'RESERVED' %}
+                        [<a href="/emrs/emrs/appointments/add/3/{{ set.person_id }}">Add to today's schedule</a>]
+                        {% endif %} 
+                        {% if set.appointment_status == 'CANCELLED' %}
+                        [<a href="/emrs/emrs/appointments/remove/{{ entry_date }}/{{ set.appointment_id }}">Remove</a>]                    
+                        {% else %}       
+                        [<a href="/emrs/emrs/appointments/cancel/{{ entry_date }}/{{ set.appointment_id }}">Cancel</a>]  
+                        {% endif %} 
+                    </td>  
+                                  
+                </tr> 
+            {% else %}
+                <tr><td>C</td><td></td><td></td></tr> 
+            {% endfor %} 
+            
+            </tbody>            
+            
             <tbody>
                 <tr><td colspan="4">
                     <center><div id="dp_inline"></div></center>
@@ -329,7 +401,58 @@
             <thead>
               <tr><th colspan="5">Third Set</th></tr>  
               <tr><th>#</th><th>Name</th><th>Added</th><th>Status</th><th>-</th></tr>
-            </thead>            
+            </thead>
+            <tbody>
+            {% set c = 1 %} 
+            {% for set in today_set3 if set.appointment_status in ['WAITING','ONGOING','DONE'] and set.hepatitis_status == 'Negative' %}
+                <tr>
+                    <td>{{ c }}</td>
+                    <td><a href="/emrs/emrs/patients/{{ set.person_id }}" target="_blank">{{ set.name|title }}</a></td>
+                    <td>{{ set.time_added[0:2] }}:{{ set.time_added[2:2] }}:{{ set.time_added[4:2] }}</td>   
+                    <td>{{ set.appointment_status }}</td>
+                    <td>
+                        [<a href="/emrs/emrs/treatments/{{ today }}/{{ set.person_id }}" target="_blank">Treatment</a>]
+                        [<a href="/emrs/emrs/appointments/cancel/{{ entry_date }}/{{ set.appointment_id }}">Cancel</a>]  
+                        [<a href="/emrs/emrs/billing/{{ set.person_id }}">Billing</a>]
+                    </td>
+                </tr> 
+                {% set c = c + 1 %}
+            {% endfor %}
+            {% for i  in c..13 %}
+                <tr><td>{{ i }}</td><td></td><td></td><td></td><td></td></tr>            
+            {% endfor %}
+
+            {% for set in today_set3 if set.appointment_status in ['WAITING','ONGOING','DONE'] and set.hepatitis_status == 'Hepatitis B' %}            
+               <tr>
+                    <td>B</td>
+                    <td><a href="/emrs/emrs/patients/{{ set.person_id }}" target="_blank">{{ set.name|title }}</a></td>
+                    <td>{{ set.time_added[0:2] }}:{{ set.time_added[2:2] }}:{{ set.time_added[4:2] }}</td>   
+                    <td>{{ set.appointment_status }}</td>
+                    <td>
+                        [<a href="/emrs/emrs/treatments/{{ today }}/{{ set.person_id }}" target="_blank">Treatment</a>]
+                        [<a href="/emrs/emrs/appointments/cancel/{{ entry_date }}/{{ set.appointment_id }}">Cancel</a>]  
+                    </td>
+                </tr> 
+            {% else %}
+                <tr><td>B</td><td></td><td></td><td></td><td></td></tr>
+            {% endfor %}            
+            
+            {% for set in today_set3 if set.appointment_status in ['WAITING','ONGOING','DONE'] and set.hepatitis_status == 'Hepatitis C' %}            
+               <tr>
+                    <td>C</td>
+                    <td><a href="/emrs/emrs/patients/{{ set.person_id }}" target="_blank">{{ set.name|title }}</a></td>
+                    <td>{{ set.time_added[0:2] }}:{{ set.time_added[2:2] }}:{{ set.time_added[4:2] }}</td>   
+                    <td>{{ set.appointment_status }}</td>
+                    <td>
+                        [<a href="/emrs/emrs/treatments/{{ today }}/{{ set.person_id }}" target="_blank">Treatment</a>]
+                        [<a href="/emrs/emrs/appointments/cancel/{{ entry_date }}/{{ set.appointment_id }}">Cancel</a>]  
+                    </td>
+                </tr> 
+            {% else %}
+                <tr><td>C</td><td></td><td></td><td></td><td></td></tr>
+            {% endfor %}              
+            
+            </tbody>           
             
           </table>
         </div>        
