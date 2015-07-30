@@ -178,11 +178,11 @@ class lib_laboratory {
 	ON le.entry_id = lel.entry_id
 	INNER JOIN persons AS p
 	ON lel.person_id = p.person_id 
-	WHERE lel.person_id IN (51,48,1,2)
-	AND property_id IN (1,2,3,4,5)
+	WHERE lel.person_id IN ($pid)
+	AND property_id IN ($cid)
 	GROUP BY p.person_id"); 
-       //if ($pid != 'all') { $STH->bindParam(':pid', $pid); }
-        //if ($cid != 'all') { $STH->bindParam(':cid', $cid); }     
+        //$STH->bindParam(':pid', $pid);
+        //$STH->bindParam(':cid', $cid);  
         $STH->execute();
         return $STH->fetchAll();       
     }     
@@ -203,8 +203,8 @@ class lib_laboratory {
             ON le.entry_id = lel.entry_id
             INNER JOIN `lab_logs` AS ll
             ON le.entry_id = ll.entry_id
-            WHERE lel.person_id IN (51,48,1,2,999)
-            AND property_id IN (1,2,3,4,5,45)
+            WHERE lel.person_id IN ($pid)
+            AND property_id IN ($cid)
             GROUP BY person_id ,property_id
             ORDER BY person_id,property_id, entry_date DESC
             ) AS c

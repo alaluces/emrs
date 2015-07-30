@@ -6,9 +6,14 @@ $app->group('/reports', function () use ($app, $sec, $person, $lab) {
         
         $app->post('/', function () use ($app, $sec) {    
             $sec->check('labs'); 
-            $pid   = $app->request->post('person_id');
-            $cid   = $app->request->post('category_id');
-            $app->redirect("/emrs/emrs/reports/laboratory/1/1");
+            $person_id = $app->request->post('person_id');
+            $prop_id   = $app->request->post('property_id');
+            
+            $a = implode(',', $person_id);
+            $b = implode(',', $prop_id);
+            $app->redirect("/emrs/emrs/reports/laboratory/$a/$b");
+            //var_dump($a);
+            // $a;
               
 
         });   
@@ -28,6 +33,8 @@ $app->group('/reports', function () use ($app, $sec, $person, $lab) {
             $sec->check('labs');            
             $app->render('reports_lab_output.html', array(
                 'title' => 'Lab Report',
+                'pid' => $pid,
+                'cid' => $cid,
                 'patients' => $person->get_patients(),      
                 'categories' => $lab->get_category_menu_list(),
                 'headers' => $lab->get_report_headers($pid, $cid),
