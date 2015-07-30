@@ -169,61 +169,56 @@ class lib_laboratory {
     
     function get_report_headers($pid, $cid) {
         // yes, this is possible 20150509
-        if ($pid == 'all') { $p = ''; } else { $p = "AND lel.person_id = :pid"; }
-        if ($cid == 'all') { $c = ''; } else { $c = "AND lel.category_id = :cid"; }
-        $STH = $this->DBH->prepare("SELECT 
-            lel.person_id,
-            CONCAT(lname, ', ', fname) AS fullname,
-            lel.category_id,
-            category_name,
-            GROUP_CONCAT(entry_date ORDER BY entry_date) as dates
-            FROM `lab_logs` AS ll
-            INNER JOIN `lab_entry_list` AS lel
-            ON ll.entry_id = lel.entry_id
-            INNER JOIN lab_categories AS lc
-            ON lc.category_id = lel.category_id 
-            INNER JOIN persons AS p
-            ON p.person_id = lel.person_id 
-            WHERE p.active = '1'
-            $p 
-            $c   
-            GROUP BY person_id, category_id
-            ORDER BY fullname"); 
-        if ($pid != 'all') { $STH->bindParam(':pid', $pid); }
-        if ($cid != 'all') { $STH->bindParam(':cid', $cid); }     
+        //if ($pid == 'all') { $p = ''; } else { $p = "AND lel.person_id = :pid"; }
+        //if ($cid == 'all') { $c = ''; } else { $c = "AND lel.category_id = :cid"; }
+        $STH = $this->DBH->prepare("	SELECT 
+	CONCAT(fname,' ', lname ) as pname
+	FROM `lab_entries` AS le
+	INNER JOIN `lab_entry_list` AS lel
+	ON le.entry_id = lel.entry_id
+	INNER JOIN persons AS p
+	ON lel.person_id = p.person_id 
+	WHERE lel.person_id IN (51,48,1,2)
+	AND property_id IN (1,2,3,4,5)
+	GROUP BY p.person_id"); 
+       //if ($pid != 'all') { $STH->bindParam(':pid', $pid); }
+        //if ($cid != 'all') { $STH->bindParam(':cid', $cid); }     
         $STH->execute();
         return $STH->fetchAll();       
     }     
     
     function get_report_values($pid, $cid) {
         // yes, this is possible 20150509
-        if ($pid == 'all') { $p = ''; } else { $p = "AND person_id = :pid"; }
-        if ($cid == 'all') { $c = ''; } else { $c = "AND lel.category_id = :cid"; }
-        $STH = $this->DBH->prepare("SELECT 
+        //if ($pid == 'all') { $p = ''; } else { $p = "AND person_id = :pid"; }
+        //if ($cid == 'all') { $c = ''; } else { $c = "AND lel.category_id = :cid"; }
+        $STH = $this->DBH->prepare("SELECT property_name, normal_value, GROUP_CONCAT(latest_entry ORDER BY person_id) as entries
+            FROM
+            (
+            SELECT 
             person_id,
-            lel.category_id,
-            property_name,
-            normal_value,
-            GROUP_CONCAT(entry_value ORDER BY ll.entry_date, ll.entry_date) as results 
+            property_id,
+            SUBSTRING_INDEX(GROUP_CONCAT(entry_value ORDER BY entry_date DESC), ',', 1) AS latest_entry 
             FROM `lab_entries` AS le
             INNER JOIN `lab_entry_list` AS lel
-            ON le.entry_id = lel.entry_id 
+            ON le.entry_id = lel.entry_id
             INNER JOIN `lab_logs` AS ll
-            ON le.entry_id = ll.entry_id 
-            INNER JOIN lab_categories AS lc 
-            ON lc.category_id = lel.category_id
-            INNER JOIN lab_properties AS lp
-            ON lp.property_id = le.property_id
-            WHERE lc.active = '1' 
-            $p
-            $c         
-            GROUP BY le.property_id,person_id
-            ORDER BY person_id, lel.category_id"); 
-        if ($pid != 'all') { $STH->bindParam(':pid', $pid); }
-        if ($cid != 'all') { $STH->bindParam(':cid', $cid); }     
+            ON le.entry_id = ll.entry_id
+            WHERE lel.person_id IN (51,48,1,2,999)
+            AND property_id IN (1,2,3,4,5,45)
+            GROUP BY person_id ,property_id
+            ORDER BY person_id,property_id, entry_date DESC
+            ) AS c
+            INNER JOIN lab_properties AS lp 
+            ON c.property_id = lp.property_id
+            INNER JOIN lab_categories AS lc
+            ON lp.category_id = lc.category_id
+            GROUP BY c.property_id"); 
+        //if ($pid != 'all') { $STH->bindParam(':pid', $pid); }
+        //if ($cid != 'all') { $STH->bindParam(':cid', $cid); }     
         $STH->execute();
         return $STH->fetchAll();       
-    }     
+    }
+    
      
 }
 
