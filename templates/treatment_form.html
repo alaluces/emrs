@@ -83,20 +83,25 @@
         $('.tr_comment').hide();
         $('.tr_comment_value').show();
         
-        $('#3').val($('#dry_weight').val());
+        
         $('#5').val($('#prev_weight').val());
         $('#101').val($('#time_started').val());
         $('#1').val($('#time_arrived').val());
         $('#201').val($('#time_finished').val());
         
-        //var standing_order = $('#20').val();
+       //var standing_order = $('#20').val(); 
         if ($('#20').val() === '') {            
             $('#20').val($('#prev_order').val());
         }  
         
         if ($('#2').val() === '') {            
             $('#2').val($('#duration').val());
-        }          
+        }
+        
+        //$('#3').val($('#dry_weight').val());
+        if ($('#3').val() === '') {            
+            $('#3').val($('#dry_weight').val());
+        }
         
         if ($('#4').val() === '') {            
             $('#4').val(0);
