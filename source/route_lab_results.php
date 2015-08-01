@@ -77,7 +77,7 @@ $app->group('/lab-results', function () use ($app, $sec, $lab, $person) {
         
         if ($new_date == '') {
             $new_date = date("Ymd");                      
-        }       
+        }  
         
         // if date has changed on edit, check new date if it exists
         if ($old_date != $new_date) {
@@ -126,7 +126,7 @@ $app->group('/lab-results', function () use ($app, $sec, $lab, $person) {
                 
         $app->flash('info', "Information saved.");
         $app->redirect("/emrs/emrs/lab-results/view/$cid/$id");        
-
+        
     });  
     
     
