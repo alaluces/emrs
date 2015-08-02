@@ -23,7 +23,7 @@ $app->group('/reports', function () use ($app, $sec, $person, $lab) {
             $app->render('reports_lab.html', array(
                 'title' => 'Lab Report',
                 'patients' => $person->get_patients(),      
-                //'categories' => $lab->get_category_menu_list(),  
+                'categories' => $lab->get_category_menu_list(),  
                 'properties' => $lab->get_property_list(),
                 'session' => $sec->get_session_array()                   
             ));       

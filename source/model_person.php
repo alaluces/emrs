@@ -430,7 +430,7 @@ class lib_person {
         $STH = $this->DBH->prepare("SELECT p.person_id, CONCAT(fname, ' ', lname) as full_name FROM `persons` AS p 
             INNER JOIN `patient_details` AS pd
             ON p.person_id = pd.person_id
-            WHERE active = '1'");        
+            WHERE active = '1' ORDER BY lname");        
         $STH->execute();
         return $STH->fetchAll();
    

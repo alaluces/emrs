@@ -29,7 +29,31 @@
     
 <div class="col-xs-3 column">
 </div>    
-<div class="col-xs-3 column">
+   
+    
+<div class="col-xs-3 column">     
+     <div class="panel panel-primary">        
+        <div class="panel-heading">Select Lab test</div>
+       
+        {% for c in categories %}
+        <ul > 
+            <li>{{ c.category_name }}</li>
+            <ul>
+            {% for p in properties if c.category_name == p.category_name %}
+            
+                <li><input name="property_id[]" type=checkbox value="{{ p.property_id }}">{{ p.property_name }}</li>
+            {% endfor %}  
+            </ul>
+        </ul>
+        {% endfor %}        
+        
+
+        
+        </table>         
+     </div>   
+</div>
+    
+ <div class="col-xs-3 column">
      <div class="panel panel-primary">        
         <div class="panel-heading">Select Patient</div>
         
@@ -44,22 +68,7 @@
         {% endfor %}
         </table>         
      </div>
-</div>    
-    
-<div class="col-xs-3 column">     
-     <div class="panel panel-primary">        
-        <div class="panel-heading">Select Lab test</div>
-        
-        <table class="table table-bordered">  
-        {% for c in properties %}
-        <tr><td style="text-align: left">
-        <input name="property_id[]" type=checkbox value="{{ c.property_id }}">{{ c.property_name }}
-        </td></tr>
-        {% endfor %}
-        
-        </table>         
-     </div>   
-</div>
+</div> 
     
 <div class="col-xs-3 column">
 </div>     

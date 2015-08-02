@@ -146,7 +146,7 @@ class lib_laboratory {
     } 
     
     function get_category_menu_list() { 
-        $STH = $this->DBH->prepare("SELECT * from lab_categories WHERE active = '1'");                
+        $STH = $this->DBH->prepare("SELECT * from lab_categories WHERE active = '1' ORDER BY category_id");                
         $STH->execute();
         return $STH->fetchAll();       
     }    
@@ -155,7 +155,7 @@ class lib_laboratory {
         $STH = $this->DBH->prepare("SELECT concat(property_id,',X') AS id FROM `lab_properties` WHERE category_id != :id");  
         $STH->bindParam(':id', $id);
         $STH->execute();
-        return $STH->fetchAll();   
+        return $STH->fetchAll();    
     } 
     
     function get_property_list() { 
