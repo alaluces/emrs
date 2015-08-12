@@ -52,6 +52,13 @@
                     <option value="C"        {{ hepa_status == 'C' ? 'SELECTED' }}>Hepa: Hepa C</option>
                 </select>
                 </span>
+                <span class="input-group-addon" >
+                <select name="active">
+                    <option value="Active"   {{ active == '1' ? 'SELECTED' }}>Active only</option>
+                    <option value="Inactive" {{ active == '0' ? 'SELECTED' }}>Inactive</option>
+                    <option value="All"      {{ gender == 'All' ? 'SELECTED' }}>All</option>
+                </select>
+                </span>                
                 <span class="input-group-btn">
                     <button class="btn btn-default" type="submit" name="btn_search">
                       Find

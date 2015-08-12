@@ -79,6 +79,7 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
         $param       = $app->request->post('param');
         $gender      = $app->request->post('gender');
         $hepa_status = $app->request->post('hepa_status'); 
+        $active      = $app->request->post('active'); 
         
         $tmp = explode(',', $param);
         if (count($tmp) > 1) {
@@ -94,13 +95,16 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
             }
         }       
         
-        $app->redirect("/emrs/emrs/patients/find/$query/$gender/$hepa_status");        
+        $app->redirect("/emrs/emrs/patients/find/$query/$gender/$hepa_status/$active");        
      });
      
-    $app->get('/find/:query/:gender/:hepa_status', function ($query, $gender, $hepa_status) use ($app, $sec, $person) {    
+    $app->get('/find/:query/:gender/:hepa_status/:active', function ($query, $gender, $hepa_status, $active) use ($app, $sec, $person) {    
         $sec->check('patients');
         $app->flash('link', "/emrs/emrs/patients/find/$query/$gender/$hepa_status");
         if ($gender == 'Both')     { $gender = ''; }
+        if ($active == 'All')      { $active = ''; }
+        if ($active == 'Active')   { $active = '1'; }
+        if ($active == 'Inactive') { $active = '0'; }
         if ($hepa_status == 'All') { $hepa_status = ''; }    
         if ($query == 'All') { $query = ''; }        
         
@@ -111,7 +115,7 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
             $param = "$tmp[0]";            
         }
         
-        $result = $person->find($query, $gender, $hepa_status);
+        $result = $person->find($query, $gender, $hepa_status, $active);
         //var_dump($result);
         $app->render('patient_search.html', array(
             'title' => 'Patients',           
@@ -119,6 +123,7 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
             'results' => $result,
             'param' => $param,
             'gender' => $gender,
+            'active' => $active,
             'hepa_status' => $hepa_status,
             'session' => $sec->get_session_array()    
         ));      

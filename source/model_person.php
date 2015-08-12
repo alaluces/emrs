@@ -53,9 +53,10 @@ class lib_person {
     
     // 20150309 added gender and hepa status
     // 20150312 optimize hepa status search
-    function find($param, $gender, $hepa_status) {
+    function find($param, $gender, $hepa_status, $active) {
         $gender      = $gender . '%';
         $hepa_status = '%' . $hepa_status;
+        $active      = $active . '%';
         $tmp = explode('-', $param);
         if (count($tmp) > 1) {            
             $lname = $tmp[0] . '%';
@@ -67,6 +68,7 @@ class lib_person {
                         WHERE fname LIKE :fname 
                         AND lname LIKE :lname
                         AND gender LIKE :gender
+                        AND active LIKE :active
                         AND pd.hepa_status LIKE :hepa_status ORDER BY lname");            
             $STH->bindParam(':fname', $fname);     
         } else {
@@ -77,11 +79,13 @@ class lib_person {
                             ON p.person_id = pd.person_id
                             WHERE lname LIKE :lname
                             AND gender LIKE :gender
+                            AND active LIKE :active
                             AND pd.hepa_status LIKE :hepa_status ORDER BY lname");                        
         }
         
         $STH->bindParam(':lname', $lname); 
         $STH->bindParam(':gender', $gender); 
+        $STH->bindParam(':active', $active); 
         $STH->bindParam(':hepa_status', $hepa_status); 
         $STH->execute();
         return $STH->fetchAll();        

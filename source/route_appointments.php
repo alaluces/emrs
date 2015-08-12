@@ -10,7 +10,7 @@ $app->group('/appointments', function () use ($app, $sec, $appointment, $person,
         
         //var_dump($appointment->get_list($entry_date, ''));        
         $app->render('appointments.html', array(
-            'title' => 'Schedule',
+            'title' => 'Appointments',
             'today_readable_date' => $readable_date,
             'today' => $entry_date,
             'readable_date' => $readable_date,
