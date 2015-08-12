@@ -29,6 +29,19 @@
       <br>
   </div>    
 </div>  
+    
+<div class="row clearfix">
+    <div class="col-xs-12 column">   
+        {% if cancel_ask %}
+        <div class="alert alert-danger fade in">
+            <button class="close" data-dismiss="alert" type="button">×</button>
+            Cancel appointment of {{ full_name }}? 
+            <a href="/emrs/emrs/appointments/cancel/{{ entry_date }}/{{ aid }}">YES</a> | 
+            <a href="/emrs/emrs/appointments">NO</a>
+        </div>
+        {% endif %} 
+    </div>
+</div>      
 
 {% include "flash_msg.html" %}  
         
@@ -57,7 +70,7 @@
                         {% if set.appointment_status == 'CANCELLED' %}
                         [<a href="/emrs/emrs/appointments/remove/{{ entry_date }}/{{ set.appointment_id }}">Remove</a>]                      
                         {% else %}       
-                        [<a href="/emrs/emrs/appointments/cancel/{{ entry_date }}/{{ set.appointment_id }}">Cancel</a>]  
+                        [<a href="/emrs/emrs/appointments/cancel-ask/{{ entry_date }}/{{ set.appointment_id }}/{{ set.person_id }}">Cancel</a>] 
                         {% endif %} 
                     </td>  
                                   
@@ -81,7 +94,7 @@
                         {% if set.appointment_status == 'CANCELLED' %}
                         [<a href="/emrs/emrs/appointments/remove/{{ entry_date }}/{{ set.appointment_id }}">Remove</a>]                      
                         {% else %}       
-                        [<a href="/emrs/emrs/appointments/cancel/{{ entry_date }}/{{ set.appointment_id }}">Cancel</a>]  
+                        [<a href="/emrs/emrs/appointments/cancel-ask/{{ entry_date }}/{{ set.appointment_id }}/{{ set.person_id }}">Cancel</a>] 
                         {% endif %}  
                     </td>  
                                   
@@ -103,7 +116,7 @@
                         {% if set.appointment_status == 'CANCELLED' %}
                         [<a href="/emrs/emrs/appointments/remove/{{ entry_date }}/{{ set.appointment_id }}">Remove</a>]                     
                         {% else %}       
-                        [<a href="/emrs/emrs/appointments/cancel/{{ entry_date }}/{{ set.appointment_id }}">Cancel</a>]  
+                        [<a href="/emrs/emrs/appointments/cancel-ask/{{ entry_date }}/{{ set.appointment_id }}/{{ set.person_id }}">Cancel</a>] 
                         {% endif %} 
                     </td>  
                                   
@@ -132,7 +145,7 @@
                         {% if set.appointment_status == 'CANCELLED' %}
                         [<a href="/emrs/emrs/appointments/remove/{{ entry_date }}/{{ set.appointment_id }}">Remove</a>]                        
                         {% else %}       
-                        [<a href="/emrs/emrs/appointments/cancel/{{ entry_date }}/{{ set.appointment_id }}">Cancel</a>]  
+                        [<a href="/emrs/emrs/appointments/cancel-ask/{{ entry_date }}/{{ set.appointment_id }}/{{ set.person_id }}">Cancel</a>] 
                         {% endif %}        
                     </td> 
                               
@@ -156,7 +169,7 @@
                         {% if set.appointment_status == 'CANCELLED' %}
                         [<a href="/emrs/emrs/appointments/remove/{{ entry_date }}/{{ set.appointment_id }}">Remove</a>]                        
                         {% else %}       
-                        [<a href="/emrs/emrs/appointments/cancel/{{ entry_date }}/{{ set.appointment_id }}">Cancel</a>]  
+                        [<a href="/emrs/emrs/appointments/cancel-ask/{{ entry_date }}/{{ set.appointment_id }}/{{ set.person_id }}">Cancel</a>] 
                         {% endif %} 
                     </td>  
                                   
@@ -178,7 +191,7 @@
                         {% if set.appointment_status == 'CANCELLED' %}
                         [<a href="/emrs/emrs/appointments/remove/{{ entry_date }}/{{ set.appointment_id }}">Remove</a>]                    
                         {% else %}       
-                        [<a href="/emrs/emrs/appointments/cancel/{{ entry_date }}/{{ set.appointment_id }}">Cancel</a>]  
+                        [<a href="/emrs/emrs/appointments/cancel-ask/{{ entry_date }}/{{ set.appointment_id }}/{{ set.person_id }}">Cancel</a>] 
                         {% endif %} 
                     </td>  
                                   
@@ -208,7 +221,7 @@
                         {% if set.appointment_status == 'CANCELLED' %}
                         [<a href="/emrs/emrs/appointments/remove/{{ entry_date }}/{{ set.appointment_id }}">Remove</a>]                        
                         {% else %}       
-                        [<a href="/emrs/emrs/appointments/cancel/{{ entry_date }}/{{ set.appointment_id }}">Cancel</a>]  
+                        [<a href="/emrs/emrs/appointments/cancel-ask/{{ entry_date }}/{{ set.appointment_id }}/{{ set.person_id }}">Cancel</a>] 
                         {% endif %}        
                     </td> 
                               
@@ -232,7 +245,7 @@
                         {% if set.appointment_status == 'CANCELLED' %}
                         [<a href="/emrs/emrs/appointments/remove/{{ entry_date }}/{{ set.appointment_id }}">Remove</a>]                        
                         {% else %}       
-                        [<a href="/emrs/emrs/appointments/cancel/{{ entry_date }}/{{ set.appointment_id }}">Cancel</a>]  
+                        [<a href="/emrs/emrs/appointments/cancel-ask/{{ entry_date }}/{{ set.appointment_id }}/{{ set.person_id }}">Cancel</a>] 
                         {% endif %} 
                     </td>  
                                   
@@ -254,7 +267,7 @@
                         {% if set.appointment_status == 'CANCELLED' %}
                         [<a href="/emrs/emrs/appointments/remove/{{ entry_date }}/{{ set.appointment_id }}">Remove</a>]                    
                         {% else %}       
-                        [<a href="/emrs/emrs/appointments/cancel/{{ entry_date }}/{{ set.appointment_id }}">Cancel</a>]  
+                        [<a href="/emrs/emrs/appointments/cancel-ask/{{ entry_date }}/{{ set.appointment_id }}/{{ set.person_id }}">Cancel</a>] 
                         {% endif %} 
                     </td>  
                                   
@@ -298,7 +311,7 @@
                     <td>{{ set.appointment_status }}</td>
                     <td>
                         [<a href="/emrs/emrs/treatments/{{ today }}/{{ set.person_id }}" target="_blank">Treatment</a>]
-                        [<a href="/emrs/emrs/appointments/cancel/{{ entry_date }}/{{ set.appointment_id }}">Cancel</a>] 
+                        [<a href="/emrs/emrs/appointments/cancel-ask/{{ entry_date }}/{{ set.appointment_id }}/{{ set.person_id }}">Cancel</a>] 
                         [<a href="/emrs/emrs/billing/{{ set.person_id }}">Billing</a>]
                     </td>
                 </tr> 
@@ -316,7 +329,7 @@
                     <td>{{ set.appointment_status }}</td>
                     <td>
                         [<a href="/emrs/emrs/treatments/{{ today }}/{{ set.person_id }}" target="_blank">Treatment</a>]
-                        [<a href="/emrs/emrs/appointments/cancel/{{ entry_date }}/{{ set.appointment_id }}">Cancel</a>]  
+                        [<a href="/emrs/emrs/appointments/cancel-ask/{{ entry_date }}/{{ set.appointment_id }}/{{ set.person_id }}">Cancel</a>]  
                         [<a href="/emrs/emrs/billing/{{ set.person_id }}">Billing</a>]
                     </td>
                 </tr> 
@@ -332,7 +345,7 @@
                     <td>{{ set.appointment_status }}</td>
                     <td>
                         [<a href="/emrs/emrs/treatments/{{ today }}/{{ set.person_id }}" target="_blank">Treatment</a>]
-                        [<a href="/emrs/emrs/appointments/cancel/{{ entry_date }}/{{ set.appointment_id }}">Cancel</a>] 
+                        [<a href="/emrs/emrs/appointments/cancel-ask/{{ entry_date }}/{{ set.appointment_id }}/{{ set.person_id }}">Cancel</a>] 
                         [<a href="/emrs/emrs/billing/{{ set.person_id }}">Billing</a>]
                     </td>
                 </tr> 
@@ -356,7 +369,7 @@
                     <td>{{ set.appointment_status }}</td>
                     <td>
                         [<a href="/emrs/emrs/treatments/{{ today }}/{{ set.person_id }}" target="_blank">Treatment</a>]
-                        [<a href="/emrs/emrs/appointments/cancel/{{ entry_date }}/{{ set.appointment_id }}">Cancel</a>]  
+                        [<a href="/emrs/emrs/appointments/cancel-ask/{{ entry_date }}/{{ set.appointment_id }}/{{ set.person_id }}">Cancel</a>]  
                         [<a href="/emrs/emrs/billing/{{ set.person_id }}">Billing</a>]
                     </td>
                 </tr> 
@@ -374,7 +387,7 @@
                     <td>{{ set.appointment_status }}</td>
                     <td>
                         [<a href="/emrs/emrs/treatments/{{ today }}/{{ set.person_id }}" target="_blank">Treatment</a>]
-                        [<a href="/emrs/emrs/appointments/cancel/{{ entry_date }}/{{ set.appointment_id }}">Cancel</a>]  
+                        [<a href="/emrs/emrs/appointments/cancel-ask/{{ entry_date }}/{{ set.appointment_id }}/{{ set.person_id }}">Cancel</a>]  
                     </td>
                 </tr> 
             {% else %}
@@ -389,7 +402,7 @@
                     <td>{{ set.appointment_status }}</td>
                     <td>
                         [<a href="/emrs/emrs/treatments/{{ today }}/{{ set.person_id }}" target="_blank">Treatment</a>]
-                        [<a href="/emrs/emrs/appointments/cancel/{{ entry_date }}/{{ set.appointment_id }}">Cancel</a>]  
+                        [<a href="/emrs/emrs/appointments/cancel-ask/{{ entry_date }}/{{ set.appointment_id }}/{{ set.person_id }}">Cancel</a>]  
                     </td>
                 </tr> 
             {% else %}
@@ -412,7 +425,7 @@
                     <td>{{ set.appointment_status }}</td>
                     <td>
                         [<a href="/emrs/emrs/treatments/{{ today }}/{{ set.person_id }}" target="_blank">Treatment</a>]
-                        [<a href="/emrs/emrs/appointments/cancel/{{ entry_date }}/{{ set.appointment_id }}">Cancel</a>]  
+                        [<a href="/emrs/emrs/appointments/cancel-ask/{{ entry_date }}/{{ set.appointment_id }}/{{ set.person_id }}">Cancel</a>]  
                         [<a href="/emrs/emrs/billing/{{ set.person_id }}">Billing</a>]
                     </td>
                 </tr> 
@@ -430,7 +443,7 @@
                     <td>{{ set.appointment_status }}</td>
                     <td>
                         [<a href="/emrs/emrs/treatments/{{ today }}/{{ set.person_id }}" target="_blank">Treatment</a>]
-                        [<a href="/emrs/emrs/appointments/cancel/{{ entry_date }}/{{ set.appointment_id }}">Cancel</a>]  
+                        [<a href="/emrs/emrs/appointments/cancel-ask/{{ entry_date }}/{{ set.appointment_id }}/{{ set.person_id }}">Cancel</a>]  
                     </td>
                 </tr> 
             {% else %}
@@ -445,7 +458,7 @@
                     <td>{{ set.appointment_status }}</td>
                     <td>
                         [<a href="/emrs/emrs/treatments/{{ today }}/{{ set.person_id }}" target="_blank">Treatment</a>]
-                        [<a href="/emrs/emrs/appointments/cancel/{{ entry_date }}/{{ set.appointment_id }}">Cancel</a>]  
+                        [<a href="/emrs/emrs/appointments/cancel-ask/{{ entry_date }}/{{ set.appointment_id }}/{{ set.person_id }}">Cancel</a>]  
                     </td>
                 </tr> 
             {% else %}

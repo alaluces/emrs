@@ -23,7 +23,6 @@ $app->group('/appointments', function () use ($app, $sec, $appointment, $person,
             'set3' => $appointment->get_list($entry_date, '3'),
             'session' => $sec->get_session_array()
         ));
-
     }); 
     
     // view appointment on specified date
@@ -173,7 +172,33 @@ $app->group('/appointments', function () use ($app, $sec, $appointment, $person,
         $appointment->update($aid, $entry_date, $entry_time, $set_number, 'CANCELLED');     
         $app->redirect("/emrs/emrs/appointments");   
         
-     });     
+     }); 
+     
+    $app->get('/cancel-ask/:entry_date/:aid/:pid', function ($entry_date, $aid, $pid) use ($app, $sec, $appointment, $person) {        
+        $sec->check('appointments');  
+        $entry_date = date("Ymd");
+        $readable_date = date("m/d/Y", strtotime($entry_date));
+        
+              
+        $app->render('appointments.html', array(
+            'title' => 'Appointments',
+            'aid' => $aid,
+            'full_name' => $person->get_fullname($pid),
+            'cancel_ask' => 1,
+            'today_readable_date' => $readable_date,
+            'today' => $entry_date,
+            'readable_date' => $readable_date,
+            'entry_date' => $entry_date,           
+            'today_set1' => $appointment->get_list($entry_date, '1'),
+            'today_set2' => $appointment->get_list($entry_date, '2'),
+            'today_set3' => $appointment->get_list($entry_date, '3'),            
+            'set1' => $appointment->get_list($entry_date, '1'),
+            'set2' => $appointment->get_list($entry_date, '2'),
+            'set3' => $appointment->get_list($entry_date, '3'),
+            'session' => $sec->get_session_array()
+        ));        
+        
+     });      
    
     
 });
