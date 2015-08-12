@@ -226,7 +226,7 @@ class lib_person {
     }    
     
     function save_credentials($id, $username, $user_group, $user_role, $user_level, $active) {
-        if ($username == '' || $active == '' || $id == '') {
+        if ($username == '' || $id == '') {
             return 0;            
         }   
         
