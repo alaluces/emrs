@@ -100,7 +100,7 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
      
     $app->get('/find/:query/:gender/:hepa_status/:active', function ($query, $gender, $hepa_status, $active) use ($app, $sec, $person) {    
         $sec->check('patients');
-        $app->flash('link', "/emrs/emrs/patients/find/$query/$gender/$hepa_status");
+        $app->flash('link', "/emrs/emrs/patients/find/$query/$gender/$hepa_status/$active");
         if ($gender == 'Both')     { $gender = ''; }
         if ($active == 'All')      { $active = ''; }
         if ($active == 'Active')   { $active = '1'; }
