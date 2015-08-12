@@ -134,12 +134,24 @@ class lib_treatment {
         return  $STH->fetchColumn(); 
     }     
     
-    function generate_time_intervals($duration, $time_start) {
-        $tmp = date("H:i", strtotime("$time_start"));        
+    function generate_time_intervals($duration, $interval, $time_start) {
+        $tmp = date("H:i", strtotime("$time_start")); 
+        switch($interval) {
+            case 10:
+                $m = 6;
+                break;
+            case 15: 
+                $m = 4;
+                break;
+            case 30: 
+                $m = 2;
+                break;           
+        }
+        
         $intervals = array();
-        for ($i=0; $i < $duration * 4; $i++) {            
+        for ($i=0; $i < $duration * $m; $i++) {            
             $intervals[$i] = $tmp;
-            $tmp = date("H:i", strtotime("$tmp +15 minutes" ));           
+            $tmp = date("H:i", strtotime("$tmp +$interval minutes" ));           
         } 
         return $intervals;       
     }    

@@ -31,12 +31,17 @@ $app->group('/treatments', function () use ($app, $sec, $person, $treatment, $ap
 
         // get duration for initial values of monitoring sheet, if not found, default value is 4
         if ($vid == '1') {
-            $duration = '4';            
+            $duration = '4';  
+            $interval = '15';
         } else {
             $duration = $treatment->get_data($tid, '2');
-             if (!$duration) {
-                 $duration = '4';
-             }           
+            if (!$duration) {
+                $duration = '4';
+            }  
+            $interval = $treatment->get_data($tid, '26');
+            if (!$interval) {
+                $interval = '15';
+            }            
         }
         $time_arrived  = $appointment->get_status_time($id, $entry_date, 'WAITING');
         $time_started  = $appointment->get_status_time($id, $entry_date, 'ONGOING');
@@ -57,7 +62,7 @@ $app->group('/treatments', function () use ($app, $sec, $person, $treatment, $ap
             'time_started' => strtotime("$time_started"),
             'time_arrived' => strtotime("$time_arrived"),
             'time_finished' => strtotime("$time_finished"),
-            'intervals' => $treatment->generate_time_intervals($duration, $time_started),
+            'intervals' => $treatment->generate_time_intervals($duration, $interval,$time_started),
             'ms' => $treatment->get_monitoring_sheet($tid),                
             'person' => $person->get_info($id),    
             'max_vid' => $treatment->get_vid($tid),            
