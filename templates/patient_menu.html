@@ -2,13 +2,13 @@
     <div class="col-md-12 column">                      
         <ul class="nav nav-pills"> 
             <li {{ title == 'Patient Edit' ? 'class="active"' : ''}} >
-                    <a href="/emrs/emrs/patients/edit/{{ pid }}">Patient Edit</a>
+                    <a target="_blank" href="/emrs/emrs/patients/edit/{{ pid }}">Patient Edit</a>
             </li>            
             <li {{ title == 'Treatments' ? 'class="active"' : ''}} >
-                    <a href="/emrs/emrs/patients/treatment/{{ pid }}">Treatments</a>
+                    <a target="_blank" href="/emrs/emrs/patients/treatment/{{ pid }}">Treatments</a>
             </li>
             <li {{ title == 'Appointments' ? 'class="active"' : ''}} >
-                    <a href="/emrs/emrs/patients/appointment/{{ pid }}">Appointments</a>
+                    <a target="_blank" href="/emrs/emrs/patients/appointment/{{ pid }}">Appointments</a>
             </li>
             <li {{ title == 'Lab Results' ? 'class="active"' : ''}} >
                     <a target="_blank" href="/emrs/emrs/patients/lab-results/{{ pid }}">Lab Results</a>
