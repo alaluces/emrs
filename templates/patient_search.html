@@ -83,14 +83,14 @@
                 <div class="panel-heading">Search results</div>
                     <table class="table">
                         <thead>
-                          <tr><th>Name</th><th>View</th><th>Add</th></tr>
+                          <tr><th>Name</th><th>View</th><th>Edit</th><th>Add</th></tr>
                         </thead>
                         <tbody>
                             {% for result in results %}                            
                             <tr>
                                 <td>{{ result.fname|title ~ ' ' ~ result.lname|title }}</td>
-                                <td><a href="/emrs/emrs/patients/{{ result.person_id }}" target="_blank">View</a></td>
-                                
+                                <td><a href="/emrs/emrs/patients/view/{{ result.person_id }}" target="_blank">View</a></td>
+                                <td><a href="/emrs/emrs/patients/edit/{{ result.person_id }}" target="_blank">Edit</a></td>
                                 <td>   
                                     <!-- take note: kasana sa looping yung form para yung na submit na button, yung ka group lang nya yung ma sesend -->
                                     <form class="form-inline" action="{{ root_url }}/emrs/emrs/appointments/set/{{ result.person_id }}" method="POST">

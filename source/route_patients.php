@@ -131,15 +131,15 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
      
     $app->get('/:id', function ($id) use ($app, $sec) {        
         $sec->check('patients'); 
-        $app->redirect("/emrs/emrs/patients/info/$id");             
+        $app->redirect("/emrs/emrs/patients/edit/$id");             
     });     
     
-    $app->get('/info/:id', function ($id) use ($app, $sec, $person) {        
+    $app->get('/edit/:id', function ($id) use ($app, $sec, $person) {        
         $sec->check('patients');
         $app->render('patients.html', array(
-            'title' => 'Patient Info',
+            'title' => 'Patient Edit',
             'pid' => $id,
-            'show_patient_info' => 1,            
+            'show_patient_edit' => 1,            
             'person_header' => $person->get_person_header(),
             'patient_header' => $person->get_patient_header(),
             'person_values' => $person->get_person_values($id),

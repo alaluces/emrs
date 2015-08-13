@@ -58,11 +58,11 @@
 
 <div class="row clearfix">
     
-{% if show_patient_info %}    
+{% if show_patient_edit %}    
 <div class="col-xs-4 column">
     
      <div class="panel panel-primary">
-        <div class="panel-heading">Patient Info</div>        
+        <div class="panel-heading">Patient Edit</div>        
         <table class="table table-bordered" style="font-size:12px"> 
         {% if person_values %}    
             {% for key, value in person_values if key not in ['person_id'] %}   
