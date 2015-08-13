@@ -1,6 +1,6 @@
 <?php
 
-$app->group('/patients', function () use ($app, $sec, $person, $presc, $treatment, $appointment) { 
+$app->group('/patients', function () use ($app, $sec, $person, $presc, $treatment, $appointment, $lab) { 
     
     $app->get('/', function () use ($app, $sec) {
         $sec->check('patients');                 
@@ -201,7 +201,7 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
         //echo 'no prob';        
     });
     
-    $app->get('/view/:id', function ($id) use ($app, $sec, $person) {        
+    $app->get('/view/:id', function ($id) use ($app, $sec, $person, $treatment, $lab) {        
         $sec->check('patients');
         
         $t = explode('\\', getcwd());
@@ -224,6 +224,13 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
             'uploadfile' => '/emrs/uploads/profile_pic/'. $id,   
             'has_profile_pic' => $has_profile_pic,        
             'date_today' => date("M d, Y"),
+            'hp1' => $lab->get_latest_data($id, '69'),
+            'hp2' => $lab->get_latest_data($id, '70'),
+            'hp3' => $lab->get_latest_data($id, '71'),
+            'ftd' => $treatment->get_first_date($id),
+            'duration' => $treatment->get_latest_data($id, '2'),
+            'dialyzer' => $treatment->get_latest_data($id, '9'),
+            'uf_goal' => $treatment->get_latest_data($id, '6'),
             'token' => $token,
             'info' => $person->get_info($id),
             'age' => $person->get_age($id),

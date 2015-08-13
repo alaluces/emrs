@@ -219,6 +219,24 @@ class lib_laboratory {
         return $STH->fetchAll();       
     }
     
+    function get_latest_data($pid, $prop_id) {
+        $STH = $this->DBH->prepare("SELECT entry_value, entry_date 
+            FROM `lab_entries` AS le
+            INNER JOIN `lab_entry_list` AS lel
+            ON le.entry_id = lel.entry_id
+            INNER JOIN `lab_logs` AS ll
+            ON le.entry_id = ll.entry_id
+            WHERE lel.person_id = :pid
+            AND le.property_id = :prop_id
+            ORDER BY entry_date DESC, entry_time DESC
+            LIMIT 1");
+        $STH->bindParam(':pid', $pid); 
+        $STH->bindParam(':prop_id', $prop_id); 
+         
+        $STH->execute();
+        return $STH->fetch();
+    }    
+    
      
 }
 

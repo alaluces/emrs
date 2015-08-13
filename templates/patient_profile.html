@@ -96,8 +96,10 @@
             <td style="width:150px">{{ age }}</td>
         </tr>
         <tr>
+            <td>Gender</td>
+            <td>{{ info.gender }}</td>
             <td>Blood Type</td>
-            <td colspan=3></td> 
+            <td></td> 
         </tr>   
 
         <tr>            
@@ -115,7 +117,7 @@
         
         <tr>
             <td>Date of first Dialysis</td>
-            <td colspan=3></td> 
+            <td colspan=3>{{ ftd[4:2] }}/{{ ftd[6:2] }}/{{ ftd[0:4] }}</td> 
         </tr> 
 
         <tr>            
@@ -127,21 +129,21 @@
         </tr>        
         <tr>
             <td>HbsAg</td>
-            <td></td>
+            <td>{{ hp1.entry_value }}</td>
             <td>Date</td>
-            <td></td>
+            <td>{{ hp1.entry_date[4:2] }}/{{ hp1.entry_date[6:2] }}/{{ hp1.entry_date[0:4] }}</td>
         </tr>
         <tr>
             <td>Anti-HBS</td>
-            <td></td>
+            <td>{{ hp2.entry_value }}</td>
             <td>Date</td>
-            <td></td>
+            <td>{{ hp2.entry_date[4:2] }}/{{ hp2.entry_date[6:2] }}/{{ hp2.entry_date[0:4] }}</td>
         </tr>
         <tr>
             <td>Anti-HCV</td>
-            <td></td>
+            <td>{{ hp3.entry_value }}</td>
             <td>Date</td>
-            <td></td>
+            <td>{{ hp3.entry_date[4:2] }}/{{ hp3.entry_date[6:2] }}/{{ hp3.entry_date[0:4] }}</td>
         </tr>    
         
         <tr>            
@@ -175,12 +177,12 @@
             <td>Frequency</td>
             <td></td>
             <td>Duration</td>
-            <td></td>
+            <td>{{ duration }} Hours</td>
         </tr>
         
         <tr>
             <td>Dialyzer</td>
-            <td></td>
+            <td>{{ dialyzer }}</td>
             <td>Re Use?</td>
             <td></td>
         </tr>
@@ -198,7 +200,7 @@
             <td>Blood Flow</td>
             <td></td>
             <td>UF Goal</td>
-            <td></td>
+            <td>{{ uf_goal }}</td>
         </tr>        
     
         

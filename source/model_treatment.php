@@ -105,6 +105,21 @@ class lib_treatment {
         return $STH->fetchColumn();
     }   
     
+    function get_latest_data($pid, $property_id) {
+        $STH = $this->DBH->prepare("SELECT VALUE
+            FROM `treatments`  AS e
+            INNER JOIN treatment_list AS li
+            ON e.treatment_id = li.treatment_id
+            WHERE person_id = :pid
+            AND property_id = :property_id
+            ORDER BY li.treatment_id DESC,version_id DESC 
+            LIMIT 1");        
+        $STH->bindParam(':pid', $pid);
+        $STH->bindParam(':property_id', $property_id);
+        $STH->execute();
+        return $STH->fetchColumn();
+    }    
+    
     function get_status($id, $tid) {
         $STH = $this->DBH->prepare("SELECT entry_status FROM `treatment_logs` AS lo
             INNER JOIN treatment_list AS li 
@@ -233,7 +248,20 @@ class lib_treatment {
             AND c.active = '1'");     
         $STH->execute();
         return $STH->fetchAll();       
-    }   
+    }
+    
+    function get_first_date($id) {
+        $STH = $this->DBH->prepare("SELECT entry_date 
+            FROM `treatment_logs` AS tlo
+            INNER JOIN `treatment_list` AS tli
+            ON tlo.treatment_id = tli.treatment_id
+            WHERE person_id = :id
+            ORDER BY entry_date ASC
+            LIMIT 1");   
+        $STH->bindParam(':id', $id );
+        $STH->execute(); 
+        return  $STH->fetchColumn(); 
+    }    
     
     //======================================================================
     // Below are functions used for saving the treatment form
