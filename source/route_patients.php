@@ -129,9 +129,8 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
         ));      
      }); 
      
-    $app->get('/:id', function ($id) use ($app, $sec) {        
-        $sec->check('patients'); 
-        $app->redirect("/emrs/emrs/patients/edit/$id");             
+    $app->get('/:id', function ($id) use ($app, $sec) {      
+        $app->redirect("/emrs/emrs/patients/view/$id");             
     });     
     
     $app->get('/edit/:id', function ($id) use ($app, $sec, $person) {        
@@ -149,8 +148,8 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
             'session' => $sec->get_session_array()    
         ));  
         
-    });     
-     
+    });   
+        
     $app->get('/treatment/:id', function ($id) use ($app, $sec, $person, $treatment) {        
          $sec->check('patients'); 
          $app->render('patients.html', array(
@@ -172,12 +171,85 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
             'appointment_history' => $appointment->get_history($id), 
             'session' => $sec->get_session_array()    
          )); 
-     });  
+    });  
      
     $app->get('/lab-results/:id', function ($id) use ($app, $sec) {        
         $sec->check('patients'); 
         $app->redirect("/emrs/emrs/lab-results/view/all/$id");    
-     });   
+    }); 
+     
+    $app->post('/upload', function () use ($app, $sec, $person) {
+        $sec->check('patients');
+        
+        // move up 1 directory
+        $t = explode('\\', getcwd());
+        $x ='';
+        for ($i=0; $i < count($t) - 1; $i++) {             
+            $x .= $t[$i] . '\\';
+        }       
+        
+        $id = $app->request->post('pid'); 
+        $uploadfile = $x . 'uploads\\profile_pic\\' . $id;
+        echo $uploadfile;
+        if (!is_uploaded_file($_FILES['profile_pic']['tmp_name'])) {
+            $app->redirect("/emrs/emrs/patients/view/$id");           
+        }
+        
+        move_uploaded_file($_FILES['profile_pic']['tmp_name'], $uploadfile);
+    
+        $app->redirect("/emrs/emrs/patients/view/$id");
+        //echo 'no prob';        
+    });
+    
+    $app->get('/view/:id', function ($id) use ($app, $sec, $person) {        
+        $sec->check('patients');
+        
+        $t = explode('\\', getcwd());
+        $x ='';
+        for ($i=0; $i < count($t) - 1; $i++) {             
+            $x .= $t[$i] . '\\';
+        } 
+        $uploadfile = $x . 'uploads\\profile_pic\\' . $id;
+        
+        $token = md5(md5($id) . 'emrs' . md5($id));
+        
+        if (file_exists("$uploadfile")) {
+            $has_profile_pic = 1;           
+        } else {
+            $has_profile_pic = 0;            
+        }
+        
+        $app->render('patient_profile.html', array(            
+            'pid' => $id,
+            'uploadfile' => '/emrs/uploads/profile_pic/'. $id,   
+            'has_profile_pic' => $has_profile_pic,        
+            'date_today' => date("M d, Y"),
+            'token' => $token,
+            'info' => $person->get_info($id),
+            'age' => $person->get_age($id),
+            'session' => $sec->get_session_array()    
+        ));        
+    });  
+    
+    $app->get('/remove/:id/:token', function ($id, $token) use ($app, $sec, $person) {        
+        $sec->check('patients');
+        
+        $t = explode('\\', getcwd());
+        $x ='';
+        for ($i=0; $i < count($t) - 1; $i++) {             
+            $x .= $t[$i] . '\\';
+        } 
+        $uploadfile = $x . 'uploads\\profile_pic\\' . $id;
+        
+        $token2 = md5(md5($id) . 'emrs' . md5($id));
+        
+        if ($token2 == $token) {
+            if (file_exists("$uploadfile")) {
+                unlink($uploadfile);          
+            }             
+        }        
+        $app->redirect("/emrs/emrs/patients/view/$id");
+    });    
      
     
 });
