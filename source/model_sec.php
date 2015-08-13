@@ -83,10 +83,7 @@ class lib_sec {
         $STH->bindParam(':section', $section); 
         $STH->execute();
         return $STH->fetch();       
-    }      
-    
-    
-
+    } 
     
     
 }
@@ -98,21 +95,19 @@ class lib_misc {
     
     function range ($start,$end) {
         for ($i=$start;$i<=$end;$i++) {
-            echo "$i<br>";
-            
-            
+            echo "$i<br>";           
         }        
     }
     
-    function generate_time_intervals($duration, $time_start) {
-        $tmp = $time_start;
-        for ($i=0; $i < $duration * 4; $i++) {
-            echo "$tmp <br>";
-            $tmp = date("His", strtotime("$tmp +15 minutes" ));             
-        }       
-        //echo date("His", strtotime("095901 +15 minutes" ));     
-    }  
-    
+    public function get_profile_pic_dir() {
+        $delim = '\\';        
+        $t = explode($delim, getcwd());
+        $x ='';
+        for ($i=0; $i < count($t) - 1; $i++) {             
+            $x .= $t[$i] . $delim;
+        } 
+        return $x . 'uploads' . $delim . 'profile_pic' . $delim ;     
+    }    
 }
 
 ?>

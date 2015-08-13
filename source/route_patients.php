@@ -1,6 +1,6 @@
 <?php
 
-$app->group('/patients', function () use ($app, $sec, $person, $presc, $treatment, $appointment, $lab) { 
+$app->group('/patients', function () use ($app, $sec, $person, $presc, $treatment, $appointment, $lab, $misc) { 
     
     $app->get('/', function () use ($app, $sec) {
         $sec->check('patients');                 
@@ -178,42 +178,28 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
         $app->redirect("/emrs/emrs/lab-results/view/all/$id");    
     }); 
      
-    $app->post('/upload', function () use ($app, $sec, $person) {
-        $sec->check('patients');
-        
-        // move up 1 directory
-        $t = explode('\\', getcwd());
-        $x ='';
-        for ($i=0; $i < count($t) - 1; $i++) {             
-            $x .= $t[$i] . '\\';
-        }       
-        
+    $app->post('/upload', function () use ($app, $sec, $misc) {
+        $sec->check('patients');        
         $id = $app->request->post('pid'); 
-        $uploadfile = $x . 'uploads\\profile_pic\\' . $id;
-        echo $uploadfile;
+        
+        // this is the direct link. ex: h:\xmpp\htdocs
+        $uploadfile = $misc->get_profile_pic_dir() . $id;   
+        
         if (!is_uploaded_file($_FILES['profile_pic']['tmp_name'])) {
             $app->redirect("/emrs/emrs/patients/view/$id");           
         }
         
-        move_uploaded_file($_FILES['profile_pic']['tmp_name'], $uploadfile);
-    
+        move_uploaded_file($_FILES['profile_pic']['tmp_name'], $uploadfile);    
         $app->redirect("/emrs/emrs/patients/view/$id");
-        //echo 'no prob';        
+             
     });
     
-    $app->get('/view/:id', function ($id) use ($app, $sec, $person, $treatment, $lab) {        
+    $app->get('/view/:id', function ($id) use ($app, $sec, $person, $treatment, $lab, $misc) {        
         $sec->check('patients');
-        
-        $t = explode('\\', getcwd());
-        $x ='';
-        for ($i=0; $i < count($t) - 1; $i++) {             
-            $x .= $t[$i] . '\\';
-        } 
-        $uploadfile = $x . 'uploads\\profile_pic\\' . $id;
-        
         $token = md5(md5($id) . 'emrs' . md5($id));
         
-        if (file_exists("$uploadfile")) {
+        $uploadfile = $misc->get_profile_pic_dir() . $id;         
+        if (file_exists($uploadfile)) {
             $has_profile_pic = 1;           
         } else {
             $has_profile_pic = 0;            
@@ -221,7 +207,7 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
         
         $app->render('patient_profile.html', array(            
             'pid' => $id,
-            'uploadfile' => '/emrs/uploads/profile_pic/'. $id,   
+            'uploadfile' => '/emrs/uploads/profile_pic/' . $id,   
             'has_profile_pic' => $has_profile_pic,        
             'date_today' => date("M d, Y"),
             'hp1' => $lab->get_latest_data($id, '69'),
@@ -238,20 +224,12 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
         ));        
     });  
     
-    $app->get('/remove/:id/:token', function ($id, $token) use ($app, $sec, $person) {        
-        $sec->check('patients');
-        
-        $t = explode('\\', getcwd());
-        $x ='';
-        for ($i=0; $i < count($t) - 1; $i++) {             
-            $x .= $t[$i] . '\\';
-        } 
-        $uploadfile = $x . 'uploads\\profile_pic\\' . $id;
-        
-        $token2 = md5(md5($id) . 'emrs' . md5($id));
-        
+    $app->get('/remove/:id/:token', function ($id, $token) use ($app, $sec, $misc) {        
+        $sec->check('patients');        
+        $token2 = md5(md5($id) . 'emrs' . md5($id)); 
+        $uploadfile = $misc->get_profile_pic_dir() . $id;   
         if ($token2 == $token) {
-            if (file_exists("$uploadfile")) {
+            if (file_exists($uploadfile)) {
                 unlink($uploadfile);          
             }             
         }        
