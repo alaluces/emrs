@@ -57,8 +57,11 @@
        
 
 <div class="row clearfix">
+     
     
-{% if show_patient_edit %}    
+{% if show_patient_edit %} 
+<div class="col-xs-4 column">      
+</div>
 <div class="col-xs-4 column">
     
      <div class="panel panel-primary">
@@ -112,7 +115,11 @@
                             <option value="{{ po.option_id }}" {{ po.option_value == value ? 'SELECTED' }} >{{ po.option_value }}</option>
                         {% endfor %}
                         </select>
-                        </td>                        
+                        </td> 
+                    {% elseif header.Field == 'active' %}
+                        <td>                           
+                            <input style="height:20px;width:20px;" type="checkbox" name="{{ key }}"  value="1" 'CHECKED'>
+                        </td>                         
                     {% else %} 
                         <td><input style="width:100%;" class="form-control input-sm" id="{{ header.Field }}" type="text" name="{{ header.Field }}"  value=""></td>
                     {% endif %}               
@@ -180,10 +187,14 @@
         </div>            
         </div>  
 </div>
+<div class="col-xs-4 column">      
+</div>
 {% endif %}
     
     
 {% if show_treatment_history %}
+<div class="col-xs-4 column">      
+</div>
 <div class="col-xs-4 column">
      <div class="panel panel-primary">
         <div class="panel-heading">Treatment History for: {{ person_values.fname }} {{ person_values.lname }}</div> 
@@ -203,6 +214,8 @@
             </table>
      </div>
 </div> 
+<div class="col-xs-4 column">      
+</div>
 {% endif %}
 
 {% if show_appointment_history %}

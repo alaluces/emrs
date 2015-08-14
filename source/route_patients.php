@@ -17,11 +17,11 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
         // generate the person_id agad so it will not cause prob on double form submission
         $pid =  $person->get_new_id();
         // save the id agad, to avoid collision
-        $person->prepare($pid);
+        //$person->prepare($pid);
         $app->render('patients.html', array(
             'title' => 'Patients',             
             'pid' => $pid,
-            'show_patient_info' => 1,           
+            'show_patient_edit' => 1,           
             'person_header' => $person->get_person_header(),
             'patient_header' => $person->get_patient_header(), 
             'person_options' => $person->get_person_options(),
