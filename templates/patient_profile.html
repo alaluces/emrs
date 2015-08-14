@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block doctype %}{% endblock %}
-{% block title %} Patient Profile {% endblock %}
+{% block title %} Patient Profile: {{ info.fname|title }} {{ info.lname|title }} {% endblock %}
 {% block bootstrap %} {% endblock %} 
 {% block header %} {% endblock %}
 {% block navbar %} {% endblock navbar %}
@@ -16,6 +16,7 @@
         padding:3px;
         padding-left:10px;
         border:solid thin grey;
+        
     }
     
     table {        

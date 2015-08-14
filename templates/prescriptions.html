@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{{ title }} {% endblock %}
+{% block title %} {{ title }}: {{ person.fname|title }} {{ person.lname|title }} {% endblock %}
 
 {% block menu %}
     {% include "patient_menu.html" %}

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %} {{ title }} {% endblock %}
+{% block title %} {{ title }}: {{ person.fname }} {{ person.lname }} {% endblock %}
 
 {% block menu %}
     {% include "patient_menu.html" %}
@@ -109,7 +109,9 @@
 <div class="row clearfix"> 
     
 <div class="col-md-12 column">
-    {% for l in lab_list %}
+
+    
+    {% for l in lab_list if l.category_id not in ['8','9','10'] %}
      <div style="overflow-y: auto;" class="panel panel-primary">        
         <div class="panel-heading">{{ l.category_name }} lab results for: {{ person.fname }} {{ person.lname }}</div>
             <form role="form" action="/emrs/emrs/lab-results/save" method="POST">
@@ -124,7 +126,7 @@
                     {% set n = 0 %}
                     {% for d in dtmp if l.date_headers %}
                         {% if d == old_date and cid == l.category_id %}
-                            <td><input style='{{ cid in ['8','9','10'] ? 'width:160px;' : 'width:60px;' }}' id="{{ lr.property_id }}" class="dp_class" name="new_date" type='text' value="{{ d }}"></td>
+                            <td><input style='width:60px;' id="{{ lr.property_id }}" class="dp_class" name="new_date" type='text' value="{{ d }}"></td>
                             {% set n = i %}
                         {% else %}     
                             <th>{{ d[4:2] }}/{{ d[6:2] }}/{{ d[0:4] }}</th>    
@@ -132,7 +134,7 @@
                         {% set i = i +1  %}
                     {% endfor %} 
                     {% if not edit_mode %}
-                        <td><input style='{{ cid in ['8','9','10'] ? 'width:160px;' : 'width:60px;' }}' id="{{ lr.property_id }}" class="dp_class" name="new_date" type='text' value="{{ d }}"></td>
+                        <td><input style='width:60px;' id="{{ lr.property_id }}" class="dp_class" name="new_date" type='text' value="{{ d }}"></td>
                     {% endif %}                        
                 </tr>  
                 <tr>
@@ -167,14 +169,14 @@
                     {% set i = 0 %}
                     {% for v in tmp if lr.val %}
                         {% if i == n and cid == l.category_id and edit_mode == '1'%}
-                            <td><input style='{{ cid in ['8','9','10'] ? 'width:160px;' : 'width:60px;' }}' id="{{ lr.property_id }}" name="{{ lr.property_id ~ ',X' }}" type='text' value="{{ v }}"></td>
+                            <td><input style='width:60px;' id="{{ lr.property_id }}" name="{{ lr.property_id ~ ',X' }}" type='text' value="{{ v }}"></td>
                         {% else %}    
                             <td>{{ v }}</td>    
                         {% endif %}                        
                         {% set i = i + 1  %}
                     {% endfor %} 
                     {% if not edit_mode %}
-                        <td><input style='{{ cid in ['8','9','10'] ? 'width:160px;' : 'width:60px;' }}' id="{{ lr.property_id }}" name="{{ lr.property_id ~ ',X' }}" type='text' value=""></td>
+                        <td><input style='width:60px;' id="{{ lr.property_id }}" name="{{ lr.property_id ~ ',X' }}" type='text' value=""></td>
                     {% endif %}   
                 </tr>    
                 {% endfor %}    

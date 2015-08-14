@@ -35,7 +35,8 @@ $app->group('/prescriptions', function () use ($app, $sec, $presc, $meds, $perso
         $app->render('prescriptions.html', array(
             'title' => 'Medications',             
             'pid' => $pid,
-            'presc_id' => $presc_id,          
+            'presc_id' => $presc_id, 
+            'person' => $person->get_info($pid),
             'entries' => $presc->get_entries($presc_id),
             'view_mode' => '1',        
             'meds' => $meds->get_meds(),
