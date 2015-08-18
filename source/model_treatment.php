@@ -164,7 +164,7 @@ class lib_treatment {
         }
         
         $intervals = array();
-        for ($i=0; $i < $duration * $m; $i++) {            
+        for ($i=0; $i <= $duration * $m; $i++) {            
             $intervals[$i] = $tmp;
             $tmp = date("H:i", strtotime("$tmp +$interval minutes" ));           
         } 
