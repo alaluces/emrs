@@ -100,7 +100,7 @@ class lib_misc {
     }
     
     public function get_profile_pic_dir() {
-        $delim = '\\';        
+        $delim = '\\';              
         $t = explode($delim, getcwd());
         $x ='';
         for ($i=0; $i < count($t) - 1; $i++) {             

@@ -52,25 +52,25 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
         $physician_id = $app->request->post('physician_id');                        
         $hepa_status = $app->request->post('hepa_status');         
              
-        if ($active == '') { $active  = '0'; } 
+        if ($active == '') { $active  = '1'; }              
         
         $ret = $person->save($id, $fname, $mname, $lname, $gender, $birth_date, $civil_status, $address1, $address2, $city, $province, $phone_number, $active);
         if (!$ret) {
             $app->flash('error', 'Error: Invalid input');
-            $app->redirect("/emrs/emrs/patients/info/$id"); 
+            $app->redirect("/emrs/emrs/patients/edit/$id");        
         }
         
         $ret = $person->save_patient($id, $dry_weight, $physician_id, $hepa_status);
         if (!$ret) {
             $app->flash('error', 'Error: Invalid input');
-            $app->redirect("/emrs/emrs/patients/info/$id"); 
+            $app->redirect("/emrs/emrs/patients/edit/$id");          
         }          
    
         //$allPostVars = $app->request->post();        
         //var_dump($allPostVars);      
 
         $app->flash('info', "Information for $fname $lname saved.");
-        $app->redirect("/emrs/emrs/patients/info/$id");  
+        $app->redirect("/emrs/emrs/patients/edit/$id");        
 
     }); 
  
