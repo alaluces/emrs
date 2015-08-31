@@ -85,7 +85,18 @@ class lib_sec {
         return $STH->fetch();       
     } 
     
-    
+    function get_settings() {
+        $STH = $this->DBH->prepare("SELECT * FROM `app_settings`");        
+        $STH->execute();
+        $t = $STH->fetchAll();
+        $a = array();
+        
+        // this loop converts it from multi dimensional array into key=>val array
+        foreach ($t as $value) {            
+           $a[$value[0]] = $value[1];            
+        }
+        return $a;       
+    }   
 }
 
 class lib_misc {    

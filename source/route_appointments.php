@@ -2,6 +2,10 @@
 
 $app->group('/appointments', function () use ($app, $sec, $appointment, $person, $treatment) {
     
+    $app->get('/a', function () use ($app, $sec, $appointment) {
+        var_dump($sec->get_settings());
+    });    
+    
     // view the appointment for todays date
     $app->get('/', function () use ($app, $sec, $appointment) {
         $sec->check('appointments');  
@@ -11,6 +15,7 @@ $app->group('/appointments', function () use ($app, $sec, $appointment, $person,
         //var_dump($appointment->get_list($entry_date, ''));        
         $app->render('appointments.html', array(
             'title' => 'Appointments',
+            'settings' => $sec->get_settings(),
             'today_readable_date' => $readable_date,
             'today' => $entry_date,
             'readable_date' => $readable_date,
@@ -34,6 +39,7 @@ $app->group('/appointments', function () use ($app, $sec, $appointment, $person,
         
         $app->render('appointments.html', array(
             'title' => 'Schedule',
+            'settings' => $sec->get_settings(),
             'today_readable_date' => date("m/d/Y"),
             'today' => $today,
             'readable_date' => $readable_date,
@@ -62,6 +68,7 @@ $app->group('/appointments', function () use ($app, $sec, $appointment, $person,
         $date_now    = date("Ymd");
         $flash       = $_SESSION['slim.flash'];
         $person_info = $person->get_info($id);
+        $settings    = $sec->get_settings();
         
         if (!isset($flash['link'])) {
             $flash['link'] = '/emrs/emrs/patients';
@@ -80,19 +87,19 @@ $app->group('/appointments', function () use ($app, $sec, $appointment, $person,
         $appointment_count = $appointment->get_count($entry_date, $hepa_status, $set_number);
         switch ($hepa_status) {
             case 'Negative' : 
-                if ($appointment_count >= 13) {
+                if ($appointment_count >= $settings[appointment_slots_negative]) {
                     $app->flash('error', 'Error: No more slot available for this set');
                     $app->redirect($flash['link']);        
                 } 
                 break;
             case 'Hepatitis B' :
-                if ($appointment_count >= 1) {
+                if ($appointment_count >= $settings[appointment_slots_hepa_b]) {
                     $app->flash('error', 'Error: No more slot available for this set');
                     $app->redirect($flash['link']);         
                 } 
                 break;               
             case 'Hepatitis C' :
-                if ($appointment_count >= 1) {
+                if ($appointment_count >= $settings[appointment_slots_hepa_c]) {
                     $app->flash("error", "Error: No more slot available for this set");
                     $app->redirect($flash['link']);          
                 } 
