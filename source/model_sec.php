@@ -16,7 +16,8 @@ class lib_sec {
         
         $tmp = $STH->fetch();
         if ($tmp) {
-            $this->set_session($tmp);
+            $this->set_session_credentials($tmp);
+            $this->set_session_settings($this->get_settings());
             return $tmp;
         } else {
             return 0;
@@ -96,7 +97,19 @@ class lib_sec {
            $a[$value[0]] = $value[1];            
         }
         return $a;       
-    }   
+    }
+
+    function set_session_credentials($arr_details) {
+        $_SESSION['person_id']  = $arr_details[0];
+        $_SESSION['username']   = $arr_details[1];
+        $_SESSION['user_level'] = $arr_details[2];
+    }    
+    
+    function set_session_settings($arr_settings) {
+        foreach ($arr_settings as $key => $value) {            
+           $_SESSION[$key] = $value;            
+        }
+    }    
 }
 
 class lib_misc {    
