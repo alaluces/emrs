@@ -1,5 +1,5 @@
 {% extends "base.html" %}
-
+{% block company_name %} {{ session.company_name }} {% endblock %}
 {% block title %} {{ title }}: {{ person.fname|title }} {{ person.lname|title }} {% endblock %}
 
 {% block menu %}
