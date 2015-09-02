@@ -36,11 +36,12 @@ $app->post('/login', function () use ($app, $sec) {
 });  
 
 $app->get('/home', function () use ($app, $sec) {    
-    $sec->check('home');    
+    $sec->check('home');
     $app->render('home.html', array(
         'title' => 'Home',      
         'session' => $sec->get_session_array()
-    ));   
+    ));
+    // var_dump($sec->get_session_array());
 });
 
 $app->get('/restricted', function () use ($app, $sec) {   

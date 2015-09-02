@@ -6,23 +6,66 @@ class lib_sec {
         $this->DBH = $DBH;
         $this->app = $app;
     }
-
-    function login($username, $password) {        
+    
+    function try_login($username, $password) {        
         $STH = $this->DBH->prepare("select person_id, username, user_level from person_credentials 
             where username = :username and password_hash = :password_hash and active='1' limit 1");
         $STH->bindParam(':username', $username);
         $STH->bindParam(':password_hash', $this->password_hash($password));
-        $STH->execute();
-        
-        $tmp = $STH->fetch();
+        $STH->execute();        
+        return $STH->fetch();  
+    }    
+
+    function login($username, $password) {        
+        $tmp = $this->try_login($username, $password);
         if ($tmp) {
             $this->set_session_credentials($tmp);
             $this->set_session_settings($this->get_settings());
-            return $tmp;
+            return true;
         } else {
-            return 0;
+            return false;
         }  
     }
+    
+    function set_session_credentials($arr_details) {
+        foreach ($arr_details as $key => $value) {            
+           $_SESSION[$key]  = $value;        
+        }
+    }    
+    
+    function set_session_settings($arr_settings) {
+        foreach ($arr_settings as $key => $value) {            
+           $_SESSION[$key] = $value;            
+        }
+    }    
+    
+    function get_session_array() {
+        $a = array();
+        foreach ($_SESSION as $key => $value) {            
+           $a[$key] = $value;                
+        }
+        return $a;        
+    } 
+    
+    function get_settings() {
+        $STH = $this->DBH->prepare("SELECT * FROM `app_settings`");        
+        $STH->execute();
+        $t = $STH->fetchAll();
+        $a = array();
+        
+        // this loop converts it from multi dimensional array into key=>val array
+        foreach ($t as $value) {            
+           $a[$value[0]] = $value[1];            
+        }
+        return $a;       
+    } 
+    
+    function get_acl($section) {
+        $STH = $this->DBH->prepare("SELECT * FROM `acl` WHERE section = :section ");
+        $STH->bindParam(':section', $section); 
+        $STH->execute();
+        return $STH->fetch();       
+    }    
     
     // used on treatment form
     function authenticate_by_id($id, $password) {        
@@ -37,21 +80,7 @@ class lib_sec {
     function password_hash($password) { 
         $password = filter_var($password);
         return md5(md5($password . md5($password . $password)));
-    } 
-    
-    function set_session($arr_details) {
-        $_SESSION['person_id']  = $arr_details[0];
-        $_SESSION['username']   = $arr_details[1];
-        $_SESSION['user_level'] = $arr_details[2];
-    }
-    
-    function get_session_array() {
-        return array(
-            'person_id'  => $_SESSION['person_id'],
-            'username'   => $_SESSION['username'] ,
-            'user_level' => $_SESSION['user_level']
-        );  
-    }    
+    }   
     
     function is_logged_in() {
         if (isset($_SESSION['username'])) {
@@ -77,39 +106,7 @@ class lib_sec {
         } else {
             $this->app->redirect("/emrs/emrs/restricted");    
         }        
-    }  
-    
-    function get_acl($section) {
-        $STH = $this->DBH->prepare("SELECT * FROM `acl` WHERE section = :section ");
-        $STH->bindParam(':section', $section); 
-        $STH->execute();
-        return $STH->fetch();       
-    } 
-    
-    function get_settings() {
-        $STH = $this->DBH->prepare("SELECT * FROM `app_settings`");        
-        $STH->execute();
-        $t = $STH->fetchAll();
-        $a = array();
-        
-        // this loop converts it from multi dimensional array into key=>val array
-        foreach ($t as $value) {            
-           $a[$value[0]] = $value[1];            
-        }
-        return $a;       
-    }
-
-    function set_session_credentials($arr_details) {
-        $_SESSION['person_id']  = $arr_details[0];
-        $_SESSION['username']   = $arr_details[1];
-        $_SESSION['user_level'] = $arr_details[2];
-    }    
-    
-    function set_session_settings($arr_settings) {
-        foreach ($arr_settings as $key => $value) {            
-           $_SESSION[$key] = $value;            
-        }
-    }    
+    }     
 }
 
 class lib_misc {    
