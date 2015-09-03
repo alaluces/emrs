@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% block company_name %} {{ session.company_name }} {% endblock %}
+{% block title %} {{ title }} {% endblock %}
+
+{% block menu %}
+    {% include "tools_menu.html" %}
+{% endblock menu %}
+
+{% block js %}
+{% endblock js %}
+
+{% block content %}
+
+
+<div class="container">
+    
+<div class="row clearfix">    
+  <div class="col-xs-12 column">  
+      <br>
+  </div>    
+</div>        
+   
+{% include "flash_msg.html" %}      
+
+
+
+<form role="form" action="{{ root_url }}/emrs/emrs/tools/users/save" method="POST">
+
+
+<div class="row clearfix">
+    
+<div class="col-md-4 column">    
+</div>    
+    
+<div class="col-md-4 column">    
+     <div class="panel panel-primary">
+        <div class="panel-heading">Settings</div>  
+        <table class="table table-bordered" style="font-size:12px"> 
+       
+        {% for key,val in settings %}     
+        <tr>
+            <td>{{ key|replace({'_': ' '})|title }}</td>                                
+            <td><input class="form-control input-sm" type="text" name="user_name" value="{{ val }}" ></td>
+        </tr> 
+        {% endfor %} 
+
+        </table> 
+        
+        <div class="form-group">
+            <button class="btn btn-primary btn-block" type="submit" name="btn_save_prep" value="1">Save</button>
+        </div>        
+            
+    </div>
+</div>
+    
+<div class="col-md-4 column">     
+</div>     
+    
+
+    
+</div>    
+</form>
+
+</div>
+
+{% endblock %}

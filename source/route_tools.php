@@ -2,6 +2,31 @@
 
 $app->group('/tools', function () use ($app, $sec, $person, $treatment, $meds) {
     
+    $app->group('/settings', function () use ($app, $sec) {
+        
+        $app->get('/', function () use ($app, $sec) {    
+            $sec->check('settings');            
+            $app->render('tools_settings.html', array(
+                'title' => 'Settings',      
+                'settings' => $sec->get_settings(),
+                'session' => $sec->get_session_array()      
+            ));       
+        }); 
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+    });        
+        
+    
     $app->group('/users', function () use ($app, $sec, $person) {
         
         $app->get('/active/', function () use ($app, $sec, $person) {    
@@ -9,8 +34,7 @@ $app->group('/tools', function () use ($app, $sec, $person, $treatment, $meds) {
             $app->render('tools_users.html', array(
                 'title' => 'Users',
                 'person_header' => $person->get_person_header(), 
-                'person_options' => $person->get_person_options(),
-                
+                'person_options' => $person->get_person_options(),                
                 'users' => $person->list_users(1),
                 'new_id' => $person->get_new_id(),
                 'pro_header' => $person->get_pro_header(),
