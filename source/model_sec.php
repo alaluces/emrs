@@ -37,6 +37,28 @@ class lib_sec {
         foreach ($arr_settings as $key => $value) {            
            $_SESSION[$key] = $value;            
         }
+    }  
+    
+    function save_settings($keys, $vals) {
+        $this->delete_settings();
+        $i = 0;
+        foreach ($keys as $value) {
+            if ($vals[$i] == '') { continue; }
+            $this->add_settings($value, $vals[$i]);
+            $i++;
+        }        
+    }  
+    
+    function add_settings($key, $val) {         
+        $STH = $this->DBH->prepare("INSERT INTO `app_settings` VALUES (:key, :val) ");                                   
+        $STH->bindParam(':key', $key );                             
+        $STH->bindParam(':val', $val );                 
+        return $STH->execute();          
+    }    
+    
+    function delete_settings() {         
+        $STH = $this->DBH->prepare("DELETE FROM `app_settings`");                
+        return $STH->execute();          
     }    
     
     function get_session_array() {

@@ -24,7 +24,7 @@
 
 
 
-<form role="form" action="{{ root_url }}/emrs/emrs/tools/users/save" method="POST">
+<form role="form" action="{{ root_url }}/emrs/emrs/tools/settings/save" method="POST">
 
 
 <div class="row clearfix">
@@ -39,11 +39,15 @@
        
         {% for key,val in settings %}     
         <tr>
-            <td>{{ key|replace({'_': ' '})|title }}</td>                                
-            <td><input class="form-control input-sm" type="text" name="user_name" value="{{ val }}" ></td>
-        </tr> 
+            <td>{{ key|replace({'_': ' '})|title }}</td>           
+            <td><input class="form-control input-sm" type="text" name="vals[]" value="{{ val }}" ></td>            
+        </tr>
+        <input type="hidden" name="keys[]" value="{{ key }}" >
         {% endfor %} 
-
+        <tr>
+            <td><input class="form-control input-sm" type="text" name="keys[]" value="custom_settings" ></td>             
+            <td><input class="form-control input-sm" type="text" name="vals[]" value="" ></td>            
+        </tr>
         </table> 
         
         <div class="form-group">

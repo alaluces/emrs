@@ -13,6 +13,20 @@ $app->group('/tools', function () use ($app, $sec, $person, $treatment, $meds) {
             ));       
         }); 
         
+        $app->post('/save', function () use ($app, $sec) {
+            $sec->check('settings');       
+            $keys = $app->request->post('keys');                                    
+            $vals = $app->request->post('vals');  
+            
+            //$allPostVars = $app->request->post();
+            //var_dump($allPostVars);             
+            
+            $sec->save_settings($keys, $vals);
+            
+            $app->flash('info', "Settings saved." );
+            $app->redirect("/emrs/emrs/tools/settings"); 
+        });         
+        
         
         
         
