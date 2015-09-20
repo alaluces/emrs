@@ -292,7 +292,7 @@
     <span style="position:absolute;top:25px;left:10px;font-family:verdana;font-size:12">Patient name: <a href="/emrs/emrs/patients/{{ pid }}">{{ person.fname|title }} {{ person.lname|title }}</a></span>
     <span style="position:absolute;top:45px;left:10px;font-family:verdana;font-size:12">{{ person.gender }} / {{ age }} years old</span>
 
-    <span style="position:absolute;top:25px;left:450px;font-family:verdana;font-size:12">Physician: {{ person.physician|title }} </span>
+    <span style="position:absolute;top:25px;left:450px;font-family:verdana;font-size:12">Physician: {{ person.physician }} </span>
     <span style="position:absolute;top:45px;left:450px;font-family:verdana;font-size:12">Hepatitis Status: {{ person.hepa_status }} </span>
   
     <span style="display:block;text-align:center;font-family:verdana;font-size:14;font-weight:bold">{{ entry_date2|date(" F j, Y") }}</span>
