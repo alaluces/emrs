@@ -123,12 +123,14 @@ $app->group('/prescriptions', function () use ($app, $sec, $presc, $meds, $perso
         
         if ($app->request->post('btn_save') == '1' ) {   
             $app->flash('info', "Information saved." );
-            $app->redirect("/emrs/emrs/prescriptions/edit/$id/$presc_id");       
+            //$app->redirect("/emrs/emrs/prescriptions/edit/$id/$presc_id"); 
+            $app->redirect("/emrs/emrs/medications/$id");  
         }
         
         if ($app->request->post('btn_duplicate') == '1' ) {    
             $app->flash('info', "Duplicate success" );
-            $app->redirect("/emrs/emrs/prescriptions/edit/$id/$presc_id");    
+            //$app->redirect("/emrs/emrs/prescriptions/edit/$id/$presc_id");   
+            $app->redirect("/emrs/emrs/medications/$id");  
         }     
       
     });  

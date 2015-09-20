@@ -6,6 +6,19 @@ class lib_prescriptions {
         $this->DBH = $DBH;
     } 
     
+    function get_latest($person_id) {
+        $STH = $this->DBH->prepare("SELECT li.presc_id FROM `presc_list` AS li
+            INNER JOIN `presc_logs` lo
+            ON li.presc_id = lo.presc_id
+            WHERE person_id = :person_id
+            AND log_status = 'UPDATE'
+            ORDER BY entry_date DESC,entry_time DESC
+            LIMIT 1");       
+        $STH->bindParam(':person_id', $person_id); 
+        $STH->execute();
+        return $STH->fetchColumn();      
+    }    
+    
     function get_list($person_id) {       
         $STH = $this->DBH->prepare("SELECT presc_id, person_id, physician_id,
             (SELECT DATE_FORMAT(CONCAT(SUBSTR(entry_date,1,4),'-',SUBSTR(entry_date,5,2),'-',SUBSTR(entry_date,7,2)),'%M %d, %Y') 
@@ -21,7 +34,8 @@ class lib_prescriptions {
             WHERE presc_id = pl.presc_id
             ORDER BY entry_date DESC, entry_time DESC LIMIT 1  ) AS log_status  
             FROM `presc_list` AS pl
-            WHERE person_id = :person_id");      
+            WHERE person_id = :person_id
+            ORDER BY presc_id DESC");      
         $STH->bindParam(':person_id', $person_id); 
         $STH->execute();
         return $STH->fetchAll();       

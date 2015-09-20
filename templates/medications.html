@@ -40,13 +40,67 @@
     
 {% include "flash_msg.html" %}
 
+<div class="row clearfix">
+<div class="col-xs-12 column">
+     <div class="panel panel-primary ">
+        <div class="panel-heading">Prescription for: {{ person.fname }} {{ person.lname }}</div> 
+            <table class="table table-bordered" style="font-size:12px">
+                <tr>
+                    
+                    <th>Med Name</th>
+                    <th>qty</th> 
+                    <th>Amt</th> 
+                    <th>Frequency</th> 
+                    <th>Duration</th>
+                    <th>Notes</th>
+                </tr>                
+
+                {% for e in entries %}
+                <tr>
+    
+                <td style="text-align: left">
+                    <span>{{ e.med_name }} - {{ e.prep_name }}</span> 
+                    <input type="hidden" name="med_id[]" value="{{ e.med_id }}">
+                    <input type="hidden" name="prep_id[]" value="{{ e.prep_id }}"> 
+                </td>    
+                <td>
+        
+                    <span>{{ e.qty }}</span> 
+           
+                </td> 
+                <td>
+  
+                    <span>{{ e.amt }}</span> 
+            
+                </td>
+                <td>
+ 
+                    <span>{{ e.frequency }}</span> 
+                      
+                </td>
+                <td> 
+  
+                    <span>{{ e.duration }}</span> 
+                         
+                </td>    
+                <td>
+        
+                    <span>{{ e.notes }}</span> 
+                        
+                </td>
+                </tr>   
+                {% endfor %}               
+            </table>
+     </div>
+
+     
+</div> 
+</div> 
+
 <form role="form" action="/emrs/emrs/medications/save" method="POST">
-<input type="hidden" name="pid" value="{{ pid }}">
-       
+<input type="hidden" name="pid" value="{{ pid }}">       
 
 <div class="row clearfix">
-    
-
 <div class="col-xs-12 column">
      <div class="panel panel-primary">
         <div class="panel-heading">Meds List for: {{ person.fname }} {{ person.lname }}</div> 
@@ -72,10 +126,7 @@
             </table>
      </div>    
      <a href="/emrs/emrs/prescriptions/add/{{ pid }}" class="btn btn-primary" type="button">Add New</a>
-</div> 
-    
- 
-    
+</div>   
 </div>
 
 </form>

@@ -9,6 +9,7 @@ $app->group('/medications', function () use ($app, $sec, $presc, $meds, $person)
             'pid' => $pid,  
             'person' => $person->get_info($pid),
             'prescription_list' => $presc->get_list($pid), 
+            'entries' => $presc->get_entries($presc->get_latest($pid)), 
             'session' => $sec->get_session_array()    
          ));    
      });  
