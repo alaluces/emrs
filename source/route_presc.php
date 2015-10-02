@@ -72,8 +72,10 @@ $app->group('/prescriptions', function () use ($app, $sec, $presc, $meds, $perso
         $sec->check('presc');            
         $app->render('prescriptions.html', array(
             'title' => 'Medications', 
+            'person' => $person->get_info($pid),            
             'pid' => $pid,
             'presc_id' => $presc_id,
+            'presc_id_latest' => $presc->get_latest($pid),
             'physician_info' => $person->get_pro_info($person->get_physician_id($presc_id)),
             'entries' => $presc->get_entries($presc_id),
             'edit_mode' => '1',

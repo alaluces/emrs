@@ -110,18 +110,29 @@
                     <th>Created</th> 
                     <th>Last Edit</th> 
                     <th>Action</th> 
-                </tr>                
+                </tr>
+                {% set c = 0 %} 
                 {% for p in prescription_list if p.log_status not in ['DELETED'] %}   
                 <tr>                    
                     <td>{{ p.presc_id }}</td>
                     <td>{{ p.created }}</td>
                     <td>{{ p.edited }}</td>
+                    {% if c > 0 %} 
+                    <td>
+                        <a href="/emrs/emrs/prescriptions/view/{{ pid }}/{{ p.presc_id }}">View</a> |
+                        <a href="/emrs/emrs/prescriptions/edit/{{ pid }}/{{ p.presc_id }}">Copy</a> |
+                        <a href="/emrs/emrs/prescriptions/print/{{ pid }}/{{ p.presc_id }}">Prescription</a> |
+                        <span style="text-decoration:line-through" >Delete</span>
+                    </td>  
+                    {% else %}
                     <td><a href="/emrs/emrs/prescriptions/view/{{ pid }}/{{ p.presc_id }}">View</a> |
                         <a href="/emrs/emrs/prescriptions/edit/{{ pid }}/{{ p.presc_id }}">Edit</a> |
                         <a href="/emrs/emrs/prescriptions/print/{{ pid }}/{{ p.presc_id }}">Prescription</a> |
                         <a href="/emrs/emrs/prescriptions/delete-ask/{{ pid }}/{{ p.presc_id }}">Delete</a>
-                    </td>                    
-                </tr>               
+                    </td>                     
+                    {% endif %} 
+                </tr>  
+                {% set c = c + 1 %} 
                 {% endfor %}    
             </table>
      </div>    

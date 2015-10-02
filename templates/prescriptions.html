@@ -293,8 +293,49 @@
 
      
 </div> 
-</div>    
+</div> 
 
+{% if not edit_mode %}
+<div class="row clearfix">
+<div class="col-xs-12 column">
+     <div class="panel panel-primary">
+        <div class="panel-heading">Meds List for: {{ person.fname }} {{ person.lname }}</div> 
+            <table class="table table-bordered" style="font-size:12px">
+                <tr>
+                    <th>ID</th>
+                    <th>Created</th> 
+                    <th>Last Edit</th> 
+                    <th>Action</th> 
+                </tr>
+                {% set c = 0 %} 
+                {% for p in prescription_list if p.log_status not in ['DELETED'] %}   
+                <tr>                    
+                    <td>{{ p.presc_id }}</td>
+                    <td>{{ p.created }}</td>
+                    <td>{{ p.edited }}</td>
+                    {% if c > 0 %} 
+                    <td>
+                        <a href="/emrs/emrs/prescriptions/view/{{ pid }}/{{ p.presc_id }}">View</a> |
+                        <a href="/emrs/emrs/prescriptions/edit/{{ pid }}/{{ p.presc_id }}">Copy</a> |
+                        <a href="/emrs/emrs/prescriptions/print/{{ pid }}/{{ p.presc_id }}">Prescription</a> |
+                        <span style="text-decoration:line-through" >Delete</span>
+                    </td>  
+                    {% else %}
+                    <td><a href="/emrs/emrs/prescriptions/view/{{ pid }}/{{ p.presc_id }}">View</a> |
+                        <a href="/emrs/emrs/prescriptions/edit/{{ pid }}/{{ p.presc_id }}">Edit</a> |
+                        <a href="/emrs/emrs/prescriptions/print/{{ pid }}/{{ p.presc_id }}">Prescription</a> |
+                        <a href="/emrs/emrs/prescriptions/delete-ask/{{ pid }}/{{ p.presc_id }}">Delete</a>
+                    </td>                     
+                    {% endif %} 
+                </tr>  
+                {% set c = c + 1 %} 
+                {% endfor %}    
+            </table>
+     </div>    
+     <a href="/emrs/emrs/prescriptions/add/{{ pid }}" class="btn btn-primary" type="button">Add New</a>
+</div>   
+</div>
+{% endif %}
       
 <div class="row clearfix">
        
@@ -303,11 +344,9 @@
     <button type="submit" name="btn_duplicate" value="1" class="btn btn-primary">Save and Copy</button>    
     <a href="/emrs/emrs/prescriptions/view/{{ pid }}/{{ presc_id }}" name="btn_view" value="1" class="btn btn-primary">View</a>
     <a href="/emrs/emrs/prescriptions/print/{{ pid }}/{{ presc_id }}" name="btn_edit" value="1" class="btn btn-primary">Prescription</a>
-    <button type="submit" name="btn_save" value="1" class="btn btn-primary pull-right">Save changes</button>
-    {% else %}
-    
-    <a href="/emrs/emrs/prescriptions/edit/{{ pid }}/{{ presc_id }}" name="btn_edit" value="1" class="btn btn-primary">Edit</a>
-    <a href="/emrs/emrs/prescriptions/print/{{ pid }}/{{ presc_id }}" name="btn_edit" value="1" class="btn btn-primary">Prescription</a>
+        {% if presc_id == presc_id_latest %}
+        <button type="submit" name="btn_save" value="1" class="btn btn-primary pull-right">Save changes</button> 
+        {% endif %}
     {% endif %}
 </div> 
     
