@@ -359,9 +359,10 @@ $app->group('/tools', function () use ($app, $sec, $person, $treatment, $meds) {
             }           
             
             if ($app->request->post('btn_save_prep') == '1') {
+                // this logic of saving is ok since we dont want to ophan the older entries
                 for ($i = 0; $i < count($prep_id); $i++) { 
                     if ($prep_name[$i] == '')   { continue; }
-                    if ($prep_id[$i] == '')     { continue; }  
+                    //if ($prep_id[$i] == '')     { continue; }  
                     if (in_array($prep_id[$i], $prep_active)) { 
                         $a = '1';                       
                     } else {
