@@ -25,20 +25,36 @@ $app->group('/tools', function () use ($app, $sec, $person, $treatment, $meds) {
             
             $app->flash('info', "Settings saved." );
             $app->redirect("/emrs/emrs/tools/settings"); 
-        });         
+        });       
         
+    });   
+    
+    $app->group('/acl', function () use ($app, $sec) {
         
+        $app->get('/', function () use ($app, $sec) {    
+            $sec->check('acl');            
+            $app->render('tools_acl.html', array(
+                'title' => 'Acl',      
+                'acl_list' => $sec->list_acl(),
+                'session' => $sec->get_session_array()      
+            ));       
+        }); 
         
+        $app->post('/save', function () use ($app, $sec) {
+            $sec->check('acl');       
+            $keys = $app->request->post('keys');                                    
+            $vals = $app->request->post('vals');  
+            
+            //$allPostVars = $app->request->post();
+            //var_dump($allPostVars);             
+            
+            $sec->save_acl($keys, $vals);
+            
+            $app->flash('info', "Access list saved." );
+            $app->redirect("/emrs/emrs/tools/acl"); 
+        });       
         
-        
-        
-        
-        
-        
-        
-        
-        
-    });        
+    });    
         
     
     $app->group('/users', function () use ($app, $sec, $person) {

@@ -87,6 +87,41 @@ class lib_sec {
         $STH->bindParam(':section', $section); 
         $STH->execute();
         return $STH->fetch();       
+    }  
+    
+    function list_acl() {
+        $STH = $this->DBH->prepare("SELECT section, user_level FROM `acl`");        
+        $STH->execute();
+        $t = $STH->fetchAll();
+        $a = array();
+        
+        // this loop converts it from multi dimensional array into key=>val array
+        foreach ($t as $value) {            
+           $a[$value[0]] = $value[1];            
+        }
+        return $a;       
+    } 
+    
+    function save_acl($keys, $vals) {
+        $this->delete_acl();
+        $i = 0;
+        foreach ($keys as $value) {
+            if ($vals[$i] == '') { continue; }
+            $this->add_acl($value, $vals[$i]);
+            $i++;
+        }        
+    }  
+    
+    function add_acl($key, $val) {         
+        $STH = $this->DBH->prepare("INSERT INTO `acl` VALUES (:key, :val, '') ");                                   
+        $STH->bindParam(':key', $key );                             
+        $STH->bindParam(':val', $val );                 
+        return $STH->execute();          
+    }    
+    
+    function delete_acl() {         
+        $STH = $this->DBH->prepare("DELETE FROM `acl`");                
+        return $STH->execute();          
     }    
     
     // used on treatment form
