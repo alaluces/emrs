@@ -161,7 +161,7 @@ class lib_person {
         
     }    
     
-    function save_patient($person_id, $dry_weight, $physician_id, $hepa_status) {
+    function save_patient($person_id, $dry_weight, $physician_id, $hepa_status, $first_dialysis, $diagnosis, $blood_type, $hemodialysis_orders) {
         if ($dry_weight == '' || $physician_id == '' || $hepa_status == '' ) {
             return 0;            
         } else {            
@@ -170,13 +170,21 @@ class lib_person {
                     :person_id,                    
                     :dry_weight,                   
                     :physician_id,                 
-                    :hepa_status   
+                    :hepa_status,
+                    :first_dialysis, 
+                    :diagnosis, 
+                    :blood_type,                    
+                    :hemodialysis_orders                    
                     )");
             } else {                               
                 $STH = $this->DBH->prepare("UPDATE `patient_details` SET                                           
                     dry_weight = :dry_weight,                      
                     physician_id = :physician_id,                  
-                    hepa_status = :hepa_status                        
+                    hepa_status = :hepa_status,
+                    first_dialysis = :first_dialysis, 
+                    diagnosis = :diagnosis, 
+                    blood_type = :blood_type,                     
+                    hemodialysis_orders = :hemodialysis_orders                  
                     WHERE person_id = :person_id                
                     ");
               
@@ -184,7 +192,11 @@ class lib_person {
             $STH->bindParam(':person_id', $person_id );                           
             $STH->bindParam(':dry_weight', $dry_weight );                         
             $STH->bindParam(':physician_id', $physician_id );                     
-            $STH->bindParam(':hepa_status', $hepa_status );         
+            $STH->bindParam(':hepa_status', $hepa_status );  
+            $STH->bindParam(':first_dialysis', $first_dialysis );
+            $STH->bindParam(':diagnosis', $diagnosis );
+            $STH->bindParam(':blood_type', $blood_type );            
+            $STH->bindParam(':hemodialysis_orders', $hemodialysis_orders );            
             return $STH->execute();                     
         }
         

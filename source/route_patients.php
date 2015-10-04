@@ -50,7 +50,13 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
                                    
         $dry_weight = $app->request->post('dry_weight');                            
         $physician_id = $app->request->post('physician_id');                        
-        $hepa_status = $app->request->post('hepa_status');         
+        $hepa_status = $app->request->post('hepa_status'); 
+        $first_dialysis = $app->request->post('first_dialysis'); 
+        $diagnosis = $app->request->post('diagnosis'); 
+        $blood_type = $app->request->post('blood_type');         
+        $hemodialysis_orders = $app->request->post('hemodialysis_orders'); 
+
+        
              
         if ($active == '') { $active  = '0'; }              
         
@@ -60,7 +66,7 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
             $app->redirect("/emrs/emrs/patients/edit/$id");        
         }
         
-        $ret = $person->save_patient($id, $dry_weight, $physician_id, $hepa_status);
+        $ret = $person->save_patient($id, $dry_weight, $physician_id, $hepa_status,$first_dialysis, $diagnosis, $blood_type, $hemodialysis_orders);
         if (!$ret) {
             $app->flash('error', 'Error: Invalid input');
             $app->redirect("/emrs/emrs/patients/edit/$id");          
@@ -183,7 +189,7 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
         $id = $app->request->post('pid'); 
         
         // this is the direct link. ex: h:\xmpp\htdocs
-        $uploadfile = $misc->get_profile_pic_dir() . $id;   
+        $uploadfile = $misc->get_uploads_dir('profile_pic') . $id;   
         
         if (!is_uploaded_file($_FILES['profile_pic']['tmp_name'])) {
             $app->redirect("/emrs/emrs/patients/view/$id");           
@@ -198,17 +204,33 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
         $sec->check('patients');
         $token = md5(md5($id) . 'emrs' . md5($id));
         
-        $uploadfile = $misc->get_profile_pic_dir() . $id;         
-        if (file_exists($uploadfile)) {
+        $has_profile_pic = 0; 
+        $has_scc_id = 0; 
+        $has_pwd_id = 0; 
+        
+        $img_profile_pic = $misc->get_uploads_dir('profile_pic') . $id;         
+        if (file_exists($img_profile_pic)) {
             $has_profile_pic = 1;           
-        } else {
-            $has_profile_pic = 0;            
         }
+        
+        $img_scc_id = $misc->get_uploads_dir('scc_id') . $id;         
+        if (file_exists($img_scc_id)) {
+            $has_scc_id = 1;           
+        }
+        
+        $img_pwd_id = $misc->get_uploads_dir('pwd_id') . $id;         
+        if (file_exists($img_pwd_id)) {
+            $has_pwd_id = 1;           
+        }        
         
         $app->render('patient_profile.html', array(            
             'pid' => $id,
-            'uploadfile' => '/emrs/uploads/profile_pic/' . $id,   
-            'has_profile_pic' => $has_profile_pic,        
+            'img_profile_pic' => '/emrs/uploads/profile_pic/' . $id,  
+            'img_scc_id' => '/emrs/uploads/scc_id/' . $id,  
+            'img_pwd_id' => '/emrs/uploads/pwd_id/' . $id,  
+            'has_profile_pic' => $has_profile_pic, 
+            'has_scc_id' => $has_scc_id,
+            'has_pwd_id' => $has_pwd_id,            
             'date_today' => date("M d, Y"),
             'hp1' => $lab->get_latest_data($id, '69'),
             'hp2' => $lab->get_latest_data($id, '70'),
@@ -227,10 +249,10 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
     $app->get('/remove/:id/:token', function ($id, $token) use ($app, $sec, $misc) {        
         $sec->check('patients');        
         $token2 = md5(md5($id) . 'emrs' . md5($id)); 
-        $uploadfile = $misc->get_profile_pic_dir() . $id;   
+        $img_profile_pic = $misc->get_uploads_dir('profile_pic') . $id; 
         if ($token2 == $token) {
-            if (file_exists($uploadfile)) {
-                unlink($uploadfile);          
+            if (file_exists($img_profile_pic)) {
+                unlink($img_profile_pic);          
             }             
         }        
         $app->redirect("/emrs/emrs/patients/view/$id");

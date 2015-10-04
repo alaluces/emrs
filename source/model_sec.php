@@ -177,14 +177,14 @@ class lib_misc {
         }        
     }
     
-    public function get_profile_pic_dir() {
+    public function get_uploads_dir($type) {
         $delim = '\\';              
         $t = explode($delim, getcwd());
         $x ='';
         for ($i=0; $i < count($t) - 1; $i++) {             
             $x .= $t[$i] . $delim;
         } 
-        return $x . 'uploads' . $delim . 'profile_pic' . $delim ;     
+        return $x . 'uploads' . "$delim$type$delim" ;     
     }    
 }
 

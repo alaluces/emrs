@@ -129,8 +129,12 @@
         
         {% if patient_values %}    
             {% for key, value in patient_values if key not in ['person_id'] %}   
-                <tr>                    
+                <tr>
+                    {% if key in ['dry_weight','hepa_status','physician_id'] %}
                     <td style="text-align:left">{{ key|replace({'_': ' '})|title }} <span style="color:red;">*</span></td>
+                    {% else %} 
+                    <td style="text-align:left">{{ key|replace({'_': ' '})|title }} </td>
+                    {% endif %}                                         
                     {% if key == 'hepa_status' %}
                         <td><select style="width:100%;" class="form-control input-sm" id="{{ key }}" type="text" name="{{ key }}">
                             <option value="" >-</option>
