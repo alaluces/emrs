@@ -184,18 +184,18 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
         $app->redirect("/emrs/emrs/lab-results/view/all/$id");    
     }); 
      
-    $app->post('/upload', function () use ($app, $sec, $misc) {
+    $app->post('/upload/:type', function ($type) use ($app, $sec, $misc) {
         $sec->check('patients');        
         $id = $app->request->post('pid'); 
         
         // this is the direct link. ex: h:\xmpp\htdocs
-        $uploadfile = $misc->get_uploads_dir('profile_pic') . $id;   
+        $uploadfile = $misc->get_uploads_dir($type) . $id;   
         
-        if (!is_uploaded_file($_FILES['profile_pic']['tmp_name'])) {
+        if (!is_uploaded_file($_FILES[$type]['tmp_name'])) {
             $app->redirect("/emrs/emrs/patients/view/$id");           
         }
         
-        move_uploaded_file($_FILES['profile_pic']['tmp_name'], $uploadfile);    
+        move_uploaded_file($_FILES[$type]['tmp_name'], $uploadfile);    
         $app->redirect("/emrs/emrs/patients/view/$id");
              
     });

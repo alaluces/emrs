@@ -93,7 +93,7 @@
             <td colspan=1 style="border:none"></td>
             <td colspan=3 style="border:none">
                 {% if has_profile_pic == 0 %}
-                <form enctype="multipart/form-data" action="/emrs/emrs/patients/upload" method="POST">  
+                <form enctype="multipart/form-data" action="/emrs/emrs/patients/upload/profile_pic" method="POST">  
                     <input type="hidden" name="pid" value="{{ pid }}" />  
                     <input type="hidden" name="MAX_FILE_SIZE" value="300000" />             
                     <input name="profile_pic" type="file" />
@@ -122,10 +122,10 @@
             <td colspan=1 style="border:none"></td>
             <td colspan=3 style="border:none">
                 {% if has_scc_id == 0 %}
-                <form enctype="multipart/form-data" action="/emrs/emrs/patients/upload" method="POST">  
+                <form enctype="multipart/form-data" action="/emrs/emrs/patients/upload/scc_id" method="POST">  
                     <input type="hidden" name="pid" value="{{ pid }}" />  
                     <input type="hidden" name="MAX_FILE_SIZE" value="300000" />             
-                    <input name="profile_pic" type="file" />
+                    <input name="scc_id" type="file" />
                     <input type="submit" value="Upload Photo" />
                 </form> 
                 {% endif %}
@@ -151,10 +151,10 @@
             <td colspan=1 style="border:none"></td>
             <td colspan=3 style="border:none">
                 {% if has_pwd_id == 0 %}
-                <form enctype="multipart/form-data" action="/emrs/emrs/patients/upload" method="POST">  
+                <form enctype="multipart/form-data" action="/emrs/emrs/patients/upload/pwd_id" method="POST">  
                     <input type="hidden" name="pid" value="{{ pid }}" />  
                     <input type="hidden" name="MAX_FILE_SIZE" value="300000" />             
-                    <input name="profile_pic" type="file" />
+                    <input name="pwd_id" type="file" />
                     <input type="submit" value="Upload Photo" />
                 </form> 
                 {% endif %}
