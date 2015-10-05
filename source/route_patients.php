@@ -246,13 +246,13 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
         ));        
     });  
     
-    $app->get('/remove/:id/:token', function ($id, $token) use ($app, $sec, $misc) {        
+    $app->get('/remove/:type/:id/:token', function ($type, $id, $token) use ($app, $sec, $misc) {        
         $sec->check('patients');        
         $token2 = md5(md5($id) . 'emrs' . md5($id)); 
-        $img_profile_pic = $misc->get_uploads_dir('profile_pic') . $id; 
+        $img = $misc->get_uploads_dir($type) . $id; 
         if ($token2 == $token) {
-            if (file_exists($img_profile_pic)) {
-                unlink($img_profile_pic);          
+            if (file_exists($img)) {
+                unlink($img);          
             }             
         }        
         $app->redirect("/emrs/emrs/patients/view/$id");
