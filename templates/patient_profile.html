@@ -33,7 +33,7 @@
 
     
     <table border=0>
-        <tr><td colspan=4>
+        <tr><td colspan=4 style="border:none">
                 [<a target="_blank" href="/emrs/emrs/">Home</a>] 
                 [<a target="_blank" href="/emrs/emrs/patients/edit/{{ pid }}">Edit</a>] 
                 [<a target="_blank" href="/emrs/emrs/patients/lab-results/{{ pid }}">Lab Results</a>] 
@@ -45,12 +45,12 @@
         </tr>        
         <tr>            
             <td colspan=3 style="border:none;height:20px;"></td> 
-            <td style="width:150px; height: 20px;text-align:center;padding:3px;">{{ date_today }}</td>      
+            <td style="width:150px; height: 20px;text-align:center;padding:3px;border:none">{{ date_today }}</td>      
         </tr>
         
         <tr>
             
-            <td colspan=2>Name: {{ info.fname|title }} {{ info.mname|title }} {{ info.lname|title }} ({{age}}/{{ info.gender }})</td>            
+            <td colspan=2 style="border:none">Name: {{ info.fname|title }} {{ info.mname|title }} {{ info.lname|title }} ({{age}}/{{ info.gender }})</td>            
             <td style="border:none"></td>  
                         
             <td rowspan=6 style="width:150px;height:150px;padding:3px;text-align:center;">
@@ -65,27 +65,27 @@
         </tr>    
         
         <tr>            
-            <td colspan=2>Address 1: {{ info.address1 }}</td> 
+            <td colspan=2 style="border:none">Address 1: {{ info.address1 }}</td> 
             <td style="border:none"></td>
         </tr>        
         <tr>
             
-            <td colspan=2>Address 2: {{ info.address2 }} {{ info.city }} {{ info.province }}</td>
+            <td colspan=2 style="border:none">Address 2: {{ info.address2 }} {{ info.city }} {{ info.province }}</td>
             <td style="border:none"></td>
         </tr> 
         <tr>
             
-            <td colspan=2>Contact Number: {{ info.phone_number }}</td>
+            <td colspan=2 style="border:none">Contact Number: {{ info.phone_number }}</td>
             <td style="border:none"></td>
         </tr> 
         <tr>
             
-            <td colspan=2 style="width:150px">Birthday: {{ info.birth_date[4:2] }}/{{ info.birth_date[6:2] }}/{{ info.birth_date[0:4] }}</td>            
+            <td colspan=2 style="width:150px;border:none">Birthday: {{ info.birth_date[4:2] }}/{{ info.birth_date[6:2] }}/{{ info.birth_date[0:4] }}</td>            
             <td style="border:none"></td>
         </tr> 
         <tr>
             
-            <td colspan=2>Blood Type: {{ info.blood_type }}</td>  
+            <td colspan=2 style="border:none">Blood Type: {{ info.blood_type }}</td>  
             <td style="border:none"></td>
         </tr>         
       
