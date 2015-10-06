@@ -21,6 +21,15 @@ class lib_treatment {
         return $STH->fetchColumn();
     }  
     
+    function id_exists($id) {
+        $STH = $this->DBH->prepare("SELECT treatment_id FROM treatment_list AS tl               
+                WHERE treatment_id = :id
+                ");
+        $STH->bindParam(':id', $id);        
+        $STH->execute();
+        return $STH->fetchColumn();
+    }    
+    
     function get_vid($tid) {
         $STH = $this->DBH->prepare("SELECT MAX(version_id) FROM `treatment_logs` AS lo
                 INNER JOIN `treatment_list` AS li
@@ -178,33 +187,59 @@ class lib_treatment {
         return $STH->fetchAll();       
     }
     
-    // very powerful!!!
+    
     // 20150212 multi option capable
     // 20150514 optimizations
-    function get_info($tid, $vid) {  
-        $STH = $this->DBH->prepare("SELECT 
-        t.property_id AS property_id,
-        `property_name`,
-        h.modify_options AS modify_options, 
-        `html_type`,            
-        `label_font`,
-        `label_font_size`,
-        `label_font_weight`,
-        `pos_label_top`,
-        `pos_label_left`,
-        `pos_input_top`,
-        `pos_input_left`,
-        `input_width`,
-        `input_height`,           
-        auto_display,
-        `value` as property_value
-        FROM `treatments` AS t  
-        INNER JOIN treatment_properties AS tp
-        ON t.property_id = tp.property_id
-        INNER JOIN html AS h
-        ON t.property_id = h.property_id
-        WHERE treatment_id = :tid AND version_id = :vid       
-        AND active = '1'"); 
+    // 20151006 quick fix, for faster loading
+    function get_info($tid, $vid) { 
+        if (!$this->id_exists($tid) || $tid == '') {
+            $query = "SELECT p.property_id AS property_id,
+            `property_name`,
+            h.modify_options AS modify_options, 
+            `html_type`,            
+            `label_font`,
+            `label_font_size`,
+            `label_font_weight`,
+            `pos_label_top`,
+            `pos_label_left`,
+            `pos_input_top`,
+            `pos_input_left`,
+            `input_width`,
+            `input_height`,           
+            auto_display,
+            '' AS property_value
+            FROM `treatment_properties` AS p
+            INNER JOIN `html` AS  h
+            ON p.property_id = h.property_id      
+            WHERE active = '1'";           
+        } else {
+            $query = "SELECT 
+            t.property_id AS property_id,
+            `property_name`,
+            h.modify_options AS modify_options, 
+            `html_type`,            
+            `label_font`,
+            `label_font_size`,
+            `label_font_weight`,
+            `pos_label_top`,
+            `pos_label_left`,
+            `pos_input_top`,
+            `pos_input_left`,
+            `input_width`,
+            `input_height`,           
+            auto_display,
+            `value` as property_value
+            FROM `treatments` AS t  
+            INNER JOIN treatment_properties AS tp
+            ON t.property_id = tp.property_id
+            INNER JOIN html AS h
+            ON t.property_id = h.property_id
+            WHERE treatment_id = :tid AND version_id = :vid       
+            AND active = '1'";
+        }    
+        
+        
+        $STH = $this->DBH->prepare($query); 
         $STH->bindParam(':vid', $vid); 
         $STH->bindParam(':tid', $tid);          
         $STH->execute();
