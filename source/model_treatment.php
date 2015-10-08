@@ -192,7 +192,7 @@ class lib_treatment {
     // 20150514 optimizations
     // 20151006 quick fix, for faster loading
     function get_info($tid, $vid) { 
-        if (!$this->id_exists($tid) || $tid == '') {
+        if (!$this->id_exists($tid) || $vid == '1') {
             $query = "SELECT p.property_id AS property_id,
             `property_name`,
             h.modify_options AS modify_options, 

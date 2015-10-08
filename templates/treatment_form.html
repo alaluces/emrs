@@ -388,6 +388,7 @@
         {% endif %}        
 
         {% if field.html_type == 'checkbox' %} 
+            <input type="hidden" name="{{ field.property_id ~ ',0,0'}}[]" value=""> 
             {% set i = field.pos_input_top %}
             {% for option in options %}
                 {% if option.property_id == field.property_id %}

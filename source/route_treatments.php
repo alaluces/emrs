@@ -137,13 +137,10 @@ $app->group('/treatments', function () use ($app, $sec, $person, $treatment, $ap
                 }        
 
                 if (is_array($val)) {
-                    // tthis is used for checkboxes with multiple values
-                    for ($i = 0; $i < count($val); $i++) {
-                        $treatment->add_entries($tid, $vid, $arrtmp[0], $val[$i]);                         
-                    }                 
-                } else {
-                    $treatment->add_entries($tid, $vid, $arrtmp[0], $val);
-                }                
+                    $val = implode(',', $val);                  
+                } 
+                    
+                $treatment->add_entries($tid, $vid, $arrtmp[0], $val);                                
             } 
             
             if ($app->request->post('btn_update') == '1' ) {
