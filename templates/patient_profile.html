@@ -12,225 +12,122 @@
 
 {% block content %}
 <style>
-    td {
-        padding:3px;
-        padding-left:10px;
-        border:solid thin grey;
-        
+    td {       
+        border: solid thin whitesmoke;       
     }
     
     table {        
         font-family:verdana;
         font-size:11px;
-        margin:auto;
-        
-    }    
+        margin:auto;       
+    }      
     
-    
-    
-</style>    
-
-
-    
+</style>       
     <table border=0>
-        <tr><td colspan=4 style="border:none">
+        <tr><td colspan=4>
                 [<a target="_blank" href="/emrs/emrs/">Home</a>] 
                 [<a target="_blank" href="/emrs/emrs/patients/edit/{{ pid }}">Edit</a>] 
                 [<a target="_blank" href="/emrs/emrs/patients/lab-results/{{ pid }}">Lab Results</a>] 
                 [<a target="_blank" href="/emrs/emrs/medications/{{ pid }}">Medications</a>]</td></tr>
-        <tr><td colspan=4 style="text-align:center;padding:5px;"><h1>{{ session.company_name }}</h1></td></tr> 
-        
+        <tr><td colspan=4 style="text-align:center;padding:5px;"><h1>{{ session.company_name }}</h1></td></tr>         
+       
         <tr>            
-            <td colspan=4 style="border:none;height:20px;"></td>           
-        </tr>        
-        <tr>            
-            <td colspan=3 style="border:none;height:20px;"></td> 
-            <td style="width:150px; height: 20px;text-align:center;padding:3px;border:none">{{ date_today }}</td>      
+            <td colspan=3 style="height:20px;"></td> 
+            <td style="width:150px; height: 20px;text-align:center;padding:3px;">{{ date_today }}</td>      
         </tr>
         
-        <tr>
+        <tr>            
+            <td colspan=3><b>Name</b>: {{ info.fname|title }} {{ info.mname|title }} {{ info.lname|title }} ({{age}}/{{ info.gender }})</td>            
             
-            <td colspan=2 style="border:none">Name: {{ info.fname|title }} {{ info.mname|title }} {{ info.lname|title }} ({{age}}/{{ info.gender }})</td>            
-            <td style="border:none"></td>  
                         
-            <td rowspan=6 style="width:150px;height:150px;padding:3px;text-align:center;">
-                {% if has_profile_pic %}
-                    <img style="width:150px;height:140px;" src="{{ img_profile_pic }}">
-                    <br>
-                    <span ><a style="font-size:9px;color:red;" href="/emrs/emrs/patients/remove/profile_pic/{{ pid }}/{{ token }}">Remove pic</a></span>  
-                {% else %}
-                    <span>No image</span>                
-                {% endif %}               
+            <td rowspan=6 style="width:150px;height:140px;padding:3px;text-align:center;border:solid thin grey;">             
+                <img style="width:150px;height:130px;" src="{{ has_profile_pic ? img_profile_pic : img_blank }}">
+                <br>
+                <span ><a style="font-size:9px;color:red;" href="/emrs/emrs/patients/image_upload/{{ pid }}}">Upload new</a></span>                   
             </td>
         </tr>    
         
         <tr>            
-            <td colspan=2 style="border:none">Address 1: {{ info.address1 }}</td> 
-            <td style="border:none"></td>
+            <td colspan=3><b>Address 1</b>: {{ info.address1 }}</td>            
         </tr>        
-        <tr>
-            
-            <td colspan=2 style="border:none">Address 2: {{ info.address2 }} {{ info.city }} {{ info.province }}</td>
-            <td style="border:none"></td>
+        <tr>            
+            <td colspan=3><b>Address 2</b>: {{ info.address2 }} {{ info.city }} {{ info.province }}</td>            
         </tr> 
         <tr>
             
-            <td colspan=2 style="border:none">Contact Number: {{ info.phone_number }}</td>
-            <td style="border:none"></td>
+            <td><b>Phone</b>: {{ info.phone_number }}</td>
+            <td style="width:150px;"><b>Birthday</b>: {{ info.birth_date[4:2] }}/{{ info.birth_date[6:2] }}/{{ info.birth_date[0:4] }}</td>            
+            <td><b>Blood Type</b>: {{ info.blood_type }}</td> 
         </tr> 
-        <tr>
-            
-            <td colspan=2 style="width:150px;border:none">Birthday: {{ info.birth_date[4:2] }}/{{ info.birth_date[6:2] }}/{{ info.birth_date[0:4] }}</td>            
-            <td style="border:none"></td>
+  
+        <tr>            
+            <td colspan=3 style="height:20px;"></td>
         </tr> 
-        <tr>
-            
-            <td colspan=2 style="border:none">Blood Type: {{ info.blood_type }}</td>  
-            <td style="border:none"></td>
+        <tr>            
+            <td colspan=3 style="height:20px;"></td>
         </tr>         
-      
+
         <tr>
-            <td colspan=1 style="border:none"></td>
-            <td colspan=3 style="border:none">
-                {% if has_profile_pic == 0 %}
-                <form enctype="multipart/form-data" action="/emrs/emrs/patients/upload/profile_pic" method="POST">  
-                    <input type="hidden" name="pid" value="{{ pid }}" />  
-                    <input type="hidden" name="MAX_FILE_SIZE" value="300000" />             
-                    <input name="profile_pic" type="file" />
-                    <input type="submit" value="Upload Photo" />
-                </form> 
-                {% endif %}
-            </td>
-        </tr> 
-        
-        <tr>
-            <td colspan=3 style="width:300px;border:none;"></td>                         
-            <td rowspan=3 style="width:150px;height:100px;padding:3px;text-align:center;">
-                {% if has_scc_id %}
-                    <img style="width:150px;height:95px;" src="{{ img_scc_id }}">
-                    <br>
-                    <span ><a style="font-size:9px;color:red;" href="/emrs/emrs/patients/remove/scc_id/{{ pid }}/{{ token }}">Remove pic</a></span>  
-                {% else %}
-                    <span>No image</span>                
-                {% endif %}               
-            </td>
-        </tr>    
-        
-        <tr><td colspan=3 style="border:none"></td></tr>        
-        <tr><td colspan=3 style="border:none"></td></tr>       
-        <tr>
-            <td colspan=1 style="border:none"></td>
-            <td colspan=3 style="border:none">
-                {% if has_scc_id == 0 %}
-                <form enctype="multipart/form-data" action="/emrs/emrs/patients/upload/scc_id" method="POST">  
-                    <input type="hidden" name="pid" value="{{ pid }}" />  
-                    <input type="hidden" name="MAX_FILE_SIZE" value="300000" />             
-                    <input name="scc_id" type="file" />
-                    <input type="submit" value="Upload Photo" />
-                </form> 
-                {% endif %}
-            </td>
-        </tr>   
-        
-        <tr>
-            <td colspan=3 style="width:300px;border:none;"></td>                       
-            <td rowspan=3 style="width:150px;height:100px;padding:3px;text-align:center;">
-                {% if has_pwd_id %}
-                    <img style="width:150px;height:95px;" src="{{ img_scc_id }}">
-                    <br>
-                    <span ><a style="font-size:9px;color:red;" href="/emrs/emrs/patients/remove/pwd_id/{{ pid }}/{{ token }}">Remove pic</a></span>  
-                {% else %}
-                    <span>No image</span>                
-                {% endif %}               
-            </td>
-        </tr>    
-        
-        <tr><td colspan=3 style="border:none"></td></tr>        
-        <tr><td colspan=3 style="border:none"></td></tr>       
-        <tr>
-            <td colspan=1 style="border:none"></td>
-            <td colspan=3 style="border:none">
-                {% if has_pwd_id == 0 %}
-                <form enctype="multipart/form-data" action="/emrs/emrs/patients/upload/pwd_id" method="POST">  
-                    <input type="hidden" name="pid" value="{{ pid }}" />  
-                    <input type="hidden" name="MAX_FILE_SIZE" value="300000" />             
-                    <input name="pwd_id" type="file" />
-                    <input type="submit" value="Upload Photo" />
-                </form> 
-                {% endif %}
-            </td>
-        </tr>        
-        
+            <td ></td>                         
+            <td rowspan=3 style="width:150px;height:100px;padding:3px;text-align:center;border:solid thin grey">
+                <img style="width:150px;height:95px;" src="{{ has_scc_id ? img_scc_id : img_blank }} ">
+                <br>
+                <span ><a style="font-size:9px;color:red;" href="/emrs/emrs/patients/image_upload/{{ pid }}}">Upload new</a></span>              
+            </td>          
+                                   
+            <td rowspan=3 style="width:150px;height:100px;padding:3px;text-align:center;border:solid thin grey">
+                <img style="width:150px;height:95px;" src="{{ has_pwd_id ? img_pwd_id : img_blank }} ">
+                <br>
+                <span ><a style="font-size:9px;color:red;" href="/emrs/emrs/patients/image_upload/{{ pid }}}">Upload new</a></span>           
+            </td> 
+            <td ></td>
+        </tr>     
         <tr>            
-            <td colspan=4 style="border:none;height:20px;"></td> 
-        </tr>        
+            <td></td><td></td> 
+        </tr>  
+        <tr>            
+            <td></td><td></td> 
+        </tr>         
     
         <tr>
-            <td>ESRD Cause</td>
-            <td colspan=3>{{ info.diagnosis }}</td> 
-        </tr> 
+            
+            <td colspan=3><b>Diagnonsis</b>: {{ info.diagnosis }}</td> 
+            <td><b>First Dialysis</b>: {{ info.first_dialysis }}</td> 
+        </tr>
 
         <tr>            
-            <td colspan=4 style="border:none;height:20px;"></td> 
-        </tr>         
-        
-        <tr>
-            <td>Date of first Dialysis</td>
-            <td colspan=3>{{ info.first_dialysis }}</td> 
-        </tr> 
-
-        <tr>            
-            <td colspan=4 style="border:none;height:20px;"></td> 
+            <td colspan=4 style="height:20px;"></td> 
         </tr>         
         
         <tr>            
-            <td colspan=4>Hepatitis Status</td> 
+            <td colspan=2><b>Hepatitis Status</b></td> 
+            <td colspan=2><b>Access</b></td> 
         </tr>        
-        <tr>
-            <td>HbsAg</td>
-            <td>{{ hp1.entry_value }}</td>
-            <td>Date</td>
-            <td>{{ hp1.entry_date[4:2] }}/{{ hp1.entry_date[6:2] }}/{{ hp1.entry_date[0:4] }}</td>
+        <tr>            
+            <td><b>HbsAg</b>: {{ hp1.entry_value }}</td>            
+            <td><b>Date</b>: {{ hp1.entry_date[4:2] }}/{{ hp1.entry_date[6:2] }}/{{ hp1.entry_date[0:4] }}</td>
+            <td><b>Date Inserted</b>:</td>      
+            <td><b>Surgeon</b>:</td>
         </tr>
-        <tr>
-            <td>Anti-HBS</td>
-            <td>{{ hp2.entry_value }}</td>
-            <td>Date</td>
-            <td>{{ hp2.entry_date[4:2] }}/{{ hp2.entry_date[6:2] }}/{{ hp2.entry_date[0:4] }}</td>
+        <tr>            
+            <td><b>Anti-HBS</b>: {{ hp2.entry_value }}</td>            
+            <td><b>Date</b>: {{ hp2.entry_date[4:2] }}/{{ hp2.entry_date[6:2] }}/{{ hp2.entry_date[0:4] }}</td>
+            <td><b>Date Done</b>:</td>       
+            <td><b>Surgeon</b>:</td>
         </tr>
-        <tr>
-            <td>Anti-HCV</td>
-            <td>{{ hp3.entry_value }}</td>
-            <td>Date</td>
-            <td>{{ hp3.entry_date[4:2] }}/{{ hp3.entry_date[6:2] }}/{{ hp3.entry_date[0:4] }}</td>
+        <tr>           
+            <td><b>Anti-HCV</b>: {{ hp3.entry_value }}</td>           
+            <td><b>Date</b>: {{ hp3.entry_date[4:2] }}/{{ hp3.entry_date[6:2] }}/{{ hp3.entry_date[0:4] }}</td>
+            <td></td>       
+            <td></td>            
         </tr>    
         
         <tr>            
-            <td colspan=4 style="border:none;height:20px;"></td> 
-        </tr>         
-        <tr>
-            <td>Access</td>
-            <td colspan=3 style="width:450px"></td> 
-        </tr> 
-        <tr>
-            <td>Date Inserted</td>
-            <td></td>
-            <td>Surgeon</td>
-            <td></td>
-        </tr>
-        <tr>
-            <td>Date Done</td>
-            <td></td>
-            <td>Surgeon</td>
-            <td></td>
-        </tr>
-
-        <tr>            
-            <td colspan=4 style="border:none;height:20px;"></td> 
-        </tr>         
+            <td colspan=4 style="height:20px;"></td> 
+        </tr>               
         
         <tr>            
-            <td colspan=1>Hemodialysis Orders</td> 
+            <td colspan=1></b>Hemodialysis Orders</b></td> 
             <td colspan=3>{{ info.hemodialysis_orders }}</td>
         </tr>
 
