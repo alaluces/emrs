@@ -29,7 +29,7 @@
                 [<a target="_blank" href="/emrs/emrs/patients/edit/{{ pid }}">Edit</a>] 
                 [<a target="_blank" href="/emrs/emrs/patients/lab-results/{{ pid }}">Lab Results</a>] 
                 [<a target="_blank" href="/emrs/emrs/medications/{{ pid }}">Medications</a>]</td></tr>
-        <tr><td colspan=4 style="text-align:center;padding:5px;"><h1>{{ session.company_name }}</h1></td></tr>         
+        <tr><td colspan=4 style="text-align:center;padding:5px;border: solid thin grey;"><span style='font-size:26px;'><b>{{ session.company_name }}</b></span></td></tr>         
        
         <tr>            
             <td colspan=3 style="height:20px;"></td> 
@@ -65,7 +65,11 @@
         </tr> 
         <tr>            
             <td colspan=3 style="height:20px;"></td>
-        </tr>         
+        </tr> 
+        
+        <tr>            
+            <td colspan=4 style="height:10px;"></td> 
+        </tr>          
 
         <tr>
             <td ></td>                         
@@ -87,16 +91,18 @@
         </tr>  
         <tr>            
             <td></td><td></td> 
-        </tr>         
-    
-        <tr>
-            
+        </tr>    
+        
+        <tr>            
+            <td colspan=4 style="height:10px;"></td> 
+        </tr>        
+        <tr>            
             <td colspan=3><b>Diagnonsis</b>: {{ info.diagnosis }}</td> 
             <td><b>First Dialysis</b>: {{ info.first_dialysis }}</td> 
         </tr>
 
         <tr>            
-            <td colspan=4 style="height:20px;"></td> 
+            <td colspan=4 style="height:10px;"></td> 
         </tr>         
         
         <tr>            
@@ -123,16 +129,35 @@
         </tr>    
         
         <tr>            
-            <td colspan=4 style="height:20px;"></td> 
+            <td colspan=4 style="height:10px;"></td> 
         </tr>               
         
         <tr>            
-            <td colspan=1></b>Hemodialysis Orders</b></td> 
+            <td colspan=1><b>Hemodialysis Orders</b></td> 
             <td colspan=3>{{ info.hemodialysis_orders }}</td>
         </tr>
 
        
-    
+        <tr>            
+            <td colspan=4 style="height:10px;"></td> 
+        </tr>         
+        <tr>            
+            <td colspan=4><b>Medications</b></td> 
+        </tr>         
+        {% for e in entries %}
+        <tr>
+        <td colspan=4 style="">
+            <span>
+                #{{ e.qty }}  
+                {{ e.amt }}                 
+                {{ e.med_name }} 
+                {{ e.prep_name }}                              
+                {{ e.frequency }}                
+                {{ e.notes }}
+            </span>
+        </td>
+        </tr>   
+        {% endfor %}     
         
         
         

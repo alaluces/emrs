@@ -200,7 +200,7 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
              
     });
     
-    $app->get('/view/:id', function ($id) use ($app, $sec, $person, $treatment, $lab, $misc) {        
+    $app->get('/view/:id', function ($id) use ($app, $sec, $person, $treatment, $lab, $misc, $presc) {        
         $sec->check('patients');
         $token = md5(md5($id) . 'emrs' . md5($id));
         
@@ -225,6 +225,7 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
         
         $app->render('patient_profile.html', array(            
             'pid' => $id,
+            'entries' => $presc->get_entries($presc->get_latest($id)),
             'img_profile_pic' => '/emrs/uploads/profile_pic/' . $id,  
             'img_scc_id' => '/emrs/uploads/scc_id/' . $id,  
             'img_pwd_id' => '/emrs/uploads/pwd_id/' . $id, 
