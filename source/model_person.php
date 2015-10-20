@@ -161,7 +161,7 @@ class lib_person {
         
     }    
     
-    function save_patient($person_id, $dry_weight, $physician_id, $hepa_status, $first_dialysis, $diagnosis, $blood_type, $hemodialysis_orders) {
+    function save_patient($person_id, $dry_weight, $physician_id, $hepa_status, $first_dialysis, $diagnosis, $blood_type, $philhealth_number) {
         if ($dry_weight == '' || $physician_id == '' || $hepa_status == '' ) {
             return 0;            
         } else {            
@@ -174,7 +174,7 @@ class lib_person {
                     :first_dialysis, 
                     :diagnosis, 
                     :blood_type,                    
-                    :hemodialysis_orders                    
+                    :philhealth_number                    
                     )");
             } else {                               
                 $STH = $this->DBH->prepare("UPDATE `patient_details` SET                                           
@@ -184,7 +184,7 @@ class lib_person {
                     first_dialysis = :first_dialysis, 
                     diagnosis = :diagnosis, 
                     blood_type = :blood_type,                     
-                    hemodialysis_orders = :hemodialysis_orders                  
+                    philhealth_number = :philhealth_number                  
                     WHERE person_id = :person_id                
                     ");
               
@@ -196,7 +196,7 @@ class lib_person {
             $STH->bindParam(':first_dialysis', $first_dialysis );
             $STH->bindParam(':diagnosis', $diagnosis );
             $STH->bindParam(':blood_type', $blood_type );            
-            $STH->bindParam(':hemodialysis_orders', $hemodialysis_orders );            
+            $STH->bindParam(':philhealth_number', $philhealth_number );            
             return $STH->execute();                     
         }
         

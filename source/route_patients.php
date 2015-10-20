@@ -54,7 +54,7 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
         $first_dialysis = $app->request->post('first_dialysis'); 
         $diagnosis = $app->request->post('diagnosis'); 
         $blood_type = $app->request->post('blood_type');         
-        $hemodialysis_orders = $app->request->post('hemodialysis_orders'); 
+        $philhealth_number = $app->request->post('philhealth_number'); 
 
         
              
@@ -66,7 +66,7 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
             $app->redirect("/emrs/emrs/patients/edit/$id");        
         }
         
-        $ret = $person->save_patient($id, $dry_weight, $physician_id, $hepa_status,$first_dialysis, $diagnosis, $blood_type, $hemodialysis_orders);
+        $ret = $person->save_patient($id, $dry_weight, $physician_id, $hepa_status,$first_dialysis, $diagnosis, $blood_type, $philhealth_number);
         if (!$ret) {
             $app->flash('error', 'Error: Invalid input');
             $app->redirect("/emrs/emrs/patients/edit/$id");          
