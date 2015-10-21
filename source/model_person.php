@@ -382,6 +382,12 @@ class lib_person {
         return $STH->fetchALL(PDO::FETCH_ASSOC);   
     }  
     
+    function get_hd_order_header() {  
+        $STH = $this->DBH->prepare("SHOW FULL FIELDS FROM `patient_hd_orders`");       
+        $STH->execute();
+        return $STH->fetchALL(PDO::FETCH_ASSOC);   
+    }    
+    
     function get_person_values($id) {       
         $STH = $this->DBH->prepare("SELECT * FROM `persons` WHERE person_id = :id");      
         $STH->bindParam(':id', $id); 
@@ -394,7 +400,14 @@ class lib_person {
         $STH->bindParam(':id', $id); 
         $STH->execute();
         return $STH->fetch(PDO::FETCH_ASSOC);       
-    }   
+    } 
+    
+    function get_hd_order_values($id) {       
+        $STH = $this->DBH->prepare("SELECT * FROM `patient_hd_orders` WHERE person_id = :id");      
+        $STH->bindParam(':id', $id); 
+        $STH->execute();
+        return $STH->fetch(PDO::FETCH_ASSOC);       
+    }     
 
     function get_pro_values($id) {       
         $STH = $this->DBH->prepare("SELECT * FROM `person_pro_data` WHERE person_id = :id");      
