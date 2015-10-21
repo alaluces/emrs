@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block doctype %}{% endblock %}
-{% block title %} Patient Profile: {{ info.fname|title }} {{ info.lname|title }} {% endblock %}
+{% block title %} Patient Profile: {{ person_values.fname|title }} {{ person_values.lname|title }} {% endblock %}
 {% block bootstrap %} {% endblock %} 
 {% block header %} {% endblock %}
 {% block navbar %} {% endblock navbar %}
@@ -13,7 +13,7 @@
 {% block content %}
 <style>
     td {       
-        border: solid thin whitesmoke;       
+        border: solid thin white;       
     }
     
     table {        
@@ -40,7 +40,7 @@
         </tr>
         
         <tr>            
-            <td colspan=3><b>Name</b>: {{ info.fname|title }} {{ info.mname|title }} {{ info.lname|title }} ({{age}}/{{ info.gender }})</td>            
+            <td colspan=3><b>Name</b>: {{ person_values.fname|title }} {{ person_values.mname|title }} {{ person_values.lname|title }} ({{age}}/{{ person_values.gender }})</td>            
             
                         
             <td rowspan=6 style="width:150px;height:140px;padding:3px;text-align:center;border:solid thin grey;">             
@@ -51,16 +51,16 @@
         </tr>    
         
         <tr>            
-            <td colspan=3><b>Address 1</b>: {{ info.address1 }}</td>            
+            <td colspan=3><b>Address 1</b>: {{ person_values.address1 }}</td>            
         </tr>        
         <tr>            
-            <td colspan=3><b>Address 2</b>: {{ info.address2 }} {{ info.city }} {{ info.province }}</td>            
+            <td colspan=3><b>Address 2</b>: {{ person_values.address2 }} {{ person_values.city }} {{ person_values.province }}</td>            
         </tr> 
         <tr>
             
-            <td><b>Phone</b>: {{ info.phone_number }}</td>
-            <td style="width:150px;"><b>Birthday</b>: {{ info.birth_date[4:2] }}/{{ info.birth_date[6:2] }}/{{ info.birth_date[0:4] }}</td>            
-            <td><b>Blood Type</b>: {{ info.blood_type }}</td> 
+            <td><b>Phone</b>: {{ person_values.phone_number }}</td>
+            <td style="width:150px;"><b>Birthday</b>: {{ person_values.birth_date[4:2] }}/{{ person_values.birth_date[6:2] }}/{{ person_values.birth_date[0:4] }}</td>            
+            <td><b>Blood Type</b>: {{ patient_values.blood_type }}</td> 
         </tr> 
   
         <tr>            
@@ -100,8 +100,8 @@
             <td colspan=4 style="height:10px;"></td> 
         </tr>        
         <tr>            
-            <td colspan=3><b>Diagnonsis</b>: {{ info.diagnosis }}</td> 
-            <td><b>First Dialysis</b>: {{ info.first_dialysis }}</td> 
+            <td colspan=3><b>Diagnonsis</b>: {{ patient_values.diagnosis }}</td> 
+            <td><b>First Dialysis</b>: {{ patient_values.first_dialysis }}</td> 
         </tr>
 
         <tr>            
@@ -109,8 +109,8 @@
         </tr>         
         
         <tr>            
-            <td colspan=2><b>Hepatitis Status</b></td> 
-            <td colspan=2><b>Access</b></td> 
+            <td colspan=2><b>Hepatitis Status</b>:</td> 
+            <td colspan=2><b>Access</b>:</td> 
         </tr>        
         <tr>            
             <td><b>HbsAg</b>: {{ hp1.entry_value }}</td>            
@@ -136,16 +136,28 @@
         </tr>               
         
         <tr>            
-            <td colspan=1><b>Hemodialysis Orders</b></td> 
-            <td colspan=3>{{ info.hemodialysis_orders }}</td>
+            <td colspan=4><b>Hemodialysis Orders</b>:</td>             
         </tr>
+        
+        <tr>            
+            <td><b>Duration</b>: {{ hd_order_values.duration }}</td> 
+            <td><b>Blood Flow</b>: {{ hd_order_values.blood_flow }}</td> 
+            <td><b>Dialysate Flow</b>: {{ hd_order_values.dialysate_flow }}</td> 
+            <td></td> 
+        </tr>   
+        <tr>            
+            <td><b>Heparin</b>: {{ hd_order_values.heparin }}</td> 
+            <td></td> 
+            <td><b>Dialyzer</b>: {{ hd_order_values.dialyzer }}</td> 
+            <td></td> 
+        </tr>         
 
        
         <tr>            
             <td colspan=4 style="height:10px;"></td> 
         </tr>         
         <tr>            
-            <td colspan=4><b>Medications</b></td> 
+            <td colspan=4><b>Medications</b>:</td> 
         </tr>         
         {% for e in entries %}
         <tr>

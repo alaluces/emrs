@@ -244,7 +244,9 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
             //dialyzer' => $treatment->get_latest_data($id, '9'),
             //'uf_goal' => $treatment->get_latest_data($id, '6'),
             'token' => $token,
-            'info' => $person->get_info($id),
+            'person_values' => $person->get_person_values($id),
+            'patient_values' => $person->get_patient_values($id),
+            'hd_order_values' => $person->get_hd_order_values($id),
             'age' => $person->get_age($id),
             'session' => $sec->get_session_array()    
         ));        
