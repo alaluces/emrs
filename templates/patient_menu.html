@@ -1,20 +1,23 @@
 <div class="row clearfix">
     <div class="col-md-12 column">                      
-        <ul class="nav nav-pills"> 
-            <li {{ title == 'Patient Edit' ? 'class="active"' : ''}} >
-                    <a target="_blank" href="/emrs/emrs/patients/edit/{{ pid }}">Patient Edit</a>
+        <ul class="nav nav-pills">
+            <li>
+                    <a target="_blank" href="/emrs/emrs/patients/view/{{ pid }}">Profile</a>
             </li>            
-            <li {{ title == 'Treatments' ? 'class="active"' : ''}} >
-                    <a target="_blank" href="/emrs/emrs/patients/treatment/{{ pid }}">Treatments</a>
+            <li {{ title == 'Patient Edit' ? 'class="active"' : ''}} >
+                    <a {{ title == 'Patient Edit' ? '' : 'target="_blank"' }} href="/emrs/emrs/patients/edit/{{ pid }}">Patient Edit</a>
+            </li>            
+            <li {{ title == 'Treatments' ? 'class="active"' : '' }} >
+                    <a {{ title == 'Treatments' ? '' : 'target="_blank"' }}  href="/emrs/emrs/patients/treatment/{{ pid }}">Treatments</a>
             </li>
-            <li {{ title == 'Appointments' ? 'class="active"' : ''}} >
-                    <a target="_blank" href="/emrs/emrs/patients/appointment/{{ pid }}">Appointments</a>
+            <li {{ title == 'Appointments' ? 'class="active"' : '' }} >
+                    <a {{ title == 'Appointments' ? '' : 'target="_blank"' }} href="/emrs/emrs/patients/appointment/{{ pid }}">Appointments</a>
             </li>
-            <li {{ title == 'Lab Results' ? 'class="active"' : ''}} >
-                    <a target="_blank" href="/emrs/emrs/patients/lab-results/{{ pid }}">Lab Results</a>
+            <li {{ title == 'Lab Results' ? 'class="active"' : '' }} >
+                    <a {{ title == 'Lab Results' ? '' : 'target="_blank"' }}  href="/emrs/emrs/patients/lab-results/{{ pid }}">Lab Results</a>
             </li>  
-            <li {{ title == 'Medications' ? 'class="active"' : ''}} >
-                    <a target="_blank" href="/emrs/emrs/medications/{{ pid }}">Medications</a>
+            <li {{ title == 'Medications' ? 'class="active"' : '' }} >
+                    <a {{ title == 'Medications' ? '' : 'target="_blank"' }} href="/emrs/emrs/medications/{{ pid }}">Medications</a>
             </li>            
 
         </ul>                
