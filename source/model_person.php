@@ -200,7 +200,39 @@ class lib_person {
             return $STH->execute();                     
         }
         
-    }      
+    }    
+    
+    function save_hd_order($person_id, $duration, $blood_flow, $dialysate_flow, $heparin, $dialyzer) {            
+        if (!$this->hd_order_exists($person_id)) {            
+            $STH = $this->DBH->prepare("INSERT INTO `patient_hd_orders` VALUES (
+                :person_id,                    
+                :duration,                     
+                :blood_flow,                   
+                :dialysate_flow,               
+                :heparin,                      
+                :dialyzer                     
+                )");
+        } else {                               
+            $STH = $this->DBH->prepare("UPDATE `patient_hd_orders` SET                      
+                duration = :duration,                          
+                blood_flow = :blood_flow,                      
+                dialysate_flow = :dialysate_flow,              
+                heparin = :heparin,                            
+                dialyzer = :dialyzer   
+                WHERE person_id = :person_id
+                ");
+
+        }  
+        $STH->bindParam(':person_id', $person_id );                           
+        $STH->bindParam(':duration', $duration );                             
+        $STH->bindParam(':blood_flow', $blood_flow );                         
+        $STH->bindParam(':dialysate_flow', $dialysate_flow );                 
+        $STH->bindParam(':heparin', $heparin );                               
+        $STH->bindParam(':dialyzer', $dialyzer );             
+        return $STH->execute();                     
+        
+        
+    }    
      
     function save_pro_data($id, $pro_title, $pro_affiliation, $prc_id, $license_number, $ptr, $s2, $active) {
         
@@ -306,6 +338,13 @@ class lib_person {
     
     function patient_exists($id) {
         $STH = $this->DBH->prepare("SELECT count(*) FROM patient_details WHERE person_id = :person_id");
+        $STH->bindParam(':person_id', $id);     
+        $STH->execute();
+        return $STH->fetchColumn();
+    }   
+    
+    function hd_order_exists($id) {
+        $STH = $this->DBH->prepare("SELECT count(*) FROM patient_hd_orders WHERE person_id = :person_id");
         $STH->bindParam(':person_id', $id);     
         $STH->execute();
         return $STH->fetchColumn();

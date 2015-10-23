@@ -55,8 +55,12 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
         $diagnosis = $app->request->post('diagnosis'); 
         $blood_type = $app->request->post('blood_type');         
         $philhealth_number = $app->request->post('philhealth_number'); 
-
         
+        $duration = $app->request->post('duration');                                
+        $blood_flow = $app->request->post('blood_flow');                            
+        $dialysate_flow = $app->request->post('dialysate_flow');                    
+        $heparin = $app->request->post('heparin');                                  
+        $dialyzer = $app->request->post('dialyzer');         
              
         if ($active == '') { $active  = '0'; }              
         
@@ -70,7 +74,13 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
         if (!$ret) {
             $app->flash('error', 'Error: Invalid input');
             $app->redirect("/emrs/emrs/patients/edit/$id");          
-        }          
+        }  
+        
+        $ret = $person->save_hd_order($id, $duration, $blood_flow, $dialysate_flow, $heparin, $dialyzer);
+        if (!$ret) {
+            $app->flash('error', 'Error: Invalid input');
+            $app->redirect("/emrs/emrs/patients/edit/$id");          
+        }         
    
         //$allPostVars = $app->request->post();        
         //var_dump($allPostVars);      
