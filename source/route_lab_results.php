@@ -12,6 +12,7 @@ $app->group('/lab-results', function () use ($app, $sec, $lab, $person) {
             'lab_menu_list' => $lab->get_category_menu_list(),
             'lab_list' => $lab->get_category_list($id, $cid),
             'lab_results' => $lab->get_all_results($id),
+            'lab_results2' => $lab->get_all_results2($id),
             'session' => $sec->get_session_array()                   
         ));       
     }); 

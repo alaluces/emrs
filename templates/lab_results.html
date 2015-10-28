@@ -112,7 +112,7 @@
 <div class="col-md-12 column">
 
     
-    {% for l in lab_list if l.category_id not in ['8','9','10'] %}
+    {% for l in lab_list if l.category_id  in ['8','9','10'] %}
      <div style="overflow-y: auto;" class="panel panel-primary">        
         <div class="panel-heading">{{ l.category_name }} lab results for: {{ person.fname }} {{ person.lname }}</div>
             <form role="form" action="/emrs/emrs/lab-results/save" method="POST">
@@ -184,7 +184,42 @@
             </table>
             </form>
      </div>
-    {% endfor %}
+    {% else %}
+     <div style="overflow-y: auto;" class="panel panel-primary">        
+        <div class="panel-heading">{{ l.category_name }} lab results for: {{ person.fname }} {{ person.lname }}</div>
+            <form role="form" action="/emrs/emrs/lab-results/save" method="POST">
+            <input type="hidden" name="pid"       value="{{ pid }}">   
+            <input type="hidden" name="old_date" value="{{ old_date }}">         
+            <table  border=1 rules="all" style="font-size:12px">
+                <tr>
+                <th>Date</th>                 
+                {% for lr in lab_results if lr.category_id == cid %}
+                    <th>{{ lr.property_name }}</th>
+                {% endfor %} 
+                </tr>
+                <tr>
+                <td>Normal Values</td>                 
+                {% for lr in lab_results if lr.category_id == cid %}
+                    <td>{{ lr.normal_value }}</td>
+                {% endfor %} 
+                </tr> 
+                
+                {% for lr in lab_results2 if lr.category_id == cid %}
+                    <tr>
+                        <td>{{ lr.entry_date }}</td>                       
+                        {% set entries = lr.entry_value|split(',') %} 
+                        {% for e in entries %}                                             
+                             <td>{{ e }}</td>
+                         {% endfor %}                        
+                        
+                    </tr>
+                {% endfor %}                 
+ 
+            </table>
+            </form>
+     </div>
+    {% endfor %}      
+
 </div>     
     
 </div>

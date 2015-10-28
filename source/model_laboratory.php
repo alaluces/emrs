@@ -124,6 +124,24 @@ class lib_laboratory {
         $STH->execute();
         return $STH->fetchAll();       
     }    
+    
+    function get_all_results2($id) {  
+        $STH = $this->DBH->prepare("SELECT 
+            ll.entry_id,
+            category_id,
+            entry_date,
+            (SELECT GROUP_CONCAT(entry_value ORDER BY property_id) FROM lab_entries AS le
+            WHERE entry_id = ll.entry_id
+            ORDER BY property_id) AS entry_value
+            FROM lab_logs AS ll
+            INNER JOIN `lab_entry_list` AS lel
+            ON ll.entry_id = lel.entry_id
+            WHERE person_id = :id
+            ORDER BY entry_date"); 
+        $STH->bindParam(':id', $id);
+        $STH->execute();
+        return $STH->fetchAll();       
+    }       
    
     function get_category_list($pid, $cid) { 
         if ($cid == 'all') { $c = ''; } else { $c = "AND category_id = :cid"; }
