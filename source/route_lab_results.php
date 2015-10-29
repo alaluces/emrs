@@ -84,7 +84,11 @@ $app->group('/lab-results', function () use ($app, $sec, $lab, $person) {
             if ($lab->get_eid($id, $cid, $new_date)) {
                 $app->flash('error', "Date already exists");
                 $app->redirect("/emrs/emrs/lab-results/view/$cid/$id");                 
-            }            
+            } else {
+                $old_eid = $lab->get_eid($id, $cid, $old_date);
+                $lab->delete_entries($old_eid); 
+                $lab->delete_logs($old_eid);                 
+            }           
         }  
         
         // new entry
