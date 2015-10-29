@@ -101,7 +101,8 @@ class lib_laboratory {
         
     }
 
-    function get_all_results($id) {  
+    // to be deleted
+    function get_all_results_old($id) {  
         $STH = $this->DBH->prepare("SELECT lp.property_id,
             lp.category_id,
             category_name,
@@ -125,12 +126,12 @@ class lib_laboratory {
         return $STH->fetchAll();       
     }    
     
-    function get_all_results2($id) {  
+    function get_all_results($id) {  
         $STH = $this->DBH->prepare("SELECT 
             ll.entry_id,
             category_id,
             entry_date,
-            (SELECT GROUP_CONCAT(entry_value ORDER BY property_id) FROM lab_entries AS le
+            (SELECT GROUP_CONCAT(concat(entry_value,'|',property_id) ORDER BY property_id) FROM lab_entries AS le
             WHERE entry_id = ll.entry_id
             ORDER BY property_id) AS entry_value
             FROM lab_logs AS ll
@@ -163,6 +164,7 @@ class lib_laboratory {
         return $STH->fetchAll();       
     } 
     
+
     function get_category_menu_list() { 
         $STH = $this->DBH->prepare("SELECT * from lab_categories WHERE active = '1' ORDER BY category_id");                
         $STH->execute();
@@ -177,10 +179,10 @@ class lib_laboratory {
     } 
     
     function get_property_list() { 
-        $STH = $this->DBH->prepare("SELECT property_id, category_name, property_name FROM `lab_properties` AS lp
+        $STH = $this->DBH->prepare("SELECT property_id, category_name, property_name, lp.category_id, normal_value FROM `lab_properties` AS lp
             INNER JOIN `lab_categories` AS lc
             ON lp.category_id = lc.category_id
-            WHERE lp.active = '1' order by category_name");                
+            WHERE lp.active = '1' ORDER BY category_name, property_id");                
         $STH->execute();
         return $STH->fetchAll();       
     } 

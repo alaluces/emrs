@@ -9,10 +9,9 @@ $app->group('/lab-results', function () use ($app, $sec, $lab, $person) {
             'pid' => $id, 
             'cid' => $cid,
             'person' => $person->get_info($id),
-            'lab_menu_list' => $lab->get_category_menu_list(),
-            'lab_list' => $lab->get_category_list($id, $cid),
+            'lab_menu_list' => $lab->get_category_menu_list(),   
             'lab_results' => $lab->get_all_results($id),
-            'lab_results2' => $lab->get_all_results2($id),
+            'lab_properties' => $lab->get_property_list(),           
             'session' => $sec->get_session_array()                   
         ));       
     }); 
@@ -26,9 +25,9 @@ $app->group('/lab-results', function () use ($app, $sec, $lab, $person) {
             'cid' => $cid,
             'person' => $person->get_info($id),
             'old_date' => $date,
-            'lab_menu_list' => $lab->get_category_menu_list(),
-            'lab_list' => $lab->get_category_list($id, $cid),
+            'lab_menu_list' => $lab->get_category_menu_list(),   
             'lab_results' => $lab->get_all_results($id),
+            'lab_properties' => $lab->get_property_list(),  
             'session' => $sec->get_session_array()                   
         ));       
     }); 
@@ -43,9 +42,9 @@ $app->group('/lab-results', function () use ($app, $sec, $lab, $person) {
             'cid' => $cid,
             'person' => $person->get_info($id),
             'old_date' => $date,
-            'lab_menu_list' => $lab->get_category_menu_list(),
-            'lab_list' => $lab->get_category_list($id, $cid),
+            'lab_menu_list' => $lab->get_category_menu_list(),   
             'lab_results' => $lab->get_all_results($id),
+            'lab_properties' => $lab->get_property_list(),  
             'session' => $sec->get_session_array()                   
         ));       
     }); 
