@@ -116,18 +116,26 @@
      <div class="panel panel-primary">        
         <div class="panel-heading">{{ lml.category_name }} - {{ person.fname }} {{ person.lname }}</div>
         <div style="overflow-y:auto;">
-            <form role="form" action="/emrs/emrs/lab-results/save" method="POST">
+            <form role="form" enctype="multipart/form-data" action="/emrs/emrs/lab-results/save" method="POST">
+            <input type="hidden" name="MAX_FILE_SIZE" value="300000" />
             <input type="hidden" name="pid"       value="{{ pid }}">   
             <input type="hidden" name="old_date" value="{{ old_date }}">         
             <table  border=1 rules="all" style="font-size:12px">
                 <tr>
-                <th><div style='width:90px;'>Date</div></th>                 
+                <th><div style='width:90px;'>Date</div></th> 
+                {% if lml.category_id in ['9','10'] %}
+                    <th>Image</th>                  
+                {% endif %}            
                 {% for lp in lab_properties if lp.category_id == lml.category_id %}
                     <th>{{ lp.property_name }}</th>
                 {% endfor %} 
-                </tr>
+                </tr>                
+                
                 <tr>
-                <td>Normal<br>Values</td>                 
+                <td>Normal<br>Values</td> 
+                {% if lml.category_id in ['9','10'] %}
+                    <td></td>
+                {% endif %}                  
                 {% for lp in lab_properties if lp.category_id == lml.category_id %}
                     <td>{{ lp.normal_value }}</td>
                 {% endfor %} 
@@ -143,27 +151,30 @@
                             {% else %}
                                 <a style='font-size:12px;' href="/emrs/emrs/lab-results/edit/{{ lr.category_id }}/{{ pid }}/{{ lr.entry_date }}">{{ d[4:2] }}/{{ d[6:2] }}/{{ d[0:4] }}</a>                                
                             {% endif %}
-                        </td>  
-                       
+                        </td> 
+                        {% if lml.category_id in ['9','10'] %}
+                            <td><a style='font-size:12px;' href="/emrs/emrs/">View</a></td>
+                        {% endif %}                           
                         {% set entries = lr.entry_value|split(',') %} 
                         {% for e in entries %}
                             {% set tmp = e|split('|') %} 
                             {% if lr.entry_date == old_date and edit_mode == '1' %}
-                                <td><input style='width:60px;' id="{{ tmp[1] }}" name="{{ tmp[1] ~ ',X' }}" type='text' value="{{ tmp[0] }}"></td>
+                                <td><input style="width:{{ lml.category_id in ['9','10'] ? '300px;' : '60px;' }}" id="{{ tmp[1] }}" name="{{ tmp[1] ~ ',X' }}" type='text' value="{{ tmp[0] }}"></td>
                             {% else %}                            
                                 <td style="text-align: left;">{{ tmp[0] }}</td>
-                            {% endif %}
-                            
-                        {% endfor %}                        
-                        
+                            {% endif %}                            
+                        {% endfor %}                       
                     </tr>
                 {% endfor %}  
                 
                 
                 {% if not edit_mode %}
                     <td><input style='width:60px;' class="dp_class" name="new_date" type='text' value=""></td> 
+                    {% if lml.category_id in ['9','10'] %}
+                        <td><input name="lab_pic" type="file" /></td>
+                    {% endif %}                                
                     {% for lp in lab_properties if lp.category_id == lml.category_id %}
-                        <td><input style='width:60px;' id="{{ lp.property_id }}" name="{{ lp.property_id ~ ',X' }}" type='text' value=""></td>
+                        <td><input style="width:{{ lml.category_id in ['9','10'] ? '300px;' : '60px;' }};" id="{{ lp.property_id }}" name="{{ lp.property_id ~ ',X' }}" type='text' value=""></td>
                     {% endfor %}
                 {% endif %}
                 </tr>
