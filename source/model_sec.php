@@ -185,7 +185,20 @@ class lib_misc {
             $x .= $t[$i] . $delim;
         } 
         return $x . 'uploads' . "$delim$type$delim" ;     
-    }    
+    }
+    
+    public function build_uploads_dir($dirs) {
+        //$mode = '0777';      
+       
+        foreach ($dirs as $dir) {
+            $temp_dir = $this->get_uploads_dir($dir);
+            if (!file_exists($temp_dir)) {                
+                exec("mkdir -p $temp_dir");    
+            }
+            unset($temp_dir);
+        }        
+    }
+    
 }
 
 ?>

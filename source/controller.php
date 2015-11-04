@@ -21,7 +21,7 @@ $meds        = new lib_medications($DBH);
 $billing     = new lib_billing($DBH);
 $misc        = new lib_misc();
 
-
+require 'init_scripts.php';
 require 'route_sec.php';
 require 'route_treatments.php';
 require 'route_appointments.php';
