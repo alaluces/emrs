@@ -192,7 +192,8 @@ class lib_misc {
        
         foreach ($dirs as $dir) {
             $temp_dir = $this->get_uploads_dir($dir);
-            if (!file_exists($temp_dir)) {                
+            if (!file_exists($temp_dir)) {
+                // note: mkdir -p is windows and linux compatible
                 exec("mkdir -p $temp_dir");    
             }
             unset($temp_dir);

@@ -112,7 +112,7 @@
 <div class="col-md-12 column">
 
     
-    {% for lml in lab_menu_list if lml.category_id == cid or cid == 'all' %}
+    {% for lml in lab_menu_list if lml.category_id == cid or (cid == 'all' and lml.category_id not in ['9','10'] ) %}
      <div class="panel panel-primary">        
         <div class="panel-heading">{{ lml.category_name }} - {{ person.fname }} {{ person.lname }}</div>
         <div style="overflow-y:auto;">
