@@ -116,9 +116,10 @@
      <div class="panel panel-primary">        
         <div class="panel-heading">{{ lml.category_name }} - {{ person.fname }} {{ person.lname }}</div>
         <div style="overflow-y:auto;">
-            <form role="form" enctype="multipart/form-data" action="/emrs/emrs/lab-results/save" method="POST">
+            <form role="form" {{ cid in ['9','10'] ? 'enctype="multipart/form-data"' }} action="/emrs/emrs/lab-results/save" method="POST">
             <input type="hidden" name="MAX_FILE_SIZE" value="300000" />
-            <input type="hidden" name="pid"       value="{{ pid }}">   
+            <input type="hidden" name="pid"       value="{{ pid }}">  
+            <input type="hidden" name="cid"       value="{{ lml.category_id }}"> 
             <input type="hidden" name="old_date" value="{{ old_date }}">         
             <table  border=1 rules="all" style="font-size:12px">
                 <tr>
@@ -153,7 +154,7 @@
                             {% endif %}
                         </td> 
                         {% if lml.category_id in ['9','10'] %}
-                            <td><a style='font-size:12px;' href="/emrs/emrs/">View</a></td>
+                            <td><a style='font-size:12px;' target='_blank' href="/emrs/uploads/labs/{{ lr.entry_date }}-{{ cid }}-{{ pid }}">View</a></td>
                         {% endif %}                           
                         {% set entries = lr.entry_value|split(',') %} 
                         {% for e in entries %}

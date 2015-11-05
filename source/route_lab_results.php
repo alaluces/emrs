@@ -1,6 +1,6 @@
 <?php
 
-$app->group('/lab-results', function () use ($app, $sec, $lab, $person) {
+$app->group('/lab-results', function () use ($app, $sec, $lab, $person, $misc) {
     
     $app->get('/view/:cid/:id', function ($cid, $id) use ($app, $sec, $lab, $person) {    
         $sec->check('labs');            
@@ -65,12 +65,12 @@ $app->group('/lab-results', function () use ($app, $sec, $lab, $person) {
         }         
     });     
     
-    $app->post('/save', function () use ($app, $sec, $lab) {
+    $app->post('/save', function () use ($app, $sec, $lab, $misc) {
         $sec->check('labs');  
         
         $allPostVars = $app->request->post();
         $id        = $app->request->post('pid');
-        $cid       = $app->request->post('btn_add_lr'); 
+        $cid       = $app->request->post('cid'); 
         $old_date  = $app->request->post('old_date'); 
         $new_date  = $app->request->post('new_date');  
         $entry_time = date("His"); 
@@ -121,8 +121,16 @@ $app->group('/lab-results', function () use ($app, $sec, $lab, $person) {
             if (!in_array($key, $del_list2)) { continue; }
             //echo "$key: $val deleted<br>";
             unset($allPostVars[$key]);
-        }  
+        }
         
+        // Upload scanned lab results
+        // this is the direct link. ex: h:\xmpp\htdocs
+        if (in_array($cid, array('9','10'))) {        
+            $uploadfile = $misc->get_uploads_dir('labs') . "$new_date-$cid-$id";            
+            if (is_uploaded_file($_FILES['lab_pic']['tmp_name'])) {
+                move_uploaded_file($_FILES['lab_pic']['tmp_name'], $uploadfile);       
+            }         
+        }
         //var_dump($allPostVars);           
         
         $lab->save($allPostVars, $eid);
