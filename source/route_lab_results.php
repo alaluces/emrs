@@ -158,7 +158,18 @@ $app->group('/lab-results', function () use ($app, $sec, $lab, $person, $misc) {
         
     });  
     
-    
+    $app->get('/img-view/:cid/:id/:date', function ($cid, $id, $date) use ($app, $sec, $lab, $person, $misc) {    
+        $sec->check('labs');    
+        $app->render('lab_results_image_viewer.html', array(            
+            'title' => 'Image Viewer', 
+            'pid' => $id, 
+            'cid' => $cid,
+            'd' => $date,
+            'person' => $person->get_info($id),
+            'img_link' => "/emrs/uploads/labs/$date-$cid-$id",
+            'session' => $sec->get_session_array()                   
+        ));       
+    });    
     
     
     

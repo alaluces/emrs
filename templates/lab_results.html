@@ -154,7 +154,7 @@
                             {% endif %}
                         </td> 
                         {% if lml.category_id in ['9','10'] %}
-                            <td><a style='font-size:12px;' target='_blank' href="/emrs/uploads/labs/{{ lr.entry_date }}-{{ cid }}-{{ pid }}">View</a></td>
+                            <td><a style='font-size:12px;' target='_blank' href="/emrs/emrs/lab-results/img-view/{{ cid }}/{{ pid }}/{{ lr.entry_date }}">View image</a></td>
                         {% endif %}                           
                         {% set entries = lr.entry_value|split(',') %} 
                         {% for e in entries %}
