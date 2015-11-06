@@ -49,13 +49,18 @@ $app->group('/lab-results', function () use ($app, $sec, $lab, $person, $misc) {
         ));       
     }); 
     
-    $app->get('/delete/:cid/:id/:date', function ($cid, $id, $date) use ($app, $sec, $lab) {    
+    $app->get('/delete/:cid/:id/:date', function ($cid, $id, $date) use ($app, $sec, $lab, $misc) {    
         $sec->check('labs'); 
         
         $eid = $lab->get_eid($id, $cid, $date);
         if ($eid) {             
             $lab->delete_entries($eid); 
-            $lab->delete_logs($eid);
+            $lab->delete_logs($eid);            
+             
+            $img_path = $misc->get_uploads_dir('labs') . "$date-$cid-$id";            
+            if (file_exists($img_path)) {
+                unlink($img_path);      
+            }                        
             
             $app->flash('info', "Entry deleted");
             $app->redirect("/emrs/emrs/lab-results/view/$cid/$id");               
