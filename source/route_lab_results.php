@@ -84,6 +84,7 @@ $app->group('/lab-results', function () use ($app, $sec, $lab, $person, $misc) {
             $new_date = date("Ymd");                      
         }  
         
+        // Update existing entries
         // if date has changed on edit, check new date if it exists
         if ($old_date != $new_date) {
             if ($lab->get_eid($id, $cid, $new_date)) {
@@ -92,7 +93,14 @@ $app->group('/lab-results', function () use ($app, $sec, $lab, $person, $misc) {
             } else {
                 $old_eid = $lab->get_eid($id, $cid, $old_date);
                 $lab->delete_entries($old_eid); 
-                $lab->delete_logs($old_eid);                 
+                $lab->delete_logs($old_eid); 
+                
+                // Also rename the file so we can access it based on the new date
+                $old_img_path = $misc->get_uploads_dir('labs') . "$old_date-$cid-$id";
+                $new_img_path = $misc->get_uploads_dir('labs') . "$new_date-$cid-$id";
+                if (file_exists($old_img_path)) {
+                    rename($old_img_path, $new_img_path);
+                }                 
             }           
         }  
         
@@ -102,7 +110,19 @@ $app->group('/lab-results', function () use ($app, $sec, $lab, $person, $misc) {
             if ($lab->get_eid($id, $cid, $new_date)) {
                 $app->flash('error', "Date already exists");
                 $app->redirect("/emrs/emrs/lab-results/view/$cid/$id");                 
-            }                     
+            }
+            
+            // Upload scanned lab results
+            // this is the direct link. ex: h:\xmpp\htdocs
+            if (in_array($cid, array('9','10'))) {        
+                $uploadfile = $misc->get_uploads_dir('labs') . "$new_date-$cid-$id";            
+                if (is_uploaded_file($_FILES['lab_pic']['tmp_name'])) {
+                    move_uploaded_file($_FILES['lab_pic']['tmp_name'], $uploadfile);       
+                } else {
+                    $app->flash('error', "File upload failed or no file uploaded");
+                    $app->redirect("/emrs/emrs/lab-results/view/$cid/$id");                    
+                }                
+            }            
         }  
         
         $eid = $lab->get_eid($id, $cid, $new_date);
@@ -126,16 +146,8 @@ $app->group('/lab-results', function () use ($app, $sec, $lab, $person, $misc) {
             if (!in_array($key, $del_list2)) { continue; }
             //echo "$key: $val deleted<br>";
             unset($allPostVars[$key]);
-        }
-        
-        // Upload scanned lab results
-        // this is the direct link. ex: h:\xmpp\htdocs
-        if (in_array($cid, array('9','10'))) {        
-            $uploadfile = $misc->get_uploads_dir('labs') . "$new_date-$cid-$id";            
-            if (is_uploaded_file($_FILES['lab_pic']['tmp_name'])) {
-                move_uploaded_file($_FILES['lab_pic']['tmp_name'], $uploadfile);       
-            }         
-        }
+        }     
+
         //var_dump($allPostVars);           
         
         $lab->save($allPostVars, $eid);
