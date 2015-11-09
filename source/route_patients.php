@@ -32,7 +32,7 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
         ));
     });
     
-    $app->post('/save', function () use ($app, $sec, $person) {
+    $app->post('/save', function () use ($app, $sec, $person, $misc) {
         $sec->check('patients');        
         $id = $app->request->post('pid');                              
         $fname = $app->request->post('fname');                                      
@@ -80,7 +80,18 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
         if (!$ret) {
             $app->flash('error', 'Error: Invalid input');
             $app->redirect("/emrs/emrs/patients/edit/$id");          
-        }         
+        }       
+       
+        // File upload fpr profile pic, scc id and pwd id
+        $dirs = $misc->get_dirs();
+        foreach ($dirs as $dir) {            
+            if (isset($_FILES[$dir]) && is_uploaded_file($_FILES[$dir]['tmp_name'])) {
+                $uploadfile = $misc->get_uploads_dir($dir) . "$id";  
+                if (file_exists($uploadfile)) { unlink($uploadfile); }
+                move_uploaded_file($_FILES[$dir]['tmp_name'], $uploadfile);             
+                unset($uploadfile);
+            }          
+        }   
    
         //$allPostVars = $app->request->post();        
         //var_dump($allPostVars);      
@@ -154,6 +165,7 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
         $app->render('patients.html', array(
             'title' => 'Patient Edit',
             'pid' => $id,
+            'token' => md5(md5($id) . 'emrs' . md5($id)),
             'show_patient_edit' => 1,            
             'person_header' => $person->get_person_header(),
             'patient_header' => $person->get_patient_header(),
@@ -196,26 +208,9 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
         $app->redirect("/emrs/emrs/lab-results/view/all/$id");    
     }); 
      
-    $app->post('/upload/:type', function ($type) use ($app, $sec, $misc) {
-        $sec->check('patients');        
-        $id = $app->request->post('pid'); 
-        
-        // this is the direct link. ex: h:\xmpp\htdocs
-        $uploadfile = $misc->get_uploads_dir($type) . $id;   
-        
-        if (!is_uploaded_file($_FILES[$type]['tmp_name'])) {
-            $app->redirect("/emrs/emrs/patients/view/$id");           
-        }
-        
-        move_uploaded_file($_FILES[$type]['tmp_name'], $uploadfile);    
-        $app->redirect("/emrs/emrs/patients/view/$id");
-             
-    });
-    
     $app->get('/view/:id', function ($id) use ($app, $sec, $person, $treatment, $lab, $misc, $presc) {        
         $sec->check('patients');
-        $token = md5(md5($id) . 'emrs' . md5($id));
-        
+       
         $has_profile_pic = 0; 
         $has_scc_id = 0; 
         $has_pwd_id = 0; 
@@ -249,11 +244,7 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
             'hp1' => $lab->get_latest_data($id, '69'),
             'hp2' => $lab->get_latest_data($id, '70'),
             'hp3' => $lab->get_latest_data($id, '71'),
-            'ftd' => $treatment->get_first_date($id),
-            //'duration' => $treatment->get_latest_data($id, '2'),
-            //dialyzer' => $treatment->get_latest_data($id, '9'),
-            //'uf_goal' => $treatment->get_latest_data($id, '6'),
-            'token' => $token,
+            'ftd' => $treatment->get_first_date($id),            
             'person_values' => $person->get_person_values($id),
             'patient_values' => $person->get_patient_values($id),
             'hd_order_values' => $person->get_hd_order_values($id),
@@ -263,15 +254,18 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
     });  
     
     $app->get('/remove/:type/:id/:token', function ($type, $id, $token) use ($app, $sec, $misc) {        
-        $sec->check('patients');        
+        $sec->check('patients');  
+        $msg = 'No image file to delete';
         $token2 = md5(md5($id) . 'emrs' . md5($id)); 
         $img = $misc->get_uploads_dir($type) . $id; 
         if ($token2 == $token) {
             if (file_exists($img)) {
-                unlink($img);          
-            }             
-        }        
-        $app->redirect("/emrs/emrs/patients/view/$id");
+                unlink($img);
+                $msg = 'Image deleted';
+            }            
+        }   
+        $app->flash('info', $msg);
+        $app->redirect("/emrs/emrs/patients/edit/$id");
     });    
      
     

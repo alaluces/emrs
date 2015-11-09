@@ -166,7 +166,12 @@ class lib_sec {
     }     
 }
 
-class lib_misc {    
+class lib_misc {
+    
+    function __construct() {        
+        $this->dirs = array();       
+    }
+    
     function display_phpinfo() {
         phpinfo();
     }    
@@ -176,6 +181,14 @@ class lib_misc {
             echo "$i<br>";           
         }        
     }
+    
+    public function set_dirs($dirs) {
+        $this->dirs = $dirs;
+    }  
+    
+    public function get_dirs() {
+        return $this->dirs;
+    }    
     
     public function get_uploads_dir($type) {
         $delim = '\\';              
@@ -187,10 +200,10 @@ class lib_misc {
         return $x . 'uploads' . "$delim$type$delim" ;     
     }
     
-    public function build_uploads_dir($dirs) {
+    public function build_uploads_dir() {
         //$mode = '0777';      
        
-        foreach ($dirs as $dir) {
+        foreach ($this->dirs as $dir) {
             $temp_dir = $this->get_uploads_dir($dir);
             if (!file_exists($temp_dir)) {                
                 exec("mkdir $temp_dir");    

@@ -52,7 +52,8 @@
     
 {% include "flash_msg.html" %}
 
-<form role="form" action="/emrs/emrs/patients/save" method="POST">
+<form role="form"  enctype="multipart/form-data" action="/emrs/emrs/patients/save" method="POST">
+<input type="hidden" name="MAX_FILE_SIZE" value="300000" /> 
 <input type="hidden" name="pid" value="{{ pid }}">
        
 
@@ -188,10 +189,35 @@
             {% endfor %}                
         {% endif %}  
       
-        </table>         
-
-           
+        </table>          
     </div>  
+    <div class="panel panel-primary">
+        <div class="panel-heading">Image Upload</div>
+        <table class="table table-bordered" style="font-size:12px">
+        <tr>
+            <td>Profile Picture</td>
+            <td>[<a style="color:red;" href="/emrs/emrs/patients/remove/profile_pic/{{ pid }}/{{ token }}">X</a>]</td>
+            <td><input style="width:180px;" name="profile_pic" type="file" /></td>
+        </tr>
+        <tr>
+            <td>Senior Citizen ID</td>
+            <td>[<a style="color:red;" href="/emrs/emrs/patients/remove/scc_id/{{ pid }}/{{ token }}">X</a>]</td>
+            <td><input style="width:180px;" name="scc_id" type="file" /></td>
+        </tr>
+        <tr>
+            <td>PWD ID</td>
+            <td>[<a style="color:red;" href="/emrs/emrs/patients/remove/pwd_id/{{ pid }}/{{ token }}">X</a>]</td>
+            <td><input style="width:180px;" name="pwd_id" type="file" /></td>
+        </tr>        
+        
+        
+        
+        
+        
+        
+        
+        </table>
+    </div>    
 </div>
 
 <div class="col-xs-4 column">
