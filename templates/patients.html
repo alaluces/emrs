@@ -260,8 +260,8 @@
                 <tr>
                     <th>Treatment ID</th>
                     <th>Date</th>                  
-                </tr> 
-                {% set i = 1 %}
+                </tr>                 
+                {% set i = patient_values.initial_treatment_id ? patient_values.initial_treatment_id : 1 %}
                 {% for history in treatment_history %}   
                 <tr>
                     <td><a href="/emrs/emrs/treatments/{{ history.entry_date }}/{{ pid }}/{{ history.treatment_id }}/{{ history.version_id }}">{{ i }}</a></td>

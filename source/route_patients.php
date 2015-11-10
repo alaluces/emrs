@@ -187,6 +187,7 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
              'title' => 'Treatments',
              'pid' => $id, 
              'person_values' => $person->get_person_values($id),
+             'patient_values' => $person->get_patient_values($id),
              'show_treatment_history' => 1,                  
              'treatment_history' => $treatment->get_history($id),
              'session' => $sec->get_session_array()    

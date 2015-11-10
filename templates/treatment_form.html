@@ -281,7 +281,7 @@
     
     <span style="position:absolute;top:0px;left:10px;font-family:verdana;font-size:12">Treatment No:    
         <select id="treatment_dropdown">
-        {% set i = 1 %}
+        {% set i = person.initial_treatment_id ? person.initial_treatment_id : 1 %}
         {% for history in treatment_history %}
                  <option value="{{ history.entry_date }}/{{ pid }}/{{ history.treatment_id }}/{{ history.version_id }}" {{ history.treatment_id == tid ? 'SELECTED' }}>{{ i }}</option>      
                  {% set i = i + 1 %}
