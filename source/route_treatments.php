@@ -1,6 +1,6 @@
 <?php
 
-$app->group('/treatments', function () use ($app, $sec, $person, $treatment, $appointment) {
+$app->group('/treatments', function () use ($app, $sec, $person, $treatment, $appointment, $paginator) {
         
     // get the date and person id so we can get the treatment id and current version
     $app->get('/:entry_date/:id', function ($entry_date, $id) use ($app, $sec, $treatment) {
@@ -26,7 +26,7 @@ $app->group('/treatments', function () use ($app, $sec, $person, $treatment, $ap
         }       
     });      
       
-    $app->get('/:entry_date/:id/:tid/:vid', function ($entry_date, $id, $tid, $vid) use ($app, $sec, $person, $treatment, $appointment) {
+    $app->get('/:entry_date/:id/:tid/:vid', function ($entry_date, $id, $tid, $vid) use ($app, $sec, $person, $treatment, $appointment, $paginator) {
         $sec->check('treatments');    
 
         // get duration for initial values of monitoring sheet, if not found, default value is 4
@@ -46,6 +46,9 @@ $app->group('/treatments', function () use ($app, $sec, $person, $treatment, $ap
         $time_arrived  = $appointment->get_status_time($id, $entry_date, 'WAITING');
         $time_started  = $appointment->get_status_time($id, $entry_date, 'ONGOING');
         $time_finished = $treatment->get_status_time($id, $entry_date, 'CLOSED');
+        
+        $history = $treatment->get_history($id);
+        $paginator->init($history, $tid);
 
         $app->render('treatment_form.html', array(
             'title' => 'Treatment',
@@ -69,7 +72,9 @@ $app->group('/treatments', function () use ($app, $sec, $person, $treatment, $ap
             'fields_main' => $treatment->get_info($tid, $vid),
             'misc_html_header' => $treatment->get_misc_html('header'),
             'misc_html' => $treatment->get_misc_html('treatment'),
-            'treatment_history' => $treatment->get_history($id),
+            'paginator_first' => $paginator->first,
+            'paginator_last' => $paginator->last,
+            'treatment_history' => $history,
             'options_persons' => $treatment->get_options_persons(),
             'options' => $treatment->get_options(),
             'session' => $sec->get_session_array()    

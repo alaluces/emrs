@@ -214,4 +214,29 @@ class lib_misc {
     
 }
 
+class lib_paginator {
+    
+    function __construct() {
+        $this->first = false;
+        $this->previous = false;
+        $this->next = false;
+        $this->last = false;        
+    }  
+    
+    function init($history, $current_tid) {        
+        $tids = array();
+        $vids = array();
+        foreach ($history as $hist_val) {
+            array_push($tids, $hist_val['treatment_id']);                    
+            array_push($vids, $hist_val['version_id']);  
+        }
+        
+        if ($tids) {
+            // sorry if its hardcoded
+            $this->first = "$tids[0]/$vids[0]";
+            $this->last = $tids[count($tids)-1] . '/' . $vids[count($vids)-1];
+        }     
+    } 
+    
+}
 ?>

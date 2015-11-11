@@ -279,7 +279,8 @@
     <button style='position:absolute;top:250px;left:300px;' type="submit" name="btn_start_now" value="1">Start Now</button>
     {% endif %}
     
-    <span style="position:absolute;top:0px;left:10px;font-family:verdana;font-size:12">Treatment No:    
+    <span style="position:absolute;top:0px;left:10px;font-family:verdana;font-size:12">Treatment No: 
+        [<a href="/emrs/emrs/treatments/{{ entry_date }}/{{ pid }}/{{ paginator_first }}">First</a>]
         <select id="treatment_dropdown">
         {% set i = person.initial_treatment_id ? person.initial_treatment_id : 1 %}
         {% for history in treatment_history %}
@@ -287,6 +288,7 @@
                  {% set i = i + 1 %}
         {% endfor %}
         </select>    
+        [<a href="/emrs/emrs/treatments/{{ entry_date }}/{{ pid }}/{{ paginator_last }}">Last</a>]
     </span>    
     
     <span style="position:absolute;top:25px;left:10px;font-family:verdana;font-size:12">Patient name: <a href="/emrs/emrs/patients/{{ pid }}">{{ person.fname|title }} {{ person.lname|title }}</a></span>

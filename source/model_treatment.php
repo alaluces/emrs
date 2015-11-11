@@ -266,8 +266,8 @@ class lib_treatment {
         $STH->bindParam(':id', $id); 
         $STH->execute();
         return $STH->fetchAll();       
-    }  
-    
+    } 
+       
     // this is used to list all options, not per property id
     function get_options() {  
         $STH = $this->DBH->prepare("SELECT * FROM `treatment_options` WHERE active = '1'");     
