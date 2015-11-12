@@ -73,6 +73,8 @@ $app->group('/treatments', function () use ($app, $sec, $person, $treatment, $ap
             'misc_html_header' => $treatment->get_misc_html('header'),
             'misc_html' => $treatment->get_misc_html('treatment'),
             'paginator_first' => $treatment->paginator_first,
+            'paginator_next' => $treatment->paginator_next,
+            'paginator_previous' => $treatment->paginator_previous,
             'paginator_last' => $treatment->paginator_last,
             'treatment_history' => $history,
             'options_persons' => $treatment->get_options_persons(),
