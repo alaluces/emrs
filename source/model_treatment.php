@@ -3,6 +3,11 @@
 class lib_treatment { 
     function __construct($DBH) {        
         $this->DBH = $DBH;
+        
+        $this->paginator_first    = false;
+        $this->paginator_previous = false;
+        $this->paginator_next     = false;
+        $this->paginator_last     = false;         
     }
     
     //======================================================================
@@ -576,8 +581,26 @@ class lib_treatment {
         $STH->bindParam(':user_level', $user_level );                         
         $STH->bindParam(':active', $active );             
         return $STH->execute();                
-    }      
-      
+    }
+    
+    
+    function paginator_init($history, $current_tid) {   
+        
+        $tids = array();
+        $vids = array();
+        foreach ($history as $hist_val) {
+            array_push($tids, $hist_val['treatment_id']);                    
+            array_push($vids, $hist_val['version_id']);  
+        }
+        
+        if ($tids) {
+            // sorry if its hardcoded
+            $this->paginator_first = "$tids[0]/$vids[0]";
+            $this->paginator_last = $tids[count($tids)-1] . '/' . $vids[count($vids)-1];
+        }     
+    }
+    
+
 
    
     

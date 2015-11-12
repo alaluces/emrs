@@ -20,7 +20,6 @@ $presc       = new lib_prescriptions($DBH);
 $meds        = new lib_medications($DBH);
 $billing     = new lib_billing($DBH);
 $misc        = new lib_misc();
-$paginator   = new lib_paginator();
 
 require 'init_scripts.php';
 require 'route_sec.php';
