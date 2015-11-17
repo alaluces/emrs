@@ -116,7 +116,8 @@ $app->group('/prescriptions', function () use ($app, $sec, $presc, $meds, $perso
         $presc->delete_entries($presc_id);         
         
         for ($i = 0; $i < count($med_id); $i++) {
-            if (!in_array($med_id[$i], $chk_med_ids)) { continue; }
+            // "$med_id[$i]|$prep_id[$i]" - they want duplicate medications
+            if (!in_array("$med_id[$i]|$prep_id[$i]", $chk_med_ids)) { continue; }
             //if ($presc->has_duplicate_entry($presc_id, $med_id, $prep_id)) { continue; }            
             $presc->add_entry($presc_id, $med_id[$i], $prep_id[$i], $qty[$i], $amt[$i], $frequency[$i], $duration[$i], $notes[$i]);
         }        
@@ -155,15 +156,15 @@ $app->group('/prescriptions', function () use ($app, $sec, $presc, $meds, $perso
         if ($amt == '' || $frequency == '') {    
             $app->flash('error', "Invalid input" );
             $app->redirect($flash['link']);        
-        }   
+        }
         
-        if ($presc->has_duplicate_meds($presc_id, $med_id)) { 
-            $app->flash('error', "Item already exists on the list" );
-            $app->redirect($flash['link']);             
-        }  
+        if ($presc->has_duplicate_meds($presc_id, $med_id, $prep_id)) { 
+            $app->flash('error', "Medication already exists on the list" ); 
+            $app->redirect($flash['link']);  
+        }         
         
         $presc->add_entry($presc_id, $med_id, $prep_id, $qty, $amt, $frequency, $duration, $notes);
-        $presc->log($presc_id, $entry_date, $entry_time, $_SESSION['person_id'], 'UPDATE', '');
+        $presc->log($presc_id, $entry_date, $entry_time, $_SESSION['person_id'], 'UPDATE', '');        
         
         $app->flash('info', "Item added." );
         $app->redirect("/emrs/emrs/prescriptions/edit/$pid/$presc_id");       

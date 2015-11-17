@@ -219,7 +219,7 @@
                 <tr>
                 {% if edit_mode %}    
                 <td style="text-align: left">
-                    <input type="checkbox" name=chk_med_ids[] value="{{ e.med_id }}" CHECKED>   
+                    <input type="checkbox" name=chk_med_ids[] value="{{ e.med_id }}|{{ e.prep_id }}" CHECKED>   
                 </td>
                 {% endif %}
                 <td style="text-align: left">

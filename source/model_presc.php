@@ -150,12 +150,14 @@ class lib_prescriptions {
     // will be used in place of has_duplicate_entry()
     // because some meds doesnt have preparations / brand
     // 20150429
-    function has_duplicate_meds($presc_id, $med_id) {       
+    function has_duplicate_meds($presc_id, $med_id, $prep_id) {       
         $STH = $this->DBH->prepare("SELECT COUNT(*) FROM `presc_entries` 
             WHERE presc_id = :presc_id
-            AND med_id = :med_id");      
+            AND med_id = :med_id
+            AND prep_id = :prep_id");      
         $STH->bindParam(':presc_id', $presc_id); 
         $STH->bindParam(':med_id', $med_id);
+        $STH->bindParam(':prep_id', $prep_id);
         $STH->execute();
         return $STH->fetchColumn();       
     }     
