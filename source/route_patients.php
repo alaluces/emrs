@@ -24,8 +24,9 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
             'show_patient_edit' => 1,           
             'person_header' => $person->get_person_header(),
             'patient_header' => $person->get_patient_header(), 
+            'hd_order_header' => $person->get_hd_order_header(),
             'person_options' => $person->get_person_options(),
-            'physicians' => $person->get_physicians(),            
+            'physicians' => $person->get_physicians(),               
             'session' => $sec->get_session_array()   
                 
                
@@ -71,18 +72,18 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
             $app->redirect("/emrs/emrs/patients/edit/$id");        
         }
         
-        $ret = $person->save_patient($id, $dry_weight, $physician_id, $hepa_status,$first_dialysis, $diagnosis, $blood_type, $philhealth_number, $initial_treatment_id);
-        if (!$ret) {
-            $app->flash('error', 'Error: Invalid input');
-            $app->redirect("/emrs/emrs/patients/edit/$id");          
-        }  
-        
         $ret = $person->save_hd_order($id, $duration, $blood_flow, $dialysate_flow, $heparin, $dialyzer);
         if (!$ret) {
             $app->flash('error', 'Error: Invalid input');
             $app->redirect("/emrs/emrs/patients/edit/$id");          
-        }       
-       
+        }           
+         
+        $ret = $person->save_patient($id, $dry_weight, $physician_id, $hepa_status, $first_dialysis, $diagnosis, $blood_type, $philhealth_number, $initial_treatment_id);
+        if (!$ret) {
+            $app->flash('error', 'Error: Invalid input');
+            $app->redirect("/emrs/emrs/patients/edit/$id");          
+        }  
+             
         // File upload fpr profile pic, scc id and pwd id
         $dirs = $misc->get_dirs();
         foreach ($dirs as $dir) {            

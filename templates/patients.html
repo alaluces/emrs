@@ -164,8 +164,12 @@
             {% endfor %}
         {% else %} 
             {% for header in patient_header if header.Field not in ['person_id'] %}   
-                <tr>                    
-                    <td style="text-align:left">{{ header.Field|replace({'_': ' '})|title }} <span style="color:red;">*</span></td>
+                <tr> 
+                    {% if header.Field in ['dry_weight','hepa_status','physician_id'] %}
+                        <td style="text-align:left">{{ header.Field|replace({'_': ' '})|title }} <span style="color:red;">*</span></td>
+                    {% else %} 
+                        <td style="text-align:left">{{ header.Field|replace({'_': ' '})|title }} </td>
+                    {% endif %} 
                     {% if header.Field == 'hepa_status' %}
                         <td><select style="width:100%;" class="form-control input-sm" id="{{ header.Field }}" type="text" name="{{ header.Field }}">
                             <option value="" >-</option>
@@ -183,7 +187,7 @@
                         </select>
                         </td>                         
                     {% else %}                    
-                    <td><input style="width:100%;" class="form-control input-sm" id="{{ header.Field }}" type="text" name="{{ header.Field }}"  value=""></td>
+                        <td><input style="width:100%;" class="form-control input-sm" id="{{ header.Field }}" type="text" name="{{ header.Field }}"  value=""></td>
                     {% endif %}            
                 </tr>            
             {% endfor %}                
@@ -208,12 +212,7 @@
             <td>PWD ID</td>
             <td>[<a style="color:red;" href="/emrs/emrs/patients/remove/pwd_id/{{ pid }}/{{ token }}">X</a>]</td>
             <td><input style="width:180px;" name="pwd_id" type="file" /></td>
-        </tr>        
-        
-        
-        
-        
-        
+        </tr> 
         
         
         </table>

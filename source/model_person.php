@@ -175,7 +175,7 @@ class lib_person {
                     :diagnosis, 
                     :blood_type,                    
                     :philhealth_number,
-                    initial_treatment_id
+                    :initial_treatment_id
                     )");
             } else {                               
                 $STH = $this->DBH->prepare("UPDATE `patient_details` SET                                           
