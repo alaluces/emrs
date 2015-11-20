@@ -92,7 +92,23 @@
        //var standing_order = $('#20').val(); 
         if ($('#20').val() === '') {            
             $('#20').val($('#prev_order').val());
-        }  
+        } 
+        
+        if ($('#227').val() === '') {            
+            $('#227').val($('#prev_iv_iron').val());
+        }
+
+        if ($('#231').val() === '') {            
+            $('#231').val($('#prev_monthly_labs').val());
+        }
+        
+        if ($('#232').val() === '') {            
+            $('#232').val($('#prev_hepa_prof').val());
+        }
+        
+        if ($('#233').val() === '') {            
+            $('#233').val($('#prev_vaccination').val());
+        }        
         
         if ($('#2').val() === '') {            
             $('#2').val($('#duration').val());
@@ -261,7 +277,11 @@
     <input type="hidden" name="tid" value="{{ tid }}"> 
     <input type="hidden" name="vid" value="{{ vid }}">  
     <input type="hidden" id="dry_weight" value="{{ person.dry_weight }}">  
-    <input type="hidden" id="prev_order" value="{{ prev_order }}"> 
+    <input type="hidden" id="prev_order" value="{{ prev_order }}">
+    <input type="hidden" id="prev_iv_iron" value="{{ prev_iv_iron }}">
+    <input type="hidden" id="prev_monthly_labs" value="{{ prev_monthly_labs }}">
+    <input type="hidden" id="prev_hepa_prof" value="{{ prev_hepa_prof }}">
+    <input type="hidden" id="prev_vaccination" value="{{ prev_vaccination }}">
     <input type="hidden" id="duration" value="{{ duration }}"> 
     <input type="hidden" id="time_arrived" value='{{ time_arrived is empty ? "" : time_arrived|date("H:i:s") }}'> 
     <input type="hidden" id="time_started" value='{{ time_started is empty ? "" : time_started|date("H:i:s") }}'> 
