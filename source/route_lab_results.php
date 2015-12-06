@@ -114,7 +114,7 @@ $app->group('/lab-results', function () use ($app, $sec, $lab, $person, $misc) {
             
             // Upload scanned lab results
             // this is the direct link. ex: h:\xmpp\htdocs
-            if (in_array($cid, array('9','10'))) {        
+            if (in_array($cid, array('8','9','10'))) {        
                 $uploadfile = $misc->get_uploads_dir('labs') . "$new_date-$cid-$id";            
                 if (is_uploaded_file($_FILES['lab_pic']['tmp_name'])) {
                     move_uploaded_file($_FILES['lab_pic']['tmp_name'], $uploadfile);       
