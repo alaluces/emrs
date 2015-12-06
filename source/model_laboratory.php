@@ -138,7 +138,7 @@ class lib_laboratory {
             INNER JOIN `lab_entry_list` AS lel
             ON ll.entry_id = lel.entry_id
             WHERE person_id = :id
-            ORDER BY entry_date"); 
+            ORDER BY entry_date desc"); 
         $STH->bindParam(':id', $id);
         $STH->execute();
         return $STH->fetchAll();       
