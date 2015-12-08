@@ -48,7 +48,7 @@ $app->group('/treatments', function () use ($app, $sec, $person, $treatment, $ap
         $time_finished = $treatment->get_status_time($id, $entry_date, 'CLOSED');
         
         $history = $treatment->get_history($id);
-        $treatment->paginator_init($history, $tid);
+        $treatment->paginator_init($history, $tid, $id);
 
         $app->render('treatment_form.html', array(
             'title' => 'Treatment',

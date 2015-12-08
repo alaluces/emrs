@@ -585,15 +585,16 @@ class lib_treatment {
     }
     
     
-    function paginator_init($history, $current_tid) {   
-        
+    function paginator_init($history, $current_tid, $pid) {   
+        $eds = array();
         $tids = array();
         $vids = array();
         foreach ($history as $hist_val) {
+            array_push($eds, $hist_val['entry_date']);  
             array_push($tids, $hist_val['treatment_id']);                    
             array_push($vids, $hist_val['version_id']); 
             if ($hist_val['treatment_id'] == $current_tid) {
-                $this->paginator_current = $hist_val['treatment_id'] . '/' . $hist_val['version_id'];                
+                $this->paginator_current = $hist_val['entry_date'] . '/' . $pid . '/' . $hist_val['treatment_id'] . '/' . $hist_val['version_id'];                
             }
         }      
         
@@ -601,21 +602,21 @@ class lib_treatment {
             // sorry if its hardcoded
             $last = count($tids) - 1;
             
-            $this->paginator_first = "$tids[0]/$vids[0]";
-            $this->paginator_last = $tids[$last] . '/' . $vids[$last];                    
+            $this->paginator_first = "$eds[0]/$pid/$tids[0]/$vids[0]";
+            $this->paginator_last = $eds[$last] . '/' . $pid . '/' . $tids[$last] . '/' . $vids[$last];                    
             
             $index = array_search($current_tid, $tids);  
       
             if ($index == 0) {
                 $this->paginator_previous = $this->paginator_first;                        
             } else {
-                $this->paginator_previous = $tids[$index - 1] . '/' . $vids[$index - 1];;
+                $this->paginator_previous = $eds[$index - 1] . '/' . $pid . '/' . $tids[$index - 1] . '/' . $vids[$index - 1];;
             }
 
             if ($index == $last) {
                 $this->paginator_next = $this->paginator_last;                        
             } else {
-                $this->paginator_next = $tids[$index + 1] . '/' . $vids[$index + 1];;
+                $this->paginator_next = $eds[$index + 1] . '/' . $pid . '/' . $tids[$index + 1] . '/' . $vids[$index + 1];;
             }           
         }       
     }   

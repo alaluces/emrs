@@ -300,10 +300,10 @@
     {% endif %}
     
     <span style="position:absolute;top:0px;left:10px;font-family:verdana;font-size:12"> 
-        [<a href="/emrs/emrs/treatments/{{ entry_date }}/{{ pid }}/{{ paginator_first }}">First</a>]
-        [<a href="/emrs/emrs/treatments/{{ entry_date }}/{{ pid }}/{{ paginator_previous }}">Previous</a>]
-        [<a href="/emrs/emrs/treatments/{{ entry_date }}/{{ pid }}/{{ paginator_next }}">Next</a>]
-        [<a href="/emrs/emrs/treatments/{{ entry_date }}/{{ pid }}/{{ paginator_last }}">Last</a>]
+        [<a href="/emrs/emrs/treatments/{{ paginator_first }}">First</a>]
+        [<a href="/emrs/emrs/treatments/{{ paginator_previous }}">Previous</a>]
+        [<a href="/emrs/emrs/treatments/{{ paginator_next }}">Next</a>]
+        [<a href="/emrs/emrs/treatments/{{ paginator_last }}">Last</a>]
         Jump to:
         <select id="treatment_dropdown">
         {% set i = person.initial_treatment_id ? person.initial_treatment_id : 1 %}
