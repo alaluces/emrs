@@ -18,6 +18,10 @@
             }
         });                  
     });
+    
+    function confirmAddNew() {
+        return confirm("Create new treatment form?");  
+    }    
 </script> 
 {% endblock js %}  
 
@@ -317,8 +321,8 @@
           <div class="panel-heading">Today's Appointment - {{ today_readable_date }}</div>
           <table class="table table-bordered" style="font-size:12px">
             <thead>
-              <tr><th colspan="5">First Set</th></tr>  
-              <tr><th>#</th><th>Name</th><th>Added</th><th>Status</th><th>-</th></tr>
+              <tr><th colspan="6">First Set</th></tr>  
+              <tr><th>#</th><th>Name</th><th>Added</th><th>Status</th><th>Treatment Form</th><th>-</th></tr>
             </thead>
             <tbody>
             {% set c = 1 %} 
@@ -329,7 +333,10 @@
                     <td>{{ set.time_added[0:2] }}:{{ set.time_added[2:2] }}:{{ set.time_added[4:2] }}</td>                    
                     <td>{{ set.appointment_status }}</td>
                     <td>
-                        [<a href="/emrs/emrs/treatments/{{ today }}/{{ set.person_id }}" target="_blank">Treatment</a>]
+                        [<a href="/emrs/emrs/treatments/{{ set.person_id }}" target="_blank">Latest</a>]
+                        [<a href="/emrs/emrs/treatments/add/{{ set.person_id }}" onClick="return confirmAddNew();" target="_blank">New</a>]
+                    </td>                    
+                    <td>                       
                         [<a href="/emrs/emrs/appointments/cancel-ask/{{ entry_date }}/{{ set.appointment_id }}/{{ set.person_id }}">Cancel</a>] 
                         [<a href="/emrs/emrs/billing/{{ set.person_id }}">Billing</a>]
                     </td>
@@ -337,7 +344,7 @@
                 {% set c = c + 1 %}
             {% endfor %}
             {% for i in c .. session.appointment_slots_negative %}
-                <tr><td>{{ i }}</td><td></td><td></td><td></td><td></td></tr>            
+                <tr><td>{{ i }}</td><td></td><td></td><td></td><td></td><td></td></tr>            
             {% endfor %}             
  
             {% set c = 1 %}             
@@ -348,7 +355,10 @@
                     <td>{{ set.time_added[0:2] }}:{{ set.time_added[2:2] }}:{{ set.time_added[4:2] }}</td>   
                     <td>{{ set.appointment_status }}</td>
                     <td>
-                        [<a href="/emrs/emrs/treatments/{{ today }}/{{ set.person_id }}" target="_blank">Treatment</a>]
+                        [<a href="/emrs/emrs/treatments/{{ set.person_id }}" target="_blank">Latest</a>]
+                        [<a href="/emrs/emrs/treatments/add/{{ set.person_id }}" onClick="return confirmAddNew();" target="_blank">New</a>]
+                    </td>                    
+                    <td>   
                         [<a href="/emrs/emrs/appointments/cancel-ask/{{ entry_date }}/{{ set.appointment_id }}/{{ set.person_id }}">Cancel</a>]  
                         [<a href="/emrs/emrs/billing/{{ set.person_id }}">Billing</a>]
                     </td>
@@ -356,7 +366,7 @@
                 {% set c = c + 1 %}
             {% endfor %}
             {% for i in c .. session.appointment_slots_hepa_b if c <= session.appointment_slots_hepa_b %}
-                <tr><td>B {{ i }}</td><td></td><td></td><td></td><td></td></tr>
+                <tr><td>B {{ i }}</td><td></td><td></td><td></td><td></td><td></td></tr>
             {% endfor %}            
             
             {% set c = 1 %}             
@@ -367,7 +377,10 @@
                     <td>{{ set.time_added[0:2] }}:{{ set.time_added[2:2] }}:{{ set.time_added[4:2] }}</td>   
                     <td>{{ set.appointment_status }}</td>
                     <td>
-                        [<a href="/emrs/emrs/treatments/{{ today }}/{{ set.person_id }}" target="_blank">Treatment</a>]
+                        [<a href="/emrs/emrs/treatments/{{ set.person_id }}" target="_blank">Latest</a>]
+                        [<a href="/emrs/emrs/treatments/add/{{ set.person_id }}" onClick="return confirmAddNew();" target="_blank">New</a>]
+                    </td>                    
+                    <td>   
                         [<a href="/emrs/emrs/appointments/cancel-ask/{{ entry_date }}/{{ set.appointment_id }}/{{ set.person_id }}">Cancel</a>] 
                         [<a href="/emrs/emrs/billing/{{ set.person_id }}">Billing</a>]
                     </td>
@@ -375,14 +388,14 @@
                 {% set c = c + 1 %}
             {% endfor %}
             {% for i in c .. session.appointment_slots_hepa_c if c <= session.appointment_slots_hepa_c %}
-                <tr><td>C {{ i }}</td><td></td><td></td><td></td><td></td></tr>
+                <tr><td>C {{ i }}</td><td></td><td></td><td></td><td></td><td></td></tr>
             {% endfor %}  
             
             </tbody>
             
             <thead>
-              <tr><th colspan="5">Second Set</th></tr>  
-              <tr><th>#</th><th>Name</th><th>Added</th><th>Status</th><th>-</th></tr>
+              <tr><th colspan="6">Second Set</th></tr>  
+              <tr><th>#</th><th>Name</th><th>Added</th><th>Status</th><th>Treatment Form</th><th>-</th></tr>
             </thead>
             <tbody>
             {% set c = 1 %} 
@@ -393,7 +406,10 @@
                     <td>{{ set.time_added[0:2] }}:{{ set.time_added[2:2] }}:{{ set.time_added[4:2] }}</td>   
                     <td>{{ set.appointment_status }}</td>
                     <td>
-                        [<a href="/emrs/emrs/treatments/{{ today }}/{{ set.person_id }}" target="_blank">Treatment</a>]
+                        [<a href="/emrs/emrs/treatments/{{ set.person_id }}" target="_blank">Latest</a>]
+                        [<a href="/emrs/emrs/treatments/add/{{ set.person_id }}" onClick="return confirmAddNew();" target="_blank">New</a>]
+                    </td>                    
+                    <td> 
                         [<a href="/emrs/emrs/appointments/cancel-ask/{{ entry_date }}/{{ set.appointment_id }}/{{ set.person_id }}">Cancel</a>]  
                         [<a href="/emrs/emrs/billing/{{ set.person_id }}">Billing</a>]
                     </td>
@@ -401,7 +417,7 @@
                 {% set c = c + 1 %}
             {% endfor %}
             {% for i in c .. session.appointment_slots_negative %}
-                <tr><td>{{ i }}</td><td></td><td></td><td></td><td></td></tr>            
+                <tr><td>{{ i }}</td><td></td><td></td><td></td><td></td><td></td></tr>            
             {% endfor %}
 
             {% set c = 1 %}             
@@ -412,7 +428,10 @@
                     <td>{{ set.time_added[0:2] }}:{{ set.time_added[2:2] }}:{{ set.time_added[4:2] }}</td>   
                     <td>{{ set.appointment_status }}</td>
                     <td>
-                        [<a href="/emrs/emrs/treatments/{{ today }}/{{ set.person_id }}" target="_blank">Treatment</a>]
+                        [<a href="/emrs/emrs/treatments/{{ set.person_id }}" target="_blank">Latest</a>]
+                        [<a href="/emrs/emrs/treatments/add/{{ set.person_id }}" onClick="return confirmAddNew();" target="_blank">New</a>]
+                    </td>                    
+                    <td> 
                         [<a href="/emrs/emrs/appointments/cancel-ask/{{ entry_date }}/{{ set.appointment_id }}/{{ set.person_id }}">Cancel</a>]  
                         [<a href="/emrs/emrs/billing/{{ set.person_id }}">Billing</a>]
                     </td>
@@ -420,7 +439,7 @@
                 {% set c = c + 1 %}
             {% endfor %}
             {% for i in c .. session.appointment_slots_hepa_b if c <= session.appointment_slots_hepa_b %}
-                <tr><td>B {{ i }}</td><td></td><td></td><td></td><td></td></tr>
+                <tr><td>B {{ i }}</td><td></td><td></td><td></td><td></td><td></td></tr>
             {% endfor %}            
             
             {% set c = 1 %}             
@@ -431,7 +450,10 @@
                     <td>{{ set.time_added[0:2] }}:{{ set.time_added[2:2] }}:{{ set.time_added[4:2] }}</td>   
                     <td>{{ set.appointment_status }}</td>
                     <td>
-                        [<a href="/emrs/emrs/treatments/{{ today }}/{{ set.person_id }}" target="_blank">Treatment</a>]
+                        [<a href="/emrs/emrs/treatments/{{ set.person_id }}" target="_blank">Latest</a>]
+                        [<a href="/emrs/emrs/treatments/add/{{ set.person_id }}" onClick="return confirmAddNew();" target="_blank">New</a>]
+                    </td>                    
+                    <td> 
                         [<a href="/emrs/emrs/appointments/cancel-ask/{{ entry_date }}/{{ set.appointment_id }}/{{ set.person_id }}">Cancel</a>] 
                         [<a href="/emrs/emrs/billing/{{ set.person_id }}">Billing</a>]
                     </td>
@@ -439,14 +461,14 @@
                 {% set c = c + 1 %}
             {% endfor %}
             {% for i in c .. session.appointment_slots_hepa_c if c <= session.appointment_slots_hepa_c %}
-                <tr><td>C {{ i }}</td><td></td><td></td><td></td><td></td></tr>
+                <tr><td>C {{ i }}</td><td></td><td></td><td></td><td></td><td></td></tr>
             {% endfor %}              
             
             </tbody>   
             
             <thead>
-              <tr><th colspan="5">Third Set</th></tr>  
-              <tr><th>#</th><th>Name</th><th>Added</th><th>Status</th><th>-</th></tr>
+              <tr><th colspan="6">Third Set</th></tr>  
+              <tr><th>#</th><th>Name</th><th>Added</th><th>Status</th><th>Treatment Form</th><th>-</th></tr>
             </thead>
             <tbody>
             {% set c = 1 %} 
@@ -457,7 +479,10 @@
                     <td>{{ set.time_added[0:2] }}:{{ set.time_added[2:2] }}:{{ set.time_added[4:2] }}</td>   
                     <td>{{ set.appointment_status }}</td>
                     <td>
-                        [<a href="/emrs/emrs/treatments/{{ today }}/{{ set.person_id }}" target="_blank">Treatment</a>]
+                        [<a href="/emrs/emrs/treatments/{{ set.person_id }}" target="_blank">Latest</a>]
+                        [<a href="/emrs/emrs/treatments/add/{{ set.person_id }}" onClick="return confirmAddNew();" target="_blank">New</a>]
+                    </td>                    
+                    <td> 
                         [<a href="/emrs/emrs/appointments/cancel-ask/{{ entry_date }}/{{ set.appointment_id }}/{{ set.person_id }}">Cancel</a>]  
                         [<a href="/emrs/emrs/billing/{{ set.person_id }}">Billing</a>]
                     </td>
@@ -465,7 +490,7 @@
                 {% set c = c + 1 %}
             {% endfor %}
             {% for i in c .. session.appointment_slots_negative %}
-                <tr><td>{{ i }}</td><td></td><td></td><td></td><td></td></tr>            
+                <tr><td>{{ i }}</td><td></td><td></td><td></td><td></td><td></td></tr>            
             {% endfor %}
 
             {% set c = 1 %}             
@@ -476,7 +501,10 @@
                     <td>{{ set.time_added[0:2] }}:{{ set.time_added[2:2] }}:{{ set.time_added[4:2] }}</td>   
                     <td>{{ set.appointment_status }}</td>
                     <td>
-                        [<a href="/emrs/emrs/treatments/{{ today }}/{{ set.person_id }}" target="_blank">Treatment</a>]
+                        [<a href="/emrs/emrs/treatments/{{ set.person_id }}" target="_blank">Latest</a>]
+                        [<a href="/emrs/emrs/treatments/add/{{ set.person_id }}" onClick="return confirmAddNew();" target="_blank">New</a>]
+                    </td>                    
+                    <td> 
                         [<a href="/emrs/emrs/appointments/cancel-ask/{{ entry_date }}/{{ set.appointment_id }}/{{ set.person_id }}">Cancel</a>]  
                         [<a href="/emrs/emrs/billing/{{ set.person_id }}">Billing</a>]
                     </td>
@@ -484,7 +512,7 @@
                 {% set c = c + 1 %}
             {% endfor %}
             {% for i in c .. session.appointment_slots_hepa_b if c <= session.appointment_slots_hepa_b %}
-                <tr><td>B {{ i }}</td><td></td><td></td><td></td><td></td></tr>
+                <tr><td>B {{ i }}</td><td></td><td></td><td></td><td></td><td></td></tr>
             {% endfor %}            
             
             {% set c = 1 %}             
@@ -495,7 +523,10 @@
                     <td>{{ set.time_added[0:2] }}:{{ set.time_added[2:2] }}:{{ set.time_added[4:2] }}</td>   
                     <td>{{ set.appointment_status }}</td>
                     <td>
-                        [<a href="/emrs/emrs/treatments/{{ today }}/{{ set.person_id }}" target="_blank">Treatment</a>]
+                        [<a href="/emrs/emrs/treatments/{{ set.person_id }}" target="_blank">Latest</a>]
+                        [<a href="/emrs/emrs/treatments/add/{{ set.person_id }}" onClick="return confirmAddNew();" target="_blank">New</a>]
+                    </td>                    
+                    <td> 
                         [<a href="/emrs/emrs/appointments/cancel-ask/{{ entry_date }}/{{ set.appointment_id }}/{{ set.person_id }}">Cancel</a>] 
                         [<a href="/emrs/emrs/billing/{{ set.person_id }}">Billing</a>]
                     </td>
@@ -503,7 +534,7 @@
                 {% set c = c + 1 %}
             {% endfor %}
             {% for i in c .. session.appointment_slots_hepa_c if c <= session.appointment_slots_hepa_c %}
-                <tr><td>C {{ i }}</td><td></td><td></td><td></td><td></td></tr>
+                <tr><td>C {{ i }}</td><td></td><td></td><td></td><td></td><td></td></tr>
             {% endfor %}             
             
             </tbody>           

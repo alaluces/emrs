@@ -12,6 +12,16 @@ $app->group('/treatments', function () use ($app, $sec, $person, $treatment, $ap
          
     });
     
+    $app->get('/add/:id', function ($id) use ($app, $sec, $treatment) {
+        $sec->check('treatments');
+        $entry_time = date("His");
+        $entry_date = date("Ymd");
+        $tid        = $treatment->get_new_tid();      
+        $treatment->add_new($tid, $id);
+        $treatment->log($tid, '1', $entry_date, $entry_time, 'CREATED', '');  
+        $app->redirect("/emrs/emrs/treatments/$id/$tid/1");         
+    });    
+    
     $app->get('/:id/:tid/:vid', function ($id, $tid, $vid) use ($app, $sec, $person, $treatment, $appointment) {
         $sec->check('treatments');  
         
