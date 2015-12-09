@@ -263,7 +263,7 @@
                 {% set i = patient_values.initial_treatment_id ? patient_values.initial_treatment_id : 1 %}
                 {% for history in treatment_history %}   
                 <tr>
-                    <td><a href="/emrs/emrs/treatments/{{ history.entry_date }}/{{ pid }}/{{ history.treatment_id }}/{{ history.version_id }}">{{ i }}</a></td>
+                    <td><a href="/emrs/emrs/treatments/{{ pid }}/{{ history.treatment_id }}/{{ history.version_id }}">{{ i }}</a></td>
                     <td style="text-align:left">{{ history.entry_date_readable }}</td>
                 </tr>  
                 {% set i = i + 1 %}

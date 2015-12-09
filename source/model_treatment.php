@@ -12,8 +12,37 @@ class lib_treatment {
     }
     
     //======================================================================
-    // Below are functions used for viewing the treatment form    
+    // Below are functions used for viewing the treatment form 
     
+    function get_latest_tid($id) {
+        $STH = $this->DBH->prepare("SELECT MAX(treatment_id) FROM `treatment_list` WHERE person_id = :id");
+        $STH->bindParam(':id', $id); 
+        $STH->execute();
+        $tid = $STH->fetchColumn();
+        if ($tid == '' || $tid == '0') {
+            return '1';
+        } else {
+            return $tid;
+        }       
+    }  
+    
+    function get_initial_date($tid) {
+        $STH = $this->DBH->prepare("SELECT entry_date FROM treatment_logs WHERE treatment_id = :tid  AND entry_status = 'created'");      
+        $STH->bindParam(':tid', $tid );  
+        $STH->execute(); 
+        return  $STH->fetchColumn(); 
+    }    
+    
+    function get_status_time($tid, $entry_status) {
+        $STH = $this->DBH->prepare("SELECT MAX(entry_time) FROM 
+        `treatment_logs`
+        WHERE entry_status = :entry_status     
+        AND treatment_id = :tid");    
+        $STH->bindParam(':entry_status', $entry_status);             
+        $STH->bindParam(':tid', $tid );
+        $STH->execute(); 
+        return  $STH->fetchColumn(); 
+    }     
     function exists($id, $entry_date) {
         $STH = $this->DBH->prepare("SELECT tl.treatment_id FROM treatment_list AS tl
                 INNER JOIN treatment_logs AS tg
@@ -148,22 +177,7 @@ class lib_treatment {
         $STH->execute(); 
         return  $STH->fetchColumn(); 
     }
-    
-    function get_status_time($id, $entry_date, $entry_status) {
-        $STH = $this->DBH->prepare("SELECT MAX(entry_time) FROM 
-        `treatment_logs` AS lo
-        INNER JOIN `treatment_list` AS li
-        ON lo.treatment_id = li.treatment_id
-        WHERE entry_status = :entry_status
-        AND entry_date = :entry_date
-        AND person_id = :id");    
-        $STH->bindParam(':entry_status', $entry_status); 
-        $STH->bindParam(':entry_date', $entry_date);        
-        $STH->bindParam(':id', $id );
-        $STH->execute(); 
-        return  $STH->fetchColumn(); 
-    }     
-    
+       
     function generate_time_intervals($duration, $interval, $time_start) {
         $tmp = date("H:i", strtotime("$time_start")); 
         switch($interval) {
@@ -586,6 +600,42 @@ class lib_treatment {
     
     
     function paginator_init($history, $current_tid, $pid) {   
+       
+        $tids = array();
+        $vids = array();
+        foreach ($history as $hist_val) {
+            
+            array_push($tids, $hist_val['treatment_id']);                    
+            array_push($vids, $hist_val['version_id']); 
+            if ($hist_val['treatment_id'] == $current_tid) {
+                $this->paginator_current = $pid . '/' . $hist_val['treatment_id'] . '/' . $hist_val['version_id'];                
+            }
+        }      
+        
+        if ($tids) { 
+            // sorry if its hardcoded
+            $last = count($tids) - 1;
+            
+            $this->paginator_first = "$pid/$tids[0]/$vids[0]";
+            $this->paginator_last = $pid . '/' . $tids[$last] . '/' . $vids[$last];                    
+            
+            $index = array_search($current_tid, $tids);  
+      
+            if ($index == 0) {
+                $this->paginator_previous = $this->paginator_first;                        
+            } else {
+                $this->paginator_previous = $pid . '/' . $tids[$index - 1] . '/' . $vids[$index - 1];;
+            }
+
+            if ($index == $last) {
+                $this->paginator_next = $this->paginator_last;                        
+            } else {
+                $this->paginator_next = $pid . '/' . $tids[$index + 1] . '/' . $vids[$index + 1];;
+            }           
+        }       
+    }  
+    
+    function paginator_init_old($history, $current_tid, $pid) {   
         $eds = array();
         $tids = array();
         $vids = array();
@@ -619,7 +669,7 @@ class lib_treatment {
                 $this->paginator_next = $eds[$index + 1] . '/' . $pid . '/' . $tids[$index + 1] . '/' . $vids[$index + 1];;
             }           
         }       
-    }   
+    }    
     
 }
 

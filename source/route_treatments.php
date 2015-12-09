@@ -2,6 +2,83 @@
 
 $app->group('/treatments', function () use ($app, $sec, $person, $treatment, $appointment) {
         
+    
+    // 20151209 - redirect to the latest treatent 
+    $app->get('/:id', function ($id) use ($app, $sec, $treatment) {
+        $sec->check('treatments');         
+        $tid = $treatment->get_latest_tid($id);        
+        $vid = $treatment->get_vid($tid);
+        $app->redirect("/emrs/emrs/treatments/$id/$tid/$vid");
+         
+    });
+    
+    $app->get('/:id/:tid/:vid', function ($id, $tid, $vid) use ($app, $sec, $person, $treatment, $appointment) {
+        $sec->check('treatments');  
+        
+        
+        $initial_date = $treatment->get_initial_date($tid);
+        
+        // get duration for initial values of monitoring sheet, if not found, default value is 4
+        if ($vid == '1') {
+            $duration = '4';  
+            $interval = '15';
+        } else {
+            $duration = $treatment->get_data($tid, '2');
+            if (!$duration) {
+                $duration = '4';
+            }  
+            $interval = $treatment->get_data($tid, '26');
+            if (!$interval) {
+                $interval = '15';
+            }            
+        }
+        $time_arrived  = $appointment->get_status_time($id, $initial_date, 'WAITING');
+        $time_started  = $treatment->get_status_time($tid, 'START_TREATMENT');
+        $time_finished = $treatment->get_status_time($tid, 'CLOSED');
+        
+        $history = $treatment->get_history($id);
+        $treatment->paginator_init($history, $tid, $id);
+
+        $app->render('treatment_form.html', array(
+            'title' => 'Treatment',
+            'pid' => $id,
+            'tid' => $tid,
+            'vid' => $vid,
+            'entry_date' => $initial_date,
+            'entry_date2' => strtotime($initial_date),
+            'age' => $person->get_age($id),            
+            'prev_weight' => $treatment->get_prev_data($id, $tid, '7'),
+            'prev_order' => $treatment->get_prev_data($id, $tid, '20'),
+            'prev_iv_iron' => $treatment->get_prev_data($id, $tid, '227'),
+            'prev_monthly_labs' => $treatment->get_prev_data($id, $tid, '231'),
+            'prev_hepa_prof' => $treatment->get_prev_data($id, $tid, '232'),
+            'prev_vaccination' => $treatment->get_prev_data($id, $tid, '233'),
+            'entry_status' => $treatment->get_status($id, $tid),
+            'duration' => $duration,
+            'time_started' => strtotime("$time_started"),
+            'time_arrived' => strtotime("$time_arrived"),
+            'time_finished' => strtotime("$time_finished"),
+            'intervals' => $treatment->generate_time_intervals($duration, $interval,$time_started),
+            'ms' => $treatment->get_monitoring_sheet($tid),                
+            'person' => $person->get_info($id),    
+            'max_vid' => $treatment->get_vid($tid),            
+            'fields_main' => $treatment->get_info($tid, $vid),
+            'misc_html_header' => $treatment->get_misc_html('header'),
+            'misc_html' => $treatment->get_misc_html('treatment'),
+            'paginator_first' => $treatment->paginator_first,
+            'paginator_next' => $treatment->paginator_next,
+            'paginator_previous' => $treatment->paginator_previous,
+            'paginator_last' => $treatment->paginator_last,
+            'treatment_history' => $history,
+            'options_persons' => $treatment->get_options_persons(),
+            'options' => $treatment->get_options(),
+            'session' => $sec->get_session_array()    
+        ));
+    });     
+    
+    //===================================================================================================
+    // code below will be revised
+    // 
     // get the date and person id so we can get the treatment id and current version
     $app->get('/:entry_date/:id', function ($entry_date, $id) use ($app, $sec, $treatment) {
         $sec->check('treatments');    
