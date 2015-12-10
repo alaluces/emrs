@@ -103,7 +103,9 @@ $app->group('/treatments', function () use ($app, $sec, $person, $treatment, $ap
         if ($app->request->post('btn_start_now') == '1' ) {
             
             $treatment->log($tid, $vid, $entry_date, $entry_time, 'START_TREATMENT', '');
-            $appointment->update($aid, $entry_date, $entry_time, $set_number, 'ONGOING');
+            if ($aid) {
+                $appointment->update($aid, $entry_date, $entry_time, $set_number, 'ONGOING');
+            }
             
         } else {
             
@@ -158,7 +160,9 @@ $app->group('/treatments', function () use ($app, $sec, $person, $treatment, $ap
                 
             if ($app->request->post('btn_done') == '1' ) {                           
                 $treatment->log($tid, $vid, $entry_date, $entry_time, 'CLOSED', '');
-                $appointment->update($aid, $entry_date, $entry_time, $set_number, 'DONE'); 
+                if ($aid) {
+                    $appointment->update($aid, $entry_date, $entry_time, $set_number, 'DONE');
+                }
             }                     
 
             $ms_time     = $app->request->post('ms_time');

@@ -19,6 +19,10 @@
             changeYear: true                    
         });                   
     });
+    
+    function confirmAddNew() {
+        return confirm("Create new treatment form?");  
+    }     
 </script> 
 {% endblock js %}
   
@@ -263,11 +267,14 @@
                 {% set i = patient_values.initial_treatment_id ? patient_values.initial_treatment_id : 1 %}
                 {% for history in treatment_history %}   
                 <tr>
-                    <td><a href="/emrs/emrs/treatments/{{ pid }}/{{ history.treatment_id }}/{{ history.version_id }}">{{ i }}</a></td>
+                    <td><a href="/emrs/emrs/treatments/{{ pid }}/{{ history.treatment_id }}/{{ history.version_id }}" target="_BLANK">{{ i }}</a></td>
                     <td style="text-align:left">{{ history.entry_date_readable }}</td>
                 </tr>  
                 {% set i = i + 1 %}
-                {% endfor %}    
+                {% endfor %}  
+                <tr>
+                    <td colspan=2><a href="/emrs/emrs/treatments/add/{{ pid}}" class="btn btn-primary btn-block" onClick="return confirmAddNew();" target="_blank">Create new treatment form for this patient</a></td>                    
+                </tr>                 
             </table>
      </div>
 </div> 
