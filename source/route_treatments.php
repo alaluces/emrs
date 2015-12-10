@@ -164,6 +164,7 @@ $app->group('/treatments', function () use ($app, $sec, $person, $treatment, $ap
             $ms_time     = $app->request->post('ms_time');
             $ms_bp1      = $app->request->post('ms_bp1');
             $ms_bp2      = $app->request->post('ms_bp2');
+            $ms_qb       = $app->request->post('ms_qb');
             $ms_ap       = $app->request->post('ms_ap');
             $ms_vp       = $app->request->post('ms_vp');            
             $ms_tmp      = $app->request->post('ms_tmp');
@@ -174,7 +175,7 @@ $app->group('/treatments', function () use ($app, $sec, $person, $treatment, $ap
             $treatment->delete_monitoring_sheet($tid);
 
             for ($i = 0; $i < count($ms_time); $i++) {                
-                $treatment->save_monitoring_sheet($tid, $ms_time[$i], $ms_bp1[$i], $ms_bp2[$i], $ms_ap[$i], $ms_vp[$i], $ms_tmp[$i], $ms_ufr[$i], $ms_ufvol[$i], $ms_comments[$i]);                
+                $treatment->save_monitoring_sheet($tid, $ms_time[$i], $ms_bp1[$i], $ms_bp2[$i], $ms_qb[$i], $ms_ap[$i], $ms_vp[$i], $ms_tmp[$i], $ms_ufr[$i], $ms_ufvol[$i], $ms_comments[$i]);                
             }            
         }        
        

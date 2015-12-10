@@ -344,13 +344,14 @@ class lib_treatment {
         $STH->execute();        
     }   
 
-    function save_monitoring_sheet($tid, $ms_time, $ms_bp1, $ms_bp2, $ms_ap, $ms_vp, $ms_tmp, $ms_ufr, $ms_ufvol, $ms_comments) { 
+    function save_monitoring_sheet($tid, $ms_time, $ms_bp1, $ms_bp2, $ms_qb, $ms_ap, $ms_vp, $ms_tmp, $ms_ufr, $ms_ufvol, $ms_comments) { 
 
         $STH = $this->DBH->prepare("INSERT INTO `monitoring_sheet` VALUES (
             :tid,
             :ms_time,
             :ms_bp1,
             :ms_bp2,
+            :ms_qb,
             :ms_ap,
             :ms_vp,
             :ms_tmp,
@@ -362,6 +363,7 @@ class lib_treatment {
             $STH->bindParam(':ms_time', $ms_time);
             $STH->bindParam(':ms_bp1', $ms_bp1);
             $STH->bindParam(':ms_bp2', $ms_bp2);
+            $STH->bindParam(':ms_qb', $ms_qb);
             $STH->bindParam(':ms_ap', $ms_ap);
             $STH->bindParam(':ms_vp', $ms_vp);             
             $STH->bindParam(':ms_tmp', $ms_tmp);

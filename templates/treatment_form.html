@@ -216,7 +216,8 @@
             <thead>
             <tr>
                 <th>Time</th>
-                <th>BP</th>                       
+                <th>BP</th> 
+                <th>QB</th>
                 <th>AP</th>
                 <th>VP</th> 
                 <th>TMP</th>
@@ -238,32 +239,34 @@
             {% if val.ms_bp2 <= 90 or val.ms_bp2 == '' %} {% set color2 = 'black' %}  {% endif %}
             <tr style="font-size:12px;font-family:verdana">
                 <td><input name='ms_time[]'  type='text' style='width:40px;' value='{{ keys }}' readonly></td>
-                <td><input name='ms_bp1[]'   type='text' style='width:40px;color:{{ color1 }}' value='{{ val.ms_bp1 }}'>/<input name='ms_bp2[]' type='text' style='width:40px;color:{{ color2 }}' value='{{ val.ms_bp2 }}'></td>                     
-                <td><input name='ms_ap[]'    type='text' style='width:40px;' value='{{ val.ms_ap }}'></td>
-                <td><input name='ms_vp[]'    type='text' style='width:40px;' value='{{ val.ms_vp }}'></td>
+                <td><input name='ms_bp1[]'   type='text' style='width:35px;color:{{ color1 }}' value='{{ val.ms_bp1 }}'>/<input name='ms_bp2[]' type='text' style='width:35px;color:{{ color2 }}' value='{{ val.ms_bp2 }}'></td>                     
+                <td><input name='ms_qb[]'    type='text' style='width:35px;' value='{{ val.ms_qb }}'></td>
+                <td><input name='ms_ap[]'    type='text' style='width:35px;' value='{{ val.ms_ap }}'></td>
+                <td><input name='ms_vp[]'    type='text' style='width:35px;' value='{{ val.ms_vp }}'></td>
                 <td><input name='ms_tmp[]'    type='text' style='width:40px;' value='{{ val.ms_tmp }}'></td>
                 <td><input name='ms_ufr[]'   type='text' style='width:40px;' value='{{ val.ms_ufr }}'></td>
-                <td><input name='ms_ufvol[]' type='text' style='width:60px;' value='{{ val.ms_ufvol }}'></td> 
+                <td><input name='ms_ufvol[]' type='text' style='width:50px;' value='{{ val.ms_ufvol }}'></td> 
                 <td><button type='button' class='showComment'>+</button><button type='button' class='hideComment' {{ val.ms_comments ? 'DISABLED' }}>-</button>
                 </td>                 
             </tr>            
             <tr class="tr_comment {{ val.ms_comments ? 'tr_comment_value' }}" style="font-size:12px;font-family:verdana">                
-                <td colspan="8"><input name='ms_comments[]' type='text' style='width:410px;' value='{{ val.ms_comments }}'></td>
+                <td colspan="9"><input name='ms_comments[]' type='text' style='width:410px;' value='{{ val.ms_comments }}'></td>
             </tr> 
            {% else %} 
             <tr style="font-size:12px;font-family:verdana">
                 <td><input name='ms_time[]'  type='text' style='width:40px;' value='{{ keys }}' readonly></td>
-                <td><input name='ms_bp1[]'   type='text' style='width:40px'>/<input name='ms_bp2[]' type='text' style='width:40px;'></td>                     
-                <td><input name='ms_ap[]'    type='text' style='width:40px;'></td>
-                <td><input name='ms_vp[]'    type='text' style='width:40px;'></td>
-                <td><input name='ms_qb[]'    type='text' style='width:40px;'></td>
+                <td><input name='ms_bp1[]'   type='text' style='width:35px'>/<input name='ms_bp2[]' type='text' style='width:35px;'></td>
+                <td><input name='ms_qb[]'    type='text' style='width:35px;'></td>
+                <td><input name='ms_ap[]'    type='text' style='width:35px;'></td>
+                <td><input name='ms_vp[]'    type='text' style='width:35px;'></td>
                 <td><input name='ms_tmp[]'   type='text' style='width:40px;'></td>
-                <td><input name='ms_ufvol[]' type='text' style='width:60px;'></td> 
+                <td><input name='ms_ufr[]'   type='text' style='width:40px;'></td>
+                <td><input name='ms_ufvol[]' type='text' style='width:50px;'></td> 
                 <td><button type='button' class='showComment'>+</button><button type='button' class='hideComment'>-</button>
                 </td>                 
             </tr>            
             <tr class='tr_comment' style="font-size:12px;font-family:verdana">                
-                <td colspan="8"><input name='ms_comments[]' type='text' style='width:420px;'></td>
+                <td colspan="9"><input name='ms_comments[]' type='text' style='width:410px;'></td>
             </tr>             
             
             {% endfor %}
