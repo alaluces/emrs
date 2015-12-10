@@ -178,7 +178,7 @@ $app->group('/treatments', function () use ($app, $sec, $person, $treatment, $ap
             }            
         }        
        
-        $app->redirect("/emrs/emrs/treatments/$entry_date/$pid/$tid/$vid");
+        $app->redirect("/emrs/emrs/treatments/$pid/$tid/$vid");
        
      });        
     
