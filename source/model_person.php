@@ -389,7 +389,7 @@ class lib_person {
     // 20150327 added dry weight, hepa status and physician
     // other modules use get_patient_header() and get_person_values($id)
     function get_info($id) {
-        $STH = $this->DBH->prepare("SELECT p.*, pd.*, ppd.pro_title AS physician FROM `persons` AS p
+        $STH = $this->DBH->prepare("SELECT p.*, pd.*, ppd.*, ppd.pro_title AS physician FROM `persons` AS p
         INNER JOIN patient_details AS pd
         ON p.person_id = pd.person_id
         INNER JOIN `person_pro_data` AS ppd
@@ -439,10 +439,8 @@ class lib_person {
     
     function get_patient_values($id) {       
         $STH = $this->DBH->prepare("SELECT * 
-            FROM `patient_details` AS pd
-            INNER JOIN person_pro_data AS ppd
-            ON pd.physician_id = ppd.person_id
-            WHERE pd.person_id =  :id");      
+            FROM `patient_details` 
+            WHERE person_id =  :id");      
         $STH->bindParam(':id', $id); 
         $STH->execute();
         return $STH->fetch(PDO::FETCH_ASSOC);       
