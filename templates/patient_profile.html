@@ -23,7 +23,7 @@
     }      
     
 </style>       
-    <table border=0>
+    <table border=1>
         <tr><td colspan=4>
                 [<a target="_blank" href="/emrs/emrs/">Home</a>] 
                 [<a target="_blank" href="/emrs/emrs/patients/view/{{ pid }}">Profile</a>] 
@@ -38,7 +38,7 @@
             <td colspan=3 style="height:20px;"></td> 
             <td style="width:150px; height: 20px;text-align:center;padding:3px;">{{ date_today }}</td>      
         </tr>
-        
+          
         <tr>            
             <td colspan=3><b>Name</b>: {{ person_values.fname|title }} {{ person_values.mname|title }} {{ person_values.lname|title }} ({{age}}/{{ person_values.gender }})</td>            
             
@@ -171,6 +171,29 @@
         </tr>   
         {% endfor %}     
         
+        <tr>            
+            <td colspan=4 style="height:30px;"></td> 
+        </tr>         
+        <tr>            
+            <td colspan=3></td> 
+            <td><b>{{ patient_values.pro_title }}</b></td> 
+        </tr>   
+        <tr>            
+            <td colspan=3></td> 
+            <td>Lic No: <u>{{ patient_values.license_number == '' ? '______' :  patient_values.license_number }}</u></td> 
+        </tr> 
+        <tr>            
+            <td colspan=3></td> 
+            <td>PTR No: <u>{{ patient_values.ptr == '' ? '______' :  patient_values.ptr }}</u></td>
+        </tr> 
+        <tr>            
+            <td colspan=3></td> 
+            <td>S2 No: <u>{{ patient_values.s2 == '' ? '______' :  patient_values.s2 }}</u></td>
+        </tr> 
+        <tr>            
+            <td colspan=4 style="height:20px;"></td> 
+        </tr>         
+      
         
         
         

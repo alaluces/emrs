@@ -250,7 +250,7 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
             'ftd' => $treatment->get_first_date($id),            
             'person_values' => $person->get_person_values($id),
             'patient_values' => $person->get_patient_values($id),
-            'hd_order_values' => $person->get_hd_order_values($id),
+            'hd_order_values' => $person->get_hd_order_values($id),            
             'age' => $person->get_age($id),
             'session' => $sec->get_session_array()    
         ));        
