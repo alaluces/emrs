@@ -192,6 +192,7 @@ class lib_laboratory {
         //if ($pid == 'all') { $p = ''; } else { $p = "AND lel.person_id = :pid"; }
         //if ($cid == 'all') { $c = ''; } else { $c = "AND lel.category_id = :cid"; }
         $STH = $this->DBH->prepare("	SELECT 
+        p.person_id,    
 	CONCAT(fname,' ', lname ) as pname
 	FROM `lab_entries` AS le
 	INNER JOIN `lab_entry_list` AS lel
@@ -211,13 +212,15 @@ class lib_laboratory {
         // yes, this is possible 20150509
         //if ($pid == 'all') { $p = ''; } else { $p = "AND person_id = :pid"; }
         //if ($cid == 'all') { $c = ''; } else { $c = "AND lel.category_id = :cid"; }
+        // 20160115 until i can find a better query
+        // ill sette with concatenating the person id and result ex. 51|324.6
         $STH = $this->DBH->prepare("SELECT property_name, normal_value, GROUP_CONCAT(latest_entry ORDER BY person_id) as entries
             FROM
             (
             SELECT 
             person_id,
             property_id,
-            SUBSTRING_INDEX(GROUP_CONCAT(entry_value ORDER BY entry_date DESC), ',', 1) AS latest_entry 
+            CONCAT(person_id, '|', SUBSTRING_INDEX(GROUP_CONCAT(entry_value ORDER BY entry_date DESC), ',', 1)) AS latest_entry 
             FROM `lab_entries` AS le
             INNER JOIN `lab_entry_list` AS lel
             ON le.entry_id = lel.entry_id

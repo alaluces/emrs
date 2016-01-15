@@ -25,10 +25,27 @@
                 <tr>           
                     <td style='text-align:left'>{{ v.property_name }}</td> 
                     <td style='text-align:left'>{{ v.normal_value }}</td>
-                    {% set tmp = v.entries|split(',') %}                    
-                    {% for t in tmp if v.entries %}                 
-                        <td>{{ t }}</td>               
-                    {% endfor %}                             
+                    
+                    <!-- This is a hack so the results will line up even if     -->
+                    <!-- there are missing data per patient                     -->
+                    <!-- the result values are concatenated with the patient id          -->
+                    <!-- ex. 53|232.6 the code belos plits the values so they will match -->
+                    {% for h in headers %} 
+                        {% set match = 0 %} 
+                        {% set mval = '' %} 
+                        {% set tmp = v.entries|split(',') %}                        
+                        {% for t in tmp if v.entries %}  
+                            {% if h.person_id == t|split('|')|first %} 
+                                {% set match = 1 %} 
+                                {% set mval = t|split('|')|last %} 
+                            {% endif %}                             
+                        {% endfor %} 
+                        {% if match == 1 %}                             
+                            <td>{{ mval }}</td> 
+                        {% else %} 
+                            <td>-</td> 
+                        {% endif %}                        
+                    {% endfor %}                                       
                 </tr>
             {% endfor %}     
     </table>
