@@ -6,6 +6,14 @@
 {% endblock menu %}
 
 {% block js %}
+<script>
+    $(function() { 
+        $( 'input[type="checkbox"]' ).click( function () {
+          attrId = $(this).attr("id");          
+          $( '.' + attrId ).prop('checked', this.checked);
+        });
+    });
+</script> 
 {% endblock js %}  
 
 {% block content %}
@@ -44,7 +52,7 @@
           <div class="panel panel-primary">
             <div class="panel-heading">
               <h4 class="panel-title">
-                <input name="{{ c.category_name }}" type=checkbox value="">  
+                <input name="{{ c.category_name }}" type=checkbox value="" id="chk_{{ c.category_id }}">  
                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse-{{ i }}">
                   {{ c.category_name }}
                 </a>
@@ -54,7 +62,7 @@
 
               <div class="panel-body">
                     {% for p in properties if c.category_name == p.category_name %}            
-                        <input name="property_id[]" type=checkbox value="{{ p.property_id }}">{{ p.property_name }}
+                        <input name="property_id[]" type=checkbox value="{{ p.property_id }}" class="chk_{{ c.category_id }}">{{ p.property_name }}
                         <br>
                     {% endfor %}            
               </div>
