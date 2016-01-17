@@ -10,8 +10,9 @@
     $(function() { 
         $( 'input[type="checkbox"]' ).click( function () {
           attrId = $(this).attr("id");          
-          $( '.' + attrId ).prop('checked', this.checked);
-        });
+          $( '.' + attrId ).prop('checked', this.checked);          
+        });  
+        
     });
 </script> 
 {% endblock js %}  
@@ -35,13 +36,12 @@
 
 <div class="row clearfix">
     
-<div class="col-xs-3 column">
-</div>    
+
    
     
-<div class="col-xs-3 column">     
+<div class="col-xs-4 column">     
      <div class="panel panel-primary">        
-        <div class="panel-heading">Select Lab test</div>        
+        <div class="panel-heading"><h2 class="panel-title">Select Lab test</h2></div>        
             
         <br>
 
@@ -51,12 +51,12 @@
 
           <div class="panel panel-primary">
             <div class="panel-heading">
-              <h4 class="panel-title">
+              <h2 class="panel-title">
                 <input name="{{ c.category_name }}" type=checkbox value="" id="chk_{{ c.category_id }}">  
                 <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion" href="#collapse-{{ i }}">
                   {{ c.category_name }}
                 </a>
-              </h4>
+              </h2>
             </div>
             <div class="panel-collapse collapse" id="collapse-{{ i }}" style="height: auto;">
 
@@ -76,25 +76,131 @@
              
      </div>   
 </div>
-    
- <div class="col-xs-3 column">
-     <div class="panel panel-primary">        
-        <div class="panel-heading">Select Patient</div>
         
-        <table class="table table-bordered"> 
-        <tr><td>
-        <button type=submit class="btn btn-primary btn-block">Submit</button>
-        </td></tr>            
-        {% for p in patients %}
-        <tr><td style="text-align: left">
-        <input name="person_id[]" type=checkbox value="{{ p.person_id }}">{{ p.full_name }}
-        </td></tr>
-        {% endfor %}
-        </table>         
-     </div>
+<div class="col-xs-4 column">     
+     <div class="panel panel-primary">        
+        <div class="panel-heading"><h2 class="panel-title">Select Patient</h2></div>            
+        <br>
+        <div class="panel-group" id="accordion2">
+
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h2 class="panel-title">
+                <input name="{{ c.category_name }}" type=checkbox value="" id="chk_Male">  
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse-Male">
+                  All Male Patients
+                </a>
+              </h2>
+            </div>
+            <div class="panel-collapse collapse" id="collapse-Male" style="height: auto;">
+              <div class="panel-body">
+                    {% for p in patients if p.gender == 'Male' %}            
+                        <input class="chk_Male" name="person_id[]" type=checkbox value="{{ p.person_id }}">{{ p.full_name }}
+                        <br>
+                    {% endfor %}            
+              </div>
+            </div>
+          </div>
+            
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h2 class="panel-title">
+                <input name="{{ c.category_name }}" type=checkbox value="" id="chk_Female">  
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse-Female">
+                  All Female Patients
+                </a>
+              </h2>
+            </div>
+            <div class="panel-collapse collapse" id="collapse-Female" style="height: auto;">
+              <div class="panel-body">
+                    {% for p in patients if p.gender == 'Female' %}            
+                        <input class="chk_Female" name="person_id[]" type=checkbox value="{{ p.person_id }}">{{ p.full_name }}
+                        <br>
+                    {% endfor %}           
+              </div>
+            </div>
+          </div>          
+
+            <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h2 class="panel-title">
+                <input name="{{ c.category_name }}" type=checkbox value="" id="chk_Negative">  
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse-Negative">
+                  All Negative Hepatitis Patients
+                </a>
+              </h2>
+            </div>
+            <div class="panel-collapse collapse" id="collapse-Negative" style="height: auto;">
+              <div class="panel-body">
+                    {% for p in patients if p.hepa_status == 'Negative' %}            
+                        <input class="chk_Negative" name="person_id[]" type=checkbox value="{{ p.person_id }}">{{ p.full_name }}
+                        <br>
+                    {% endfor %}           
+              </div>
+            </div>
+          </div> 
+            
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h2 class="panel-title">
+                <input name="{{ c.category_name }}" type=checkbox value="" id="chk_HepatitisB">  
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse-HepatitisB">
+                  All Patients with Hepatitis B
+                </a>
+              </h2>
+            </div>
+            <div class="panel-collapse collapse" id="collapse-HepatitisB" style="height: auto;">
+              <div class="panel-body">
+                    {% for p in patients if p.hepa_status == 'Hepatitis B' %}                
+                        <input class="chk_HepatitisB" name="person_id[]" type=checkbox value="{{ p.person_id }}">{{ p.full_name }}
+                        <br>
+                    {% endfor %}           
+              </div>
+            </div>
+          </div>   
+            
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h2 class="panel-title">
+                <input name="{{ c.category_name }}" type=checkbox value="" id="chk_HepatitisC">  
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse-HepatitisC">
+                  All Patients with Hepatitis C
+                </a>
+              </h2>
+            </div>
+            <div class="panel-collapse collapse" id="collapse-HepatitisC" style="height: auto;">
+              <div class="panel-body">
+                    {% for p in patients if p.hepa_status == 'Hepatitis C' %}                
+                        <input class="chk_HepatitisC" name="person_id[]" type=checkbox value="{{ p.person_id }}">{{ p.full_name }}
+                        <br>
+                    {% endfor %}           
+              </div>
+            </div>
+          </div>              
+
+        </div>             
+     </div>   
 </div> 
     
-<div class="col-xs-3 column">
+    
+ <div class="col-xs-4 column">
+     <div class="panel panel-primary">        
+        <div class="panel-heading"><h2 class="panel-title">Select Report</h2></div>
+        
+        <table class="table table-bordered">  
+        <tr>  
+            <td><button type=submit class="btn btn-primary btn-block">Latest Report Comparison</button></td>
+        </tr>      
+        <tr>  
+            <td><button class="btn btn-primary btn-block disabled">Not Available</button></td>
+        </tr>
+        <tr>  
+            <td><button class="btn btn-primary btn-block disabled">Not Available</button></td>
+        </tr>       
+        
+        </table> 
+        <ul>    
+     </div>
 </div>     
     
 
