@@ -51,7 +51,16 @@
             <a href="/emrs/emrs/prescriptions/{{ pid }}">NO</a>
         </div>
         {% endif %} 
+        {% if check_add %}
+        <div class="alert alert-danger fade in">
+            <button class="close" data-dismiss="alert" type="button">×</button>
+            Treatment form already exists for specified date. Create another? 
+            <a href="/emrs/emrs/treatments/add/{{ pid }}">YES</a> | 
+            <a href="/emrs/emrs/appointments/">NO</a>
+        </div>
+        {% endif %}         
     </div>
+    
 </div>     
     
 {% include "flash_msg.html" %}
@@ -273,7 +282,7 @@
                 {% set i = i + 1 %}
                 {% endfor %}  
                 <tr>
-                    <td colspan=2><a href="/emrs/emrs/treatments/add/{{ pid}}" class="btn btn-primary btn-block" onClick="return confirmAddNew();" target="_blank">Create new treatment form for this patient</a></td>                    
+                    <td colspan=2><a href="/emrs/emrs/treatments/check-add/{{ pid}}" class="btn btn-primary btn-block" target="_blank">Create new treatment form for this patient</a></td>                    
                 </tr>                 
             </table>
      </div>

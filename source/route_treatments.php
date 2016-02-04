@@ -12,6 +12,29 @@ $app->group('/treatments', function () use ($app, $sec, $person, $treatment, $ap
          
     });
     
+    $app->get('/check-add/:id', function ($id) use ($app, $sec, $treatment, $person) {
+        $sec->check('treatments');
+        $entry_time = date("His");
+        $entry_date = date("Ymd");        
+        if ($treatment->exists($id, $entry_date)) {
+            $app->render('patients.html', array(
+                'title' => 'Treatments',
+                'pid' => $id, 
+                'person_values' => $person->get_person_values($id),
+                'patient_values' => $person->get_patient_values($id),
+                'show_treatment_history' => 1,
+                'check_add' => 1,   
+                'treatment_history' => $treatment->get_history($id),
+                'session' => $sec->get_session_array()    
+            ));           
+        } else {
+            $tid        = $treatment->get_new_tid();      
+            $treatment->add_new($tid, $id);
+            $treatment->log($tid, '1', $entry_date, $entry_time, 'CREATED', '');  
+            $app->redirect("/emrs/emrs/treatments/$id/$tid/1");            
+        }       
+    });
+    
     $app->get('/add/:id', function ($id) use ($app, $sec, $treatment) {
         $sec->check('treatments');
         $entry_time = date("His");
