@@ -209,9 +209,6 @@ class lib_laboratory {
     }     
     
     function get_report_values($pid, $cid) {
-        // yes, this is possible 20150509
-        //if ($pid == 'all') { $p = ''; } else { $p = "AND person_id = :pid"; }
-        //if ($cid == 'all') { $c = ''; } else { $c = "AND lel.category_id = :cid"; }
         // 20160115 until i can find a better query
         // ill sette with concatenating the person id and result ex. 51|324.6
         $STH = $this->DBH->prepare("SELECT property_name, normal_value, GROUP_CONCAT(latest_entry ORDER BY person_id) as entries
@@ -235,9 +232,7 @@ class lib_laboratory {
             ON c.property_id = lp.property_id
             INNER JOIN lab_categories AS lc
             ON lp.category_id = lc.category_id
-            GROUP BY c.property_id"); 
-        //if ($pid != 'all') { $STH->bindParam(':pid', $pid); }
-        //if ($cid != 'all') { $STH->bindParam(':cid', $cid); }     
+            GROUP BY c.property_id");    
         $STH->execute();
         return $STH->fetchAll();       
     }
@@ -258,6 +253,43 @@ class lib_laboratory {
          
         $STH->execute();
         return $STH->fetch();
+    } 
+    
+    function get_report_lab_headers($year) {
+        $months = array(
+            $year.'01|January',
+            $year.'02|February',    
+            $year.'03|March',
+            $year.'04|April',
+            $year.'05|May',
+            $year.'06|June',
+            $year.'07|July',
+            $year.'08|August',
+            $year.'09|September',
+            $year.'10|October',
+            $year.'11|November',
+            $year.'12|December'           
+        );
+        
+        return $months;       
+    }     
+    
+    function get_report_lab_values($pid, $prop_id) {
+        $STH = $this->DBH->prepare("SELECT CONCAT(fname, ' ', lname) as name,lp.property_name, GROUP_CONCAT(CONCAT(entry_date,'|',entry_value) ORDER BY entry_date) as entries
+        FROM lab_entry_list AS lel
+        INNER JOIN lab_entries AS le
+        ON lel.entry_id = le.entry_id
+        INNER JOIN lab_properties AS lp
+        ON le.property_id = lp.property_id
+        INNER JOIN lab_logs AS lo
+        ON lo.entry_id = le.entry_id 
+        INNER JOIN persons AS p
+        ON lel.person_id = p.person_id
+        WHERE lp.property_id IN ($prop_id)
+        AND lel.person_id IN ($pid) 
+        GROUP BY lel.person_id,lp.property_id");    
+        $STH->execute();
+        return $STH->fetchAll();       
     }    
     
      

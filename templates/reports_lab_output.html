@@ -13,7 +13,49 @@
 {% block content %}
 
     <table rules="all" style="border:solid thin black;font-family: verdana;font-size:12px">    
-
+        {% if type == '1' %} 
+        <tr>
+            <th>Patient</th>
+            <th>Lab Test</th>                  
+            {% for h in headers %}                 
+                <th>{{ h|split('|')|last }}</th>               
+            {% endfor %}              
+        </tr>
+            {% set current_name = '' %} 
+            {% for v in values  %}
+                <tr>   
+                     
+                    <td style='text-align:left'>{{ v.name == current_name ? '' : v.name }}</td> 
+                    <td style='text-align:left'>{{ v.property_name }}</td>
+                    
+                    {% set current_name = v.name %}     
+                    
+                    <!-- This is a hack so the results will line up even if     -->
+                    <!-- there are missing data per patient                     -->
+                    <!-- the result values are concatenated with the patient id          -->
+                    <!-- ex. 53|232.6 the code below splits the values so they will match -->
+                    {% for h in headers %} 
+                        {% set match = 0 %} 
+                        {% set mval = '' %} 
+                        {% set tmp = v.entries|split(',') %}                        
+                        {% for t in tmp if v.entries %}                             
+                            {% if h|split('|')|first == t|split('|')|first[0:6] %} 
+                                {% set match = 1 %} 
+                                {% set mval = t|split('|')|last %} 
+                            {% endif %}                             
+                        {% endfor %} 
+                        {% if match == 1 %}                             
+                            <td>{{ mval }}</td> 
+                        {% else %} 
+                            <td>-</td> 
+                        {% endif %}                        
+                    {% endfor %}                     
+                                          
+                </tr>
+            {% endfor %}   
+            
+        {% else %} 
+        
         <tr>
             <th>Lab Test</th>
             <th>Normal Value</th>                  
@@ -29,7 +71,7 @@
                     <!-- This is a hack so the results will line up even if     -->
                     <!-- there are missing data per patient                     -->
                     <!-- the result values are concatenated with the patient id          -->
-                    <!-- ex. 53|232.6 the code belos plits the values so they will match -->
+                    <!-- ex. 53|232.6 the code below splits the values so they will match -->
                     {% for h in headers %} 
                         {% set match = 0 %} 
                         {% set mval = '' %} 
@@ -47,7 +89,8 @@
                         {% endif %}                        
                     {% endfor %}                                       
                 </tr>
-            {% endfor %}     
+            {% endfor %}  
+        {% endif %}             
     </table>
 
 

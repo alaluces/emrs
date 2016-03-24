@@ -82,6 +82,25 @@
         <div class="panel-heading"><h2 class="panel-title">Select Patient</h2></div>            
         <br>
         <div class="panel-group" id="accordion2">
+            
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h2 class="panel-title">
+                <input name="{{ c.category_name }}" type=checkbox value="" id="chk_All">  
+                <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapse-All">
+                  All Patients
+                </a>
+              </h2>
+            </div>
+            <div class="panel-collapse collapse" id="collapse-All" style="height: auto;">
+              <div class="panel-body">
+                    {% for p in patients %}            
+                        <input class="chk_All" name="person_id[]" type=checkbox value="{{ p.person_id }}">{{ p.full_name }}
+                        <br>
+                    {% endfor %}            
+              </div>
+            </div>
+          </div>            
 
           <div class="panel panel-primary">
             <div class="panel-heading">
@@ -189,10 +208,10 @@
         
         <table class="table table-bordered">  
         <tr>  
-            <td><button type=submit class="btn btn-primary btn-block">Latest Report Comparison</button></td>
+            <td><button type=submit class="btn btn-primary btn-block" name="btn_rep" value="1">Lab Report Per Month</button></td>
         </tr>      
         <tr>  
-            <td><button class="btn btn-primary btn-block disabled">Not Available</button></td>
+            <td><button type=submit class="btn btn-primary btn-block" name="btn_rep" value="2">Latest Report Comparison</button></td>
         </tr>
         <tr>  
             <td><button class="btn btn-primary btn-block disabled">Not Available</button></td>
