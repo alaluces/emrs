@@ -84,7 +84,7 @@ $app->group('/patients', function () use ($app, $sec, $person, $presc, $treatmen
             $app->redirect("/emrs/emrs/patients/edit/$id");          
         }  
              
-        // File upload fpr profile pic, scc id and pwd id
+        // File upload for profile pic, scc id and pwd id
         $dirs = $misc->get_dirs();
         foreach ($dirs as $dir) {            
             if (isset($_FILES[$dir]) && is_uploaded_file($_FILES[$dir]['tmp_name'])) {

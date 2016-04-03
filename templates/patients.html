@@ -129,7 +129,7 @@
                         </td> 
                     {% elseif header.Field == 'active' %}
                         <td>                           
-                            <input style="height:20px;width:20px;" type="checkbox" name="{{ key }}"  value="1" CHECKED>           
+                            <input style="height:20px;width:20px;" type="checkbox" name="{{ header.Field }}"  value="1" CHECKED>           
                         </td>                         
                     {% else %} 
                         <td><input style="width:100%;" class="form-control input-sm" id="{{ header.Field }}" type="text" name="{{ header.Field }}"  value=""></td>
