@@ -199,6 +199,25 @@
 
         </div>             
      </div>   
+    
+     <div class="panel panel-primary">        
+        <div class="panel-heading"><h2 class="panel-title">Select Year Report</h2></div>
+        
+        <table class="table table-bordered">  
+        <tr>  
+            <td><span>Year</span></td>
+            <td>                
+                <select name="year">
+                    <option value="2016">2016</option>
+                    <option value="2015">2015</option>
+                    <option value="2014">2014</option>
+                </select>
+            </td>
+        </tr>      
+
+        </table> 
+        <ul>    
+     </div>    
 </div> 
     
     
@@ -208,10 +227,12 @@
         
         <table class="table table-bordered">  
         <tr>  
-            <td><button type=submit class="btn btn-primary btn-block" name="btn_rep" value="1">Lab Report Per Month</button></td>
+            <td><button type=submit class="btn btn-primary btn-block" name="btn_view" value="1">Lab Report Per Month - View</button></td>
+            <td><button type=submit class="btn btn-primary btn-block" name="btn_dl" value="1">Download</button></td>
         </tr>      
         <tr>  
-            <td><button type=submit class="btn btn-primary btn-block" name="btn_rep" value="2">Latest Report Comparison</button></td>
+            <td><button type=submit class="btn btn-primary btn-block" name="btn_view" value="2">Latest Report Comparison - View</button></td>
+            <td><button type=submit class="btn btn-primary btn-block" name="btn_dl" value="2">Download</button></td>
         </tr>
         <tr>  
             <td><button class="btn btn-primary btn-block disabled">Not Available</button></td>

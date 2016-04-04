@@ -187,7 +187,7 @@ class lib_laboratory {
         return $STH->fetchAll();       
     } 
     
-    function get_report_headers($pid, $cid) {
+    function get_report_latest_comparison_headers($pid, $cid) {
         // yes, this is possible 20150509
         //if ($pid == 'all') { $p = ''; } else { $p = "AND lel.person_id = :pid"; }
         //if ($cid == 'all') { $c = ''; } else { $c = "AND lel.category_id = :cid"; }
@@ -208,7 +208,7 @@ class lib_laboratory {
         return $STH->fetchAll();       
     }     
     
-    function get_report_values($pid, $cid) {
+    function get_report_latest_comparison_values($pid, $cid) {
         // 20160115 until i can find a better query
         // ill sette with concatenating the person id and result ex. 51|324.6
         $STH = $this->DBH->prepare("SELECT property_name, normal_value, GROUP_CONCAT(latest_entry ORDER BY person_id) as entries
@@ -290,9 +290,82 @@ class lib_laboratory {
         GROUP BY lel.person_id,lp.property_id");    
         $STH->execute();
         return $STH->fetchAll();       
-    }    
+    }  
     
-     
+    // 20160403
+    // This function is created so that we can capture the html string which can also be used for xlsx output
+    function get_report_lab_html($header, $values) {
+        $o  = "<table rules='all' style='border:solid thin black; font-family: verdana;font-size:12px'>";         
+        $o .= "<tr>
+               <th style='border:solid thin black;'>Patient</th>
+               <th style='border:solid thin black;'>Lab Test</th>";
+               foreach ($header as $h) {
+                   $t = explode('|',$h);               
+                   $o .= "<th style='border:solid thin black;'>$t[1]</th>";               
+               }
+        $o .= "</tr>";
+               $current_name = '';
+               foreach ($values as $v) {
+                   $name   = $v['name'] == $current_name ? '' : $v['name'];
+                   $border = $v['name'] == $current_name ? '' : 'border:solid thin black;';
+                   $current_name = $v['name'];  
+                   $o .= "<tr>";
+                   $o .= "<td style='$border text-align:left'>$name</td>
+                          <td style='border:solid thin black; text-align:left'>$v[property_name]</td>"; 
+                          foreach ($header as $h) {
+                              if ($h == '') { continue; }                              
+                              $mval = '';                          
+                              foreach (explode(',', $v['entries']) as $t) {
+                                  if ($t == '') { continue; }
+                                  $h1 = explode('|', $h);
+                                  $t1 = explode('|', $t);
+                                  if ($h1[0] == substr($t1[0], 0, 6)) {                                      
+                                      $mval  = $t1[1];
+                                  }                              
+                              }                              
+                              $o .= "<td style='border:solid thin black;'>$mval</td>";                                                     
+                          }
+                   $o .= "</tr>";
+               } 
+               $o .= "</table>";
+            return $o;        
+        } 
+
+        function get_report_latest_comparison_html($header, $values) {
+        $o  = "<table rules='all' style='border:solid thin black; font-family: verdana; font-size:12px'>";         
+        $o .= "<tr>               
+               <th style='border:solid thin black;'>Lab Test</th>
+               <th style='border:solid thin black;'>Normal Value</th>";
+               foreach ($header as $h) {                            
+                   $o .= "<th style='border:solid thin black;'>$h[pname]</th>";               
+               }
+        $o .= "</tr>";               
+               foreach ($values as $v) { 
+                   $o .= "<tr>";
+                   $o .= "<td style='border:solid thin black; text-align:left'>$v[property_name]</td>
+                          <td style='border:solid thin black; text-align:left'>$v[normal_value]</td>"; 
+                          /*
+                          This is a hack so the results will line up even if  
+                          there are missing data per patient           
+                          the result values are concatenated with the patient id 
+                          ex. 53|232.6 the code below splits the values so they will match                       
+                          */                
+                          foreach ($header as $h) {                              
+                              $mval = '';                          
+                              foreach (explode(',', $v['entries']) as $t) {                                
+                                  $t1 = explode('|', $t);
+                                  if ($h['person_id'] == $t1[0]) {                                      
+                                      $mval  = $t1[1];
+                                  }                              
+                              }                             
+                              $o .= "<td style='border:solid thin black;'>$mval</td>";                                                      
+                          }
+                   $o .= "</tr>";
+               }  
+               $o .= "</table>";
+            return $o;        
+        } 
+   
 }
 
 ?>

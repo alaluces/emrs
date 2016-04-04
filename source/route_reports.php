@@ -6,13 +6,21 @@ $app->group('/reports', function () use ($app, $sec, $person, $lab) {
         
         $app->post('/', function () use ($app, $sec) {    
             $sec->check('labs'); 
-            $person_id   = $app->request->post('person_id');
-            $prop_id     = $app->request->post('property_id');
-            $report_type = $app->request->post('btn_rep');
+            $person_id = $app->request->post('person_id');
+            $prop_id   = $app->request->post('property_id');
+            $year      = $app->request->post('year');
+            $view_type = $app->request->post('btn_view');
+            $dl_type   = $app->request->post('btn_dl');
             
             $a = implode(',', $person_id);
             $b = implode(',', $prop_id);
-            $app->redirect("/emrs/emrs/reports/laboratory/$report_type/2015/$a/$b");
+            
+            if ($view_type) {
+                $app->redirect("/emrs/emrs/reports/laboratory/$view_type/$year/$a/$b");    
+            } else {
+                $app->redirect("/emrs/emrs/reports/laboratory/download/$dl_type/$year/$a/$b");
+            }
+            
             //var_dump($report_type);
             //echo $report_type;
               
@@ -35,31 +43,51 @@ $app->group('/reports', function () use ($app, $sec, $person, $lab) {
             
             switch($type) {
                 case '1':
-                    $headers = $lab->get_report_lab_headers($year);
+                    $header = $lab->get_report_lab_headers($year);
                     $values = $lab->get_report_lab_values($pid, $cid);
+                    $html   = $lab->get_report_lab_html($header, $values);
                     break;
                 case '2':
-                    $headers = $lab->get_report_headers($pid, $cid);
-                    $values = $lab->get_report_values($pid, $cid);                    
+                    $header = $lab->get_report_latest_comparison_headers($pid, $cid);
+                    $values = $lab->get_report_latest_comparison_values($pid, $cid);   
+                    $html   = $lab->get_report_latest_comparison_html($header, $values);
                     break;               
             }
-            
+
             $app->render('reports_lab_output.html', array(
                 'title' => 'Lab Report',
-                'pid' => $pid,
-                'cid' => $cid,
-                'type' => $type,
-                'patients' => $person->get_patients(),      
-                'categories' => $lab->get_category_menu_list(),
-                'headers' => $headers,
-                'values' => $values,
-                'session' => $sec->get_session_array()                   
-            ));       
-        });         
+                'body' => $html                 
+            ));
+       
+        });        
 
-        
+        $app->get('/download/:type/:year/:pid/:cid', function ($type, $year, $pid, $cid) use ($app, $sec, $lab, $person) {    
+            $sec->check('labs'); 
+            
+            switch($type) {
+                case '1':
+                    $header = $lab->get_report_lab_headers($year);
+                    $values = $lab->get_report_lab_values($pid, $cid);
+                    $html   = $lab->get_report_lab_html($header, $values);
+                    $filename = $year . '_monthly_lab_report.xls';
+                    break;
+                case '2':
+                    $header = $lab->get_report_latest_comparison_headers($pid, $cid);
+                    $values = $lab->get_report_latest_comparison_values($pid, $cid);   
+                    $html   = $lab->get_report_latest_comparison_html($header, $values);
+                    $filename = 'comparison_report.xls';
+                    break;               
+            }
 
-    
+            header('Content-Type: application/octet-stream');  
+            header('Content-type: application/vnd.ms-excel');
+            header("Content-Disposition: attachment; filename=$filename");
+            header('Content-Transfer-Encoding: binary');               
+
+            echo $html;
+
+        });          
+
     });      
     
     
