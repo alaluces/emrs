@@ -49,6 +49,10 @@ $app->group('/prescriptions', function () use ($app, $sec, $presc, $meds, $perso
         $sec->check('presc'); 
         
         $count_entries = count($presc->get_entries($presc_id));
+        
+        //echo ceil($count_entries / 8);
+        //var_dump($presc->get_entries($presc_id));
+        //die();
                 
         $app->render('prescriptions_print.html', array(
             'title' => 'Medications',             
@@ -57,7 +61,7 @@ $app->group('/prescriptions', function () use ($app, $sec, $presc, $meds, $perso
             'physician_info' => $person->get_pro_info($person->get_physician_id($presc_id)),
             'entries' => $presc->get_entries($presc_id),
             'count_entries' => $count_entries,
-            'total_pages' => ceil($count_entries / 10),
+            'total_pages' => ceil($count_entries / 9),
             'print_mode' => '1',
             'physicians' => $person->get_physicians(),
             'person' => $person->get_info($pid),
