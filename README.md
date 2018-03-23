@@ -2,7 +2,7 @@
 
 Uses SLIM microframework and TWIG templating engine
 
-# Run using docker
+# Run using Docker
 
 git clone https://github.com/alaluces/docker-emrs.git
 
