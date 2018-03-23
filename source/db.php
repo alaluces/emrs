@@ -1,6 +1,6 @@
 <?php
 
-$host   = 'localhost';
+$host   = 'emrs-db';
 $dbname = 'emrs';
 $user   = 'emrs';
 $pass   = '1234';
